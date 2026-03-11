@@ -1,123 +1,118 @@
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.15);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --cyan-border: #00FFFF;
-    --yellow-border: #FFFF00;
+    --glass-white: rgba(255, 255, 255, 0.85);
+    --border-radius: 20px;
 }
 
 body {
     margin: 0;
-    min-height: 100vh;
+    height: 100vh;
     background: url('FUNDO.png') no-repeat center center fixed;
     background-size: cover;
-    font-family: 'Calibri', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    font-family: 'Calibri', sans-serif;
 }
 
-/* Janela Fixa Liquid Glass */
-.glass-container {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 30px;
-    width: 600px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    text-align: center;
+/* Janela Fixa Central */
+.main-window {
+    background: var(--glass-white);
+    backdrop-filter: blur(10px);
+    width: 90%;
+    max-width: 1000px;
+    height: 85vh;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     position: relative;
-    z-index: 100;
+    padding: 40px;
+    overflow-y: auto; /* Permite rolar para ver as etiquetas */
+    box-sizing: border-box;
 }
 
-.main-logo {
-    width: 80px;
+.top-right-logo {
     position: absolute;
     top: 20px;
     right: 20px;
-    border-radius: 10px;
+    width: 70px;
+    height: auto;
+}
+
+/* Botões Estilo Glass */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 50px;
 }
 
 .btn-glass {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--glass-border);
-    color: white;
-    padding: 12px 20px;
-    margin: 5px;
-    border-radius: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 12px;
+    font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    font-weight: bold;
-    text-transform: uppercase;
 }
 
 .btn-glass:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+    background: #f0f0f0;
+    transform: scale(1.05);
 }
 
-/* Esconder elementos */
 .hidden { display: none; }
 
-/* Configuração da Etiqueta (Precisão Técnica) */
+/* Preview das Etiquetas dentro da janela */
+#preview-container {
+    transform: scale(0.7); /* Zoom out para caber na janela de edição */
+    transform-origin: top center;
+    margin-top: -50px;
+}
+
+/* Medidas Reais para o PDF (serão restauradas no download) */
 .page-a4 {
     width: 21cm;
-    height: 29.7cm;
     background: white;
-    margin: 20px auto;
+    margin-bottom: 20px;
     display: grid;
-    grid-template-columns: 9cm 9cm; /* Duas fileiras verticais */
+    grid-template-columns: 9cm 9cm;
     grid-auto-rows: 6.3cm;
     justify-content: center;
-    align-content: start;
-    box-sizing: border-box;
-    padding-top: 1cm;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .etiqueta {
     width: 9cm;
     height: 6.3cm;
-    border: 0.1px solid #ddd; /* Guia de corte fina */
-    position: relative;
-    overflow: hidden;
-    color: black;
+    border: 0.1mm solid #eee;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
-.topo-etiqueta {
+.topo {
     height: 1.75cm;
     display: flex;
     align-items: center;
-    padding: 0 0.3cm;
+    padding: 0 5px;
 }
 
-.logo-etiqueta { height: 1.3cm; width: auto; }
-
-.titulo-escola {
-    font-family: 'Calibri', sans-serif;
-    font-size: 12pt;
-    text-align: center;
-    flex: 1;
-    font-weight: bold;
-}
-
-.conteudo-etiqueta {
+.corpo {
     display: flex;
-    height: 4.55cm;
-    padding: 0.2cm;
+    flex: 1;
+    padding: 5px;
     align-items: center;
 }
 
-.foto-aluno {
-    width: 3cm; /* Proporção 3x4 */
+.foto {
+    width: 3cm;
     height: 4cm;
     object-fit: cover;
 }
 
-/* Bordas solicitadas (2.25 points ≈ 3px) */
-.borda-manha { border: 3px solid var(--yellow-border); }
-.borda-tarde { border: 3px solid var(--cyan-border); }
+.borda-manha { border: 3px solid #FFFF00; }
+.borda-tarde { border: 3px solid #00FFFF; }
 
 .nome-aluno {
     flex: 1;
@@ -125,10 +120,7 @@ body {
     font-size: 20pt;
     font-weight: bold;
     text-align: center;
-    padding-left: 10px;
-    line-height: 1.1;
-}
-
-@media print {
-    .glass-container { display: none; }
+    text-transform: uppercase;
+    padding: 10px;
+    cursor: text;
 }
