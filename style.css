@@ -1,126 +1,64 @@
-:root {
-    --glass-white: rgba(255, 255, 255, 0.85);
-    --border-radius: 20px;
+function goToStep(step) {
+    document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
+    document.getElementById(`step-${step}`).classList.remove('hidden');
 }
 
-body {
-    margin: 0;
-    height: 100vh;
-    background: url('FUNDO.png') no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Calibri', sans-serif;
+async function gerarEtiquetas() {
+    const files = document.getElementById('upload-fotos').files;
+    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const container = document.getElementById('preview-container');
+    
+    if (files.length === 0) return alert("Por favor, selecione as fotos.");
+
+    container.innerHTML = "";
+    goToStep(3); // Vai para a tela de edição
+
+    let currentPage;
+    for (let i = 0; i < files.length; i++) {
+        if (i % 8 === 0) {
+            currentPage = document.createElement('div');
+            currentPage.className = 'page-a4';
+            container.appendChild(currentPage);
+        }
+
+        const file = files[i];
+        const nomeOriginal = file.name.split('.')[0];
+        const imgSrc = URL.createObjectURL(file);
+
+        const etiqueta = document.createElement('div');
+        etiqueta.className = 'etiqueta';
+        etiqueta.innerHTML = `
+            <div class="topo">
+                <img src="LOGO.jpg" style="height:1.4cm">
+                <div style="font-size:12pt; font-weight:bold; flex:1; text-align:center;">
+                    ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX
+                </div>
+            </div>
+            <div class="corpo">
+                <img src="${imgSrc}" class="foto ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
+                <div class="nome-aluno" contenteditable="true">${nomeOriginal}</div>
+            </div>
+        `;
+        currentPage.appendChild(etiqueta);
+    }
 }
 
-/* Janela Fixa Central */
-.main-window {
-    background: var(--glass-white);
-    backdrop-filter: blur(10px);
-    width: 90%;
-    max-width: 1000px;
-    height: 85vh;
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    position: relative;
-    padding: 40px;
-    overflow-y: auto; /* Permite rolar para ver as etiquetas */
-    box-sizing: border-box;
-}
+function imprimirPDF() {
+    const element = document.getElementById('preview-container');
+    
+    // Remove o zoom de visualização apenas para o PDF
+    element.style.transform = "scale(1)";
+    
+    const opt = {
+        margin: 0,
+        filename: 'etiquetas_escolares.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+    };
 
-.top-right-logo {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 70px;
-    height: auto;
-}
-
-/* Botões Estilo Glass */
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-top: 50px;
-}
-
-.btn-glass {
-    background: white;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-glass:hover {
-    background: #f0f0f0;
-    transform: scale(1.05);
-}
-
-.hidden { display: none; }
-
-/* Preview das Etiquetas dentro da janela */
-#preview-container {
-    transform: scale(0.7); /* Zoom out para caber na janela de edição */
-    transform-origin: top center;
-    margin-top: -50px;
-}
-
-/* Medidas Reais para o PDF (serão restauradas no download) */
-.page-a4 {
-    width: 21cm;
-    background: white;
-    margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 9cm 9cm;
-    grid-auto-rows: 6.3cm;
-    justify-content: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.etiqueta {
-    width: 9cm;
-    height: 6.3cm;
-    border: 0.1mm solid #eee;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-}
-
-.topo {
-    height: 1.75cm;
-    display: flex;
-    align-items: center;
-    padding: 0 5px;
-}
-
-.corpo {
-    display: flex;
-    flex: 1;
-    padding: 5px;
-    align-items: center;
-}
-
-.foto {
-    width: 3cm;
-    height: 4cm;
-    object-fit: cover;
-}
-
-.borda-manha { border: 3px solid #FFFF00; }
-.borda-tarde { border: 3px solid #00FFFF; }
-
-.nome-aluno {
-    flex: 1;
-    font-family: 'Bogart Black', 'Arial Black', sans-serif;
-    font-size: 20pt;
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
-    padding: 10px;
-    cursor: text;
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Restaura o zoom para continuar editando no site se precisar
+        element.style.transform = "scale(0.7)";
+    });
 }
