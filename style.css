@@ -1,0 +1,127 @@
+/* Geral e Fundo */
+body {
+    margin: 0;
+    font-family: 'Calibri', sans-serif;
+    background: url('FUNDO.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+}
+
+/* Menu Lateral Fixo */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    position: fixed;
+    right: 0; /* Conforme solicitado: canto direito */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.menu-logo {
+    width: 80px;
+    margin: 0 auto 20px;
+}
+
+.sidebar button {
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: white;
+    font-weight: bold;
+}
+
+/* Área de Trabalho */
+#content {
+    margin-right: 240px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Configuração da Folha A4 */
+.page {
+    width: 21cm;
+    min-height: 29.7cm;
+    padding: 1cm;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+/* Grid de Etiquetas: 2 colunas verticais */
+#etiquetas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 9cm);
+    gap: 0; /* Coladas conforme pedido */
+    justify-content: center;
+}
+
+/* Layout da Etiqueta Individual */
+.etiqueta {
+    width: 9cm;
+    height: 6.3cm;
+    border: 0.5px solid #eee; /* Apenas guia visual */
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.topo-etiqueta {
+    height: 1.75cm;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 0 5px;
+}
+
+.escola-logo {
+    height: 1.5cm;
+    width: auto;
+}
+
+.escola-nome {
+    font-family: 'Calibri', sans-serif;
+    font-size: 12pt;
+    text-align: center;
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+.corpo-etiqueta {
+    display: flex;
+    align-items: center;
+    height: 4.55cm;
+    padding: 5px;
+}
+
+/* Foto do Aluno com Borda Dinâmica */
+.foto-aluno {
+    width: 3.5cm;
+    height: 4cm;
+    object-fit: cover;
+}
+
+.borda-manha { border: 2.25pt solid yellow; }
+.borda-tarde { border: 2.25pt solid cyan; }
+
+/* Nome do Aluno */
+.nome-aluno {
+    flex: 1;
+    font-family: 'Bogart Black', sans-serif; /* Certifique-se de ter a fonte ou use Arial Black como fallback */
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+    padding-left: 10px;
+}
+
+/* Campo de edição */
+.edit-name {
+    width: 90%;
+    font-size: 10pt;
+    margin-top: 5px;
+}
