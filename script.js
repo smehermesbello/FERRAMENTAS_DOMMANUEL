@@ -1,46 +1,56 @@
+// Navegação entre telas com efeito de transição simples
 function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(screenId).classList.remove('hidden');
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(s => {
+        s.classList.add('hidden');
+        s.style.opacity = '0';
+    });
+
+    const active = document.getElementById(screenId);
+    active.classList.remove('hidden');
+    setTimeout(() => {
+        active.style.opacity = '1';
+        active.style.transition = 'opacity 0.4s ease';
+    }, 50);
 }
 
 async function generatePreview() {
-    const input = document.getElementById('file-input');
+    const fileInput = document.getElementById('file-input');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const pdfArea = document.getElementById('pdf-area');
-    
-    if (input.files.length === 0) {
-        alert("Por favor, selecione as imagens dos estudantes.");
+
+    if (fileInput.files.length === 0) {
+        alert("Ops! Você esqueceu de selecionar as fotos dos alunos.");
         return;
     }
 
-    pdfArea.innerHTML = ""; // Limpa preview anterior
+    pdfArea.innerHTML = ""; // Limpa visualização anterior
     showScreen('screen-preview');
 
-    let files = Array.from(input.files);
-    let totalFiles = files.length;
-    let itemsPerPage = 8;
-    
-    for (let i = 0; i < totalFiles; i += itemsPerPage) {
-        // Criar uma nova folha A4
+    const files = Array.from(fileInput.files);
+    const total = files.length;
+    const porPagina = 8;
+
+    for (let i = 0; i < total; i += porPagina) {
         const page = document.createElement('div');
         page.className = 'page-a4';
-        
-        let chunk = files.slice(i, i + itemsPerPage);
-        
-        for (let file of chunk) {
-            const imgSrc = await readFile(file);
-            const nomeAluno = file.name.split('.')[0].toUpperCase();
-            
+
+        const fotosNoBloco = files.slice(i, i + porPagina);
+
+        for (let file of fotosNoBloco) {
+            const imgSrc = await lerImagem(file);
+            const nomeSemExtensao = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ");
+
             const etiqueta = document.createElement('div');
             etiqueta.className = 'etiqueta';
             etiqueta.innerHTML = `
                 <div class="etiqueta-topo">
                     <img src="LOGO.jpg" class="etiqueta-logo">
-                    <div class="etiqueta-titulo">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
+                    <div class="etiqueta-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
                 </div>
                 <div class="etiqueta-corpo">
                     <img src="${imgSrc}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
-                    <div class="nome-aluno" contenteditable="true">${nomeAluno}</div>
+                    <div class="nome-aluno" contenteditable="true">${nomeSemExtensao}</div>
                 </div>
             `;
             page.appendChild(etiqueta);
@@ -49,7 +59,8 @@ async function generatePreview() {
     }
 }
 
-function readFile(file) {
+// Promessa para ler o arquivo de imagem
+function lerImagem(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
@@ -57,15 +68,23 @@ function readFile(file) {
     });
 }
 
+// Função para baixar o PDF
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
+    const btin = document.querySelector('.btn-download');
+    btin.innerText = "GERANDO PDF...";
+    btin.disabled = true;
+
     const opt = {
         margin: 0,
-        filename: 'etiquetas-escolares.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
+        filename: 'Etiquetas_Dom_Manuel.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
-    
-    html2pdf().set(opt).from(element).save();
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        btin.innerText = "BAIXAR PDF FINAL";
+        btin.disabled = false;
+    });
 }
