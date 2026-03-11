@@ -1,59 +1,63 @@
-function gerarEtiquetas() {
-    const input = document.getElementById('upload-fotos');
-    const grid = document.getElementById('etiquetas-grid');
-    const turno = document.getElementById('turno').value;
+function showEtiquetas() {
+    document.getElementById('etiquetas-controls').classList.remove('hidden');
+}
+
+async function gerarEtiquetas() {
+    const files = document.getElementById('upload-fotos').files;
+    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const container = document.getElementById('pdf-content');
     
-    if (input.files.length === 0) {
-        alert("Selecione fotos primeiro!");
-        return;
+    container.innerHTML = ""; // Limpa anterior
+
+    if (files.length === 0) return alert("Selecione as fotos!");
+
+    let currentPage;
+    let grid;
+
+    for (let i = 0; i < files.length; i++) {
+        // Cria nova página A4 a cada 8 fotos
+        if (i % 8 === 0) {
+            currentPage = document.createElement('div');
+            currentPage.className = 'page-a4';
+            container.appendChild(currentPage);
+        }
+
+        const file = files[i];
+        const nomeAlun = file.name.split('.')[0]; // Pega nome do arquivo
+        const imgSrc = await readFileAsDataURL(file);
+
+        const etiqueta = document.createElement('div');
+        etiqueta.className = 'etiqueta';
+        etiqueta.innerHTML = `
+            <div class="topo-etiqueta">
+                <img src="LOGO.jpg" class="logo-etiqueta">
+                <div class="titulo-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
+            </div>
+            <div class="conteudo-etiqueta">
+                <img src="${imgSrc}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
+                <div class="nome-aluno" contenteditable="true">${nomeAlun.toUpperCase()}</div>
+            </div>
+        `;
+        currentPage.appendChild(etiqueta);
     }
+}
 
-    grid.innerHTML = ""; // Limpa a folha
-    
-    // Limite de 8 fotos
-    const numFotos = Math.min(input.files.length, 8);
-
-    for (let i = 0; i < numFotos; i++) {
-        const file = input.files[i];
+function readFileAsDataURL(file) {
+    return new Promise((resolve) => {
         const reader = new FileReader();
-
-        reader.onload = function(e) {
-            // Remove a extensão do nome do arquivo
-            const nomeArquivo = file.name.replace(/\.[^/.]+$/, "");
-            
-            const etiquetaHtml = `
-                <div class="etiqueta">
-                    <div class="topo-etiqueta">
-                        <img src="LOGO.jpg" class="escola-logo">
-                        <div class="escola-nome">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
-                    </div>
-                    <div class="corpo-etiqueta">
-                        <img src="${e.target.result}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
-                        <div class="nome-aluno" contenteditable="true">${nomeArquivo}</div>
-                    </div>
-                    <div style="font-size: 8pt; color: gray; text-align:center;">(Clique no nome para editar)</div>
-                </div>
-            `;
-            grid.innerHTML += etiquetaHtml;
-        };
+        reader.onload = (e) => resolve(e.target.result);
         reader.readAsDataURL(file);
-    }
+    });
 }
 
 function imprimirPDF() {
-    const element = document.getElementById('folha-a4');
+    const element = document.getElementById('pdf-content');
     const opt = {
         margin: 0,
-        filename: 'etiquetas_escolares.pdf',
+        filename: 'etiquetas_alunos.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
-
     html2pdf().set(opt).from(element).save();
-}
-
-function showSection(sectionId) {
-    // No futuro, aqui você alterna entre etiquetas, carômetros, etc.
-    alert("Abrindo seção de " + sectionId);
 }
