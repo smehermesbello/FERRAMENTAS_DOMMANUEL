@@ -3,42 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Formatação Escolar</title>
+    <title>Sistema de Formatação Escolar - Dom Manuel</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <img src="LOGO.jpg" alt="Logo" class="menu-logo">
-        <button onclick="showSection('etiquetas')">Etiquetas</button>
-        <button>Carômetro</button>
-        <button>Listagem</button>
-        <button>Carteirinha</button>
-        <button>Formatação</button>
-    </nav>
+    <div class="glass-container">
+        <header class="glass-header">
+            <img src="LOGO.jpg" alt="Logo" class="main-logo">
+            <h1>Painel de Controle</h1>
+        </header>
+        
+        <nav class="glass-nav">
+            <button onclick="showEtiquetas()" class="btn-glass">Etiqueta</button>
+            <button class="btn-glass">Carômetro</button>
+            <button class="btn-glass">Listagem</button>
+            <button class="btn-glass">Carteirinha</button>
+            <button class="btn-glass">Formatação</button>
+        </nav>
 
-    <main id="content">
-        <section id="etiquetas-section">
-            <h1>Gerador de Etiquetas</h1>
-            
-            <div class="controls">
-                <input type="file" id="upload-fotos" accept="image/*" multiple>
-                <select id="turno">
-                    <option value="manha">Manhã (Amarelo)</option>
-                    <option value="tarde">Tarde (Azul Ciano)</option>
-                </select>
-                <button onclick="gerarEtiquetas()" class="btn-main">Gerar Etiquetas</button>
-                <button onclick="imprimirPDF()" class="btn-print">Imprimir PDF (A4)</button>
+        <div id="etiquetas-controls" class="controls-area hidden">
+            <input type="file" id="upload-fotos" accept="image/*" multiple>
+            <div class="options">
+                <label><input type="radio" name="turno" value="manha" checked> Manhã</label>
+                <label><input type="radio" name="turno" value="tarde"> Tarde</label>
             </div>
+            <button onclick="gerarEtiquetas()" class="btn-action">Gerar Etiquetas</button>
+            <button onclick="imprimirPDF()" class="btn-print">Baixar PDF A4</button>
+        </div>
+    </div>
 
-            <p><small>* Máximo de 08 fotos por folha.</small></p>
-
-            <div id="folha-a4" class="page">
-                <div id="etiquetas-grid"></div>
-            </div>
-        </section>
-    </main>
+    <div id="pdf-content">
+        </div>
 
     <script src="script.js"></script>
 </body>
