@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Formatação Escolar</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <img src="LOGO.jpg" alt="Logo" class="menu-logo">
+        <button onclick="showSection('etiquetas')">Etiquetas</button>
+        <button>Carômetro</button>
+        <button>Listagem</button>
+        <button>Carteirinha</button>
+        <button>Formatação</button>
+    </nav>
+
+    <main id="content">
+        <section id="etiquetas-section">
+            <h1>Gerador de Etiquetas</h1>
+            
+            <div class="controls">
+                <input type="file" id="upload-fotos" accept="image/*" multiple>
+                <select id="turno">
+                    <option value="manha">Manhã (Amarelo)</option>
+                    <option value="tarde">Tarde (Azul Ciano)</option>
+                </select>
+                <button onclick="gerarEtiquetas()" class="btn-main">Gerar Etiquetas</button>
+                <button onclick="imprimirPDF()" class="btn-print">Imprimir PDF (A4)</button>
+            </div>
+
+            <p><small>* Máximo de 08 fotos por folha.</small></p>
+
+            <div id="folha-a4" class="page">
+                <div id="etiquetas-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
