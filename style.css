@@ -1,127 +1,134 @@
-/* Geral e Fundo */
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --cyan-border: #00FFFF;
+    --yellow-border: #FFFF00;
+}
+
 body {
     margin: 0;
-    font-family: 'Calibri', sans-serif;
+    min-height: 100vh;
     background: url('FUNDO.png') no-repeat center center fixed;
     background-size: cover;
+    font-family: 'Calibri', sans-serif;
     display: flex;
-}
-
-/* Menu Lateral Fixo */
-.sidebar {
-    width: 200px;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.9);
-    position: fixed;
-    right: 0; /* Conforme solicitado: canto direito */
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-    z-index: 1000;
-}
-
-.menu-logo {
-    width: 80px;
-    margin: 0 auto 20px;
-}
-
-.sidebar button {
-    margin: 10px 0;
-    padding: 10px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    background: white;
-    font-weight: bold;
-}
-
-/* Área de Trabalho */
-#content {
-    margin-right: 240px;
-    padding: 20px;
-    width: 100%;
-}
-
-/* Configuração da Folha A4 */
-.page {
-    width: 21cm;
-    min-height: 29.7cm;
-    padding: 1cm;
-    margin: 20px auto;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-/* Grid de Etiquetas: 2 colunas verticais */
-#etiquetas-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 9cm);
-    gap: 0; /* Coladas conforme pedido */
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-/* Layout da Etiqueta Individual */
+/* Janela Fixa Liquid Glass */
+.glass-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    width: 600px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    text-align: center;
+    position: relative;
+    z-index: 100;
+}
+
+.main-logo {
+    width: 80px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border-radius: 10px;
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 12px 20px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Esconder elementos */
+.hidden { display: none; }
+
+/* Configuração da Etiqueta (Precisão Técnica) */
+.page-a4 {
+    width: 21cm;
+    height: 29.7cm;
+    background: white;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 9cm 9cm; /* Duas fileiras verticais */
+    grid-auto-rows: 6.3cm;
+    justify-content: center;
+    align-content: start;
+    box-sizing: border-box;
+    padding-top: 1cm;
+}
+
 .etiqueta {
     width: 9cm;
     height: 6.3cm;
-    border: 0.5px solid #eee; /* Apenas guia visual */
-    box-sizing: border-box;
+    border: 0.1px solid #ddd; /* Guia de corte fina */
     position: relative;
     overflow: hidden;
+    color: black;
 }
 
 .topo-etiqueta {
     height: 1.75cm;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding: 0 5px;
+    padding: 0 0.3cm;
 }
 
-.escola-logo {
-    height: 1.5cm;
-    width: auto;
-}
+.logo-etiqueta { height: 1.3cm; width: auto; }
 
-.escola-nome {
+.titulo-escola {
     font-family: 'Calibri', sans-serif;
     font-size: 12pt;
     text-align: center;
-    flex-grow: 1;
+    flex: 1;
     font-weight: bold;
 }
 
-.corpo-etiqueta {
+.conteudo-etiqueta {
     display: flex;
-    align-items: center;
     height: 4.55cm;
-    padding: 5px;
+    padding: 0.2cm;
+    align-items: center;
 }
 
-/* Foto do Aluno com Borda Dinâmica */
 .foto-aluno {
-    width: 3.5cm;
+    width: 3cm; /* Proporção 3x4 */
     height: 4cm;
     object-fit: cover;
 }
 
-.borda-manha { border: 2.25pt solid yellow; }
-.borda-tarde { border: 2.25pt solid cyan; }
+/* Bordas solicitadas (2.25 points ≈ 3px) */
+.borda-manha { border: 3px solid var(--yellow-border); }
+.borda-tarde { border: 3px solid var(--cyan-border); }
 
-/* Nome do Aluno */
 .nome-aluno {
     flex: 1;
-    font-family: 'Bogart Black', sans-serif; /* Certifique-se de ter a fonte ou use Arial Black como fallback */
+    font-family: 'Bogart Black', 'Arial Black', sans-serif;
     font-size: 20pt;
     font-weight: bold;
     text-align: center;
-    word-wrap: break-word;
     padding-left: 10px;
+    line-height: 1.1;
 }
 
-/* Campo de edição */
-.edit-name {
-    width: 90%;
-    font-size: 10pt;
-    margin-top: 5px;
+@media print {
+    .glass-container { display: none; }
 }
