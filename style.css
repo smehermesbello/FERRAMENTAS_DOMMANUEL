@@ -1,138 +1,149 @@
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --primary-color: #2c3e50;
     --verde-musgo: #4A5D23;
     --azul-intenso: #003399;
+    --text-dark: #2c3e50;
+    --glass: rgba(255, 255, 255, 0.6);
 }
 
 body {
     margin: 0;
     height: 100vh;
+    background: url('FUNDO.png') no-repeat center center fixed;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('FUNDO.png') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Calibri', sans-serif;
+    font-family: 'Calibri', 'Segoe UI', sans-serif;
+    color: var(--text-dark);
 }
 
-/* Janela Branca Centralizada */
+/* JANELA BRANCA CENTRAL */
 .main-window {
-    background: rgba(255, 255, 255, 0.95);
-    width: 90%;
-    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.92);
+    width: 95%;
+    max-width: 1100px;
     height: 85vh;
-    border-radius: 30px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    border-radius: 40px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
     position: relative;
-    padding: 40px;
+    padding: 50px;
+    box-sizing: border-box;
     overflow-y: auto;
     backdrop-filter: blur(10px);
 }
 
 .corner-logo {
     position: absolute;
-    top: 25px;
-    right: 35px;
-    width: 100px;
-    height: auto;
+    top: 30px;
+    right: 40px;
+    width: 110px;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
 }
 
+/* UTILITÁRIOS */
+.flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .hidden { display: none !important; }
 
-/* Estética Liquid Glass nos Botões */
+/* TELA INICIAL */
+.main-title { font-size: 4rem; font-weight: 900; margin: 0; letter-spacing: -2px; color: var(--text-dark); }
+.subtitle { font-size: 1.4rem; margin-bottom: 50px; opacity: 0.8; }
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: 100%;
+    max-width: 800px;
+}
+
 .btn-main {
-    background: var(--glass-bg);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 15px 30px;
-    margin: 10px;
+    height: 140px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    border-radius: 25px;
+    border: 1px solid rgba(0,0,0,0.05);
+    background: var(--glass);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.btn-main .icon { font-size: 3rem; margin-bottom: 10px; }
+.btn-main:hover:not(:disabled) { transform: translateY(-10px); background: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+.btn-main:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(1); }
+
+/* CONFIGURAÇÕES */
+.config-container {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.config-item { margin-bottom: 30px; text-align: left; }
+.config-item label { font-size: 1.3rem; font-weight: bold; display: block; margin-bottom: 15px; }
+
+.turno-selector { display: flex; gap: 20px; }
+.turno-card { flex: 1; cursor: pointer; }
+.turno-card input { display: none; }
+.card-content {
+    display: block;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 2px solid #eee;
     border-radius: 15px;
-    backdrop-filter: blur(5px);
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    transition: 0.3s;
+}
+.turno-card input:checked + .card-content { border-color: var(--text-dark); background: var(--text-dark); color: white; }
+
+.btn-execute {
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    background: #27ae60;
+    color: white;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    font-size: 1.1em;
 }
 
-.btn-main:hover {
-    background: white;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
+.btn-back { position: absolute; top: 40px; left: 40px; background: none; border: 1px solid #ccc; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
 
-/* Layout das Etiquetas no Preview (Medidas Reais) */
+/* ETIQUETAS (MEDIDAS REAIS) */
 .page-a4 {
     width: 21cm;
     min-height: 29.7cm;
     background: white;
-    margin: 20px auto;
-    padding: 1cm 0; /* Centralização vertical das etiquetas na folha */
+    margin: 30px auto;
     display: grid;
     grid-template-columns: 9cm 9cm;
     grid-auto-rows: 6.3cm;
     justify-content: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
-.etiqueta {
-    width: 9cm;
-    height: 6.3cm;
-    border: 0.1px solid #eee; /* Guia de corte */
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-}
+.etiqueta { width: 9cm; height: 6.3cm; border: 0.1mm solid #eee; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; }
+.etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; border-bottom: 0.1mm solid #f0f0f0; }
+.etiqueta-logo { width: 1.4cm; height: auto; margin-right: 10px; }
+.etiqueta-escola { font-size: 12pt; font-weight: bold; text-align: center; line-height: 1.1; }
+.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 0.2cm; }
+.foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
+.nome-aluno { flex: 1; font-family: 'Arial Black', sans-serif; font-size: 19pt; font-weight: bold; text-align: center; padding-left: 10px; line-height: 1.2; text-transform: uppercase; }
 
-.etiqueta-topo {
-    height: 1.75cm;
-    display: flex;
-    align-items: center;
-    padding: 0 0.2cm;
-}
+/* Bordas solicitadas */
+.borda-manha { border: 2.25pt solid var(--verde-musgo); }
+.borda-tarde { border: 2.25pt solid var(--azul-intenso); }
 
-.etiqueta-logo { width: 1.5cm; height: auto; }
-
-.etiqueta-titulo {
-    font-size: 12pt;
-    text-align: center;
-    font-weight: bold;
-    flex: 1;
-}
-
-.etiqueta-corpo {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-}
-
-.foto-aluno {
-    width: 3cm;
-    height: 4cm;
-    object-fit: cover;
-}
-
-.nome-aluno {
-    flex: 1;
-    font-family: 'Bogart Black', 'Arial Black', sans-serif;
-    font-size: 20pt;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
-    word-wrap: break-word;
-    cursor: text;
-}
-
-/* Bordas dinâmicas */
-.borda-manha { border: 3px solid var(--verde-musgo); }
-.borda-tarde { border: 3px solid var(--azul-intenso); }
-
-/* Botões de Ação */
-.btn-action, .btn-print {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2em;
-}
+.preview-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+.btn-download { background: #e67e22; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; }
