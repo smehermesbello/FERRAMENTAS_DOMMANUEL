@@ -3,45 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Formatação Escolar</title>
+    <title>Sistema Escolar - Dom Manuel</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
     <div class="main-window">
-        <img src="LOGO.jpg" alt="Logo" class="top-right-logo">
+        <img src="LOGO.jpg" alt="Logo" class="corner-logo">
         
-        <div id="step-1" class="step">
-            <h2>O que deseja formatar hoje?</h2>
-            <div class="button-grid">
-                <button onclick="goToStep(2)" class="btn-glass">Etiquetas</button>
-                <button class="btn-glass" disabled>Carômetro</button>
-                <button class="btn-glass" disabled>Listagem</button>
-                <button class="btn-glass" disabled>Carteirinha</button>
-                <button class="btn-glass" disabled>Formatação</button>
+        <div id="screen-menu" class="screen">
+            <h1 class="glass-title">Painel de Formatação</h1>
+            <div class="button-container">
+                <button class="btn-main" onclick="showScreen('screen-config')">Etiqueta</button>
+                <button class="btn-main" disabled title="Em breve">Carômetro</button>
+                <button class="btn-main" disabled title="Em breve">Listagem</button>
+                <button class="btn-main" disabled title="Em breve">Carteirinha</button>
+                <button class="btn-main" disabled title="Em breve">Formatação</button>
             </div>
         </div>
 
-        <div id="step-2" class="step hidden">
-            <button onclick="goToStep(1)" class="btn-back">← Voltar</button>
+        <div id="screen-config" class="screen hidden">
+            <button class="btn-back" onclick="showScreen('screen-menu')">← Voltar</button>
             <h2>Configuração de Etiquetas</h2>
-            <div class="upload-box">
-                <input type="file" id="upload-fotos" accept="image/*" multiple>
-                <div class="turno-select">
-                    <label><input type="radio" name="turno" value="manha" checked> Manhã (Amarelo)</label>
-                    <label><input type="radio" name="turno" value="tarde"> Tarde (Ciano)</label>
+            
+            <div class="config-form">
+                <div class="input-group">
+                    <label>Selecione as Imagens dos Alunos:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple>
                 </div>
-                <button onclick="gerarEtiquetas()" class="btn-action">Carregar Fotos</button>
+                
+                <div class="input-group">
+                    <label>Selecione o Turno:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="turno" value="manha" checked> Manhã (Verde)</label>
+                        <label><input type="radio" name="turno" value="tarde"> Tarde (Azul)</label>
+                    </div>
+                </div>
+
+                <button class="btn-action" onclick="generatePreview()">Ver Resultados</button>
             </div>
         </div>
 
-        <div id="step-3" class="step hidden">
-            <div class="toolbar">
-                <button onclick="goToStep(2)" class="btn-back">← Trocar Fotos</button>
-                <button onclick="imprimirPDF()" class="btn-print">Baixar PDF Final</button>
+        <div id="screen-preview" class="screen hidden">
+            <div class="preview-header">
+                <button class="btn-back" onclick="showScreen('screen-config')">← Configurações</button>
+                <button class="btn-print" onclick="downloadPDF()">Baixar PDF Final</button>
             </div>
-            <div id="preview-container">
+            
+            <div id="pdf-area">
                 </div>
         </div>
     </div>
