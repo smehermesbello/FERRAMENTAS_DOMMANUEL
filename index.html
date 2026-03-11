@@ -3,39 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Formatação Escolar - Dom Manuel</title>
+    <title>Sistema de Formatação Escolar</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
-    <div class="glass-container">
-        <header class="glass-header">
-            <img src="LOGO.jpg" alt="Logo" class="main-logo">
-            <h1>Painel de Controle</h1>
-        </header>
+    <div class="main-window">
+        <img src="LOGO.jpg" alt="Logo" class="top-right-logo">
         
-        <nav class="glass-nav">
-            <button onclick="showEtiquetas()" class="btn-glass">Etiqueta</button>
-            <button class="btn-glass">Carômetro</button>
-            <button class="btn-glass">Listagem</button>
-            <button class="btn-glass">Carteirinha</button>
-            <button class="btn-glass">Formatação</button>
-        </nav>
-
-        <div id="etiquetas-controls" class="controls-area hidden">
-            <input type="file" id="upload-fotos" accept="image/*" multiple>
-            <div class="options">
-                <label><input type="radio" name="turno" value="manha" checked> Manhã</label>
-                <label><input type="radio" name="turno" value="tarde"> Tarde</label>
+        <div id="step-1" class="step">
+            <h2>O que deseja formatar hoje?</h2>
+            <div class="button-grid">
+                <button onclick="goToStep(2)" class="btn-glass">Etiquetas</button>
+                <button class="btn-glass" disabled>Carômetro</button>
+                <button class="btn-glass" disabled>Listagem</button>
+                <button class="btn-glass" disabled>Carteirinha</button>
+                <button class="btn-glass" disabled>Formatação</button>
             </div>
-            <button onclick="gerarEtiquetas()" class="btn-action">Gerar Etiquetas</button>
-            <button onclick="imprimirPDF()" class="btn-print">Baixar PDF A4</button>
+        </div>
+
+        <div id="step-2" class="step hidden">
+            <button onclick="goToStep(1)" class="btn-back">← Voltar</button>
+            <h2>Configuração de Etiquetas</h2>
+            <div class="upload-box">
+                <input type="file" id="upload-fotos" accept="image/*" multiple>
+                <div class="turno-select">
+                    <label><input type="radio" name="turno" value="manha" checked> Manhã (Amarelo)</label>
+                    <label><input type="radio" name="turno" value="tarde"> Tarde (Ciano)</label>
+                </div>
+                <button onclick="gerarEtiquetas()" class="btn-action">Carregar Fotos</button>
+            </div>
+        </div>
+
+        <div id="step-3" class="step hidden">
+            <div class="toolbar">
+                <button onclick="goToStep(2)" class="btn-back">← Trocar Fotos</button>
+                <button onclick="imprimirPDF()" class="btn-print">Baixar PDF Final</button>
+            </div>
+            <div id="preview-container">
+                </div>
         </div>
     </div>
-
-    <div id="pdf-content">
-        </div>
 
     <script src="script.js"></script>
 </body>
