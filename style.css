@@ -57,9 +57,9 @@ body {
 
 .etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; box-sizing: border-box; }
 
-/* RECONSTRUÇÃO DA MOLDURA PARA PDF */
+/* MOLDURA PARA PDF */
 .container-foto {
-    position: relative; /* Base para os elementos internos */
+    position: relative;
     width: 3.2cm;
     height: 4.2cm;
     min-width: 3.2cm;
@@ -73,21 +73,20 @@ body {
     display: block;
 }
 
-/* O QUADRO REAL: Um elemento que fica por cima da foto */
 .moldura-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Não atrapalha cliques */
+    pointer-events: none;
     box-sizing: border-box;
-    border: 5px solid transparent; /* Reservando espaço */
+    /* ESPESSURA REDUZIDA PARA 3PX */
+    border: 3px solid transparent; 
 }
 
-/* Cores aplicadas diretamente na borda da moldura overlay */
-.moldura-verde { border: 5px solid var(--verde) !important; }
-.moldura-azul { border: 5px solid var(--azul) !important; }
+.moldura-verde { border: 3px solid var(--verde) !important; }
+.moldura-azul { border: 3px solid var(--azul) !important; }
 
 .nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; color: #000; text-transform: uppercase; }
 .preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 20px auto; }
