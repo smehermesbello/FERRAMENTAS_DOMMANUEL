@@ -1,4 +1,3 @@
-/* IMPORTAÇÃO DA FONTE COINY */
 @font-face {
     font-family: 'CoinyCustom';
     src: url('Coiny-Cyrillic.ttf') format('truetype');
@@ -10,7 +9,6 @@
     --verde-musgo: #4A5D23;
     --azul-intenso: #003399;
     --text-dark: #2c3e50;
-    --glass-white: rgba(255, 255, 255, 0.95);
 }
 
 body {
@@ -22,153 +20,102 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Calibri', sans-serif;
-    color: var(--text-dark);
 }
 
-/* JANELA CENTRAL */
 .main-window {
-    background: var(--glass-white);
+    background: rgba(255, 255, 255, 0.96);
     width: 95%;
     max-width: 1100px;
     height: 85vh;
     border-radius: 40px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
     position: relative;
     padding: 60px;
     box-sizing: border-box;
     overflow-y: auto;
-    backdrop-filter: blur(15px);
 }
 
-.corner-logo {
-    position: absolute;
-    top: 30px;
-    right: 45px;
-    width: 110px;
-}
-
+.corner-logo { position: absolute; top: 30px; right: 45px; width: 110px; }
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .hidden { display: none !important; }
 
-/* MENU INICIAL */
-.main-title { font-size: 3.8rem; font-weight: 900; margin: 0; color: var(--text-dark); }
-.subtitle { font-size: 1.3rem; margin-bottom: 50px; opacity: 0.7; }
-
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    width: 100%;
-    max-width: 850px;
-}
+.main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin: 0; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 40px; }
 
 .btn-main {
-    height: 150px;
-    font-size: 1.6rem;
-    font-weight: bold;
-    border-radius: 25px;
-    border: 1px solid rgba(0,0,0,0.05);
-    background: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-main:hover:not(:disabled) { transform: translateY(-8px); background: #fff; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-.btn-main:disabled { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
-
-/* CONFIGURAÇÕES */
-.config-container {
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 30px;
-    width: 100%;
-    max-width: 750px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-}
-
-.config-item { margin-bottom: 35px; text-align: left; }
-.config-item label { font-size: 1.4rem; font-weight: bold; display: block; margin-bottom: 15px; }
-
-.turno-selector { display: flex; gap: 20px; }
-.turno-card { flex: 1; cursor: pointer; }
-.turno-card input { display: none; }
-.card-content {
-    display: block;
-    padding: 20px;
-    background: #f1f3f5;
-    border: 2px solid #e9ecef;
-    border-radius: 18px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: center;
-    transition: 0.3s;
-}
-.turno-card input:checked + .card-content { border-color: var(--text-dark); background: var(--text-dark); color: white; }
-
-.btn-execute {
-    width: 100%;
-    padding: 22px;
-    border-radius: 15px;
-    border: none;
-    background: #27ae60;
-    color: white;
+    height: 120px;
     font-size: 1.4rem;
     font-weight: bold;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: white;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.btn-back { position: absolute; top: 40px; left: 45px; background: none; border: 1px solid #ccc; padding: 12px 25px; border-radius: 12px; cursor: pointer; }
+.btn-main:hover:not(:disabled) { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-/* ÁREA DO PDF E ETIQUETAS */
+.config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.turno-selector { display: flex; gap: 15px; margin-top: 10px; }
+.turno-card { flex: 1; cursor: pointer; }
+.turno-card input { display: none; }
+.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; text-align: center; font-weight: bold; }
+.turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
+
+.btn-execute { width: 100%; padding: 20px; margin-top: 20px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
+
+/* ETIQUETAS */
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
     background: white;
-    margin-bottom: 40px;
     display: grid;
     grid-template-columns: 9cm 9cm;
     grid-auto-rows: 6.3cm;
     justify-content: center;
-    box-sizing: border-box;
     page-break-after: always;
 }
 
 .etiqueta {
     width: 9cm;
     height: 6.3cm;
-    border: 0.01mm solid #f0f0f0;
-    box-sizing: border-box;
+    border: 0.1mm solid #eee;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
 .etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
-.etiqueta-logo { width: 1.4cm; height: auto; margin-right: 12px; }
-.etiqueta-escola { font-size: 12pt; font-weight: bold; text-align: center; line-height: 1.1; flex: 1; }
+.etiqueta-logo { width: 1.4cm; height: auto; margin-right: 10px; }
+.etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; }
 
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 0.2cm; }
+.etiqueta-corpo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
 .foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
-
 .borda-manha { border: 3px solid var(--verde-musgo); }
 .borda-tarde { border: 3px solid var(--azul-intenso); }
 
-/* APLICAÇÃO DA FONTE COINY */
 .nome-aluno {
     flex: 1;
     font-family: 'CoinyCustom', sans-serif;
-    font-size: 22pt;
+    font-size: 18pt; /* Tamanho base reduzido */
     text-align: center;
-    padding: 0 10px;
+    padding-left: 10px;
     line-height: 1.1;
     text-transform: uppercase;
     word-wrap: break-word;
-    cursor: text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
-.preview-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 25px; }
-.btn-download { background: #e67e22; color: white; border: none; padding: 18px 35px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+.preview-controls { display: flex; justify-content: space-between; padding-bottom: 20px; }
+.btn-download { background: #e67e22; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; }
