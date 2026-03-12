@@ -7,7 +7,7 @@ function showScreen(id) {
 
 function openConfig(mode) {
     currentMode = mode;
-    document.getElementById('config-title').innerText = mode.toUpperCase();
+    document.getElementById('config-title').innerText = mode === 'etiqueta' ? "GERADOR DE ETIQUETAS" : "GERADOR DE CARÔMETRO";
     showScreen('screen-config');
 }
 
@@ -17,7 +17,7 @@ async function startGeneration() {
     
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "Gerando...";
+    area.innerHTML = "<h2 style='color:white'>PREPARANDO...</h2>";
 
     if (currentMode === 'etiqueta') await genEtiquetas(files);
     else await genCarometro(files);
@@ -39,8 +39,8 @@ async function genEtiquetas(files) {
     
     setupBtns(['pdf']);
     area.innerHTML = "";
-
     const arr = Array.from(files);
+
     for (let i = 0; i < arr.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
@@ -52,13 +52,13 @@ async function genEtiquetas(files) {
                 <div style="width:90mm; height:63mm; border:0.5pt solid #000; display:flex; flex-direction:column; box-sizing:border-box;">
                     <div style="height:18mm; border-bottom:3px dotted ${cor}; display:flex; align-items:center; padding:5px;">
                         <img src="LOGO.jpg" style="height:12mm; margin-right:10px;">
-                        <span style="font-size:8pt; font-weight:bold; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <span style="font-size:7.5pt; font-weight:bold; text-align:center; flex:1;">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
                         <div class="container-foto ${mClass}" style="width:32mm; height:42mm;">
                             <img src="${src}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
-                        <div class="nome-aluno" style="font-size:14pt; flex:1;">${nome}</div>
+                        <div class="nome-aluno" style="font-size:15pt; flex:1;">${nome}</div>
                     </div>
                 </div>`;
         }
@@ -85,7 +85,7 @@ async function genCarometro(files) {
                 <div class="container-foto ${mClass}" style="width:10cm; height:13cm;">
                     <img src="${src}" style="width:100%; height:100%; object-fit:cover;">
                 </div>
-                <div class="nome-aluno" style="font-size:42pt;">${nome}</div>
+                <div class="nome-aluno" style="font-size:44pt; margin-top:30px; width:90%;">${nome}</div>
             </div>`;
         area.appendChild(page);
     }
@@ -94,19 +94,21 @@ async function genCarometro(files) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" style="background:green; color:white; padding:10px;">PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" style="background:orange; color:white; padding:10px; margin-left:10px;">POWERPOINT</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" style="background:#27ae60; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" style="background:#e67e22; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold; margin-left:10px;">POWERPOINT</button>`;
 }
 
 function doPDF() {
     const el = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
-    html2pdf().set({
+    const opt = {
         margin: 0,
-        filename: 'documento.pdf',
-        html2canvas: { scale: 2, useCORS: true },
+        filename: 'Documento_Escola.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
-    }).from(el).save();
+    };
+    html2pdf().set(opt).from(el).save();
 }
 
 function doPPT() {
@@ -121,11 +123,11 @@ function doPPT() {
     document.querySelectorAll('.page-widescreen').forEach(p => {
         const slide = pptx.addSlide();
         slide.background = { path: bg };
-        const img = p.querySelector('img').src;
+        const imgSrc = p.querySelector('img').src;
         const nome = p.querySelector('.nome-aluno').innerText;
         
-        slide.addImage({ data:img, x:4.6, y:0.5, w:4, h:5.3, line:{color:cor, pt:2} });
-        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:40, bold:true });
+        slide.addImage({ data:imgSrc, x:4.6, y:0.5, w:4.1, h:5.3, line:{color:cor, pt:3} });
+        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial Black' });
     });
-    pptx.writeFile({ fileName: 'Carometro.pptx' });
+    pptx.writeFile({ fileName: 'Carometro_Dom_Manuel.pptx' });
 }
