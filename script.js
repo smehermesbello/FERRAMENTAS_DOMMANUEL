@@ -13,7 +13,7 @@ async function generatePreview() {
     
     const turno = turnoRadio.value;
     const classeLinha = (turno === 'manha') ? 'linha-manha' : 'linha-tarde';
-    const classeWrapper = (turno === 'manha') ? 'wrapper-manha' : 'wrapper-tarde';
+    const classeBorda = (turno === 'manha') ? 'borda-manha' : 'borda-tarde';
 
     await document.fonts.ready;
     area.innerHTML = "";
@@ -34,7 +34,7 @@ async function generatePreview() {
 
             const nome = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Note o novo "div wrapper-foto" em volta da imagem
+            // Note que aplicamos a classe de borda na DIV (moldura-foto)
             page.innerHTML += `
                 <div class="etiqueta">
                     <div class="etiqueta-topo ${classeLinha}">
@@ -42,7 +42,7 @@ async function generatePreview() {
                         <div class="etiqueta-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
                     </div>
                     <div class="etiqueta-corpo">
-                        <div class="wrapper-foto ${classeWrapper}">
+                        <div class="moldura-foto ${classeBorda}">
                             <img src="${src}" class="foto-aluno">
                         </div>
                         <div class="nome-aluno" contenteditable="true">${nome}</div>
@@ -60,7 +60,7 @@ function downloadPDF() {
         filename: 'ETIQUETAS_DOM_MANUEL.pdf',
         image: { type: 'jpeg', quality: 1.0 },
         html2canvas: { 
-            scale: 3, // Aumentei a escala para nitidez máxima
+            scale: 3, // Aumenta a resolução para evitar falhas em detalhes pequenos
             useCORS: true, 
             scrollY: 0, 
             backgroundColor: '#ffffff'
