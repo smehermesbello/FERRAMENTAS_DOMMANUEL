@@ -1,6 +1,6 @@
-/* IMPORTAÇÃO DA FONTE DO REPOSITÓRIO */
+/* IMPORTAÇÃO DA FONTE COINY */
 @font-face {
-    font-family: 'MinhaFontePersonalizada'; /* Nome interno para o código */
+    font-family: 'CoinyCustom';
     src: url('Coiny-Cyrillic.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
@@ -10,6 +10,7 @@
     --verde-musgo: #4A5D23;
     --azul-intenso: #003399;
     --text-dark: #2c3e50;
+    --glass-white: rgba(255, 255, 255, 0.95);
 }
 
 body {
@@ -21,11 +22,12 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Calibri', sans-serif;
+    color: var(--text-dark);
 }
 
 /* JANELA CENTRAL */
 .main-window {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--glass-white);
     width: 95%;
     max-width: 1100px;
     height: 85vh;
@@ -45,8 +47,8 @@ body {
     width: 110px;
 }
 
-.hidden { display: none !important; }
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+.hidden { display: none !important; }
 
 /* MENU INICIAL */
 .main-title { font-size: 3.8rem; font-weight: 900; margin: 0; color: var(--text-dark); }
@@ -65,10 +67,10 @@ body {
     font-size: 1.6rem;
     font-weight: bold;
     border-radius: 25px;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,7 +78,7 @@ body {
 }
 
 .btn-main:hover:not(:disabled) { transform: translateY(-8px); background: #fff; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-.btn-main:disabled { opacity: 0.4; filter: grayscale(1); }
+.btn-main:disabled { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
 
 /* CONFIGURAÇÕES */
 .config-container {
@@ -119,7 +121,9 @@ body {
     cursor: pointer;
 }
 
-/* ETIQUETAS */
+.btn-back { position: absolute; top: 40px; left: 45px; background: none; border: 1px solid #ccc; padding: 12px 25px; border-radius: 12px; cursor: pointer; }
+
+/* ÁREA DO PDF E ETIQUETAS */
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
@@ -137,6 +141,7 @@ body {
     width: 9cm;
     height: 6.3cm;
     border: 0.01mm solid #f0f0f0;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -144,21 +149,19 @@ body {
 
 .etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
 .etiqueta-logo { width: 1.4cm; height: auto; margin-right: 12px; }
-.etiqueta-escola { font-size: 12pt; font-weight: bold; text-align: center; flex: 1; }
+.etiqueta-escola { font-size: 12pt; font-weight: bold; text-align: center; line-height: 1.1; flex: 1; }
 
 .etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 0.2cm; }
 .foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
 
-/* Bordas: 2.25pt */
 .borda-manha { border: 3px solid var(--verde-musgo); }
 .borda-tarde { border: 3px solid var(--azul-intenso); }
 
-/* FONTE PERSONALIZADA DO ESTUDANTE */
+/* APLICAÇÃO DA FONTE COINY */
 .nome-aluno {
     flex: 1;
-    font-family: 'MinhaFontePersonalizada', sans-serif; /* Usa o nome que você criou acima */
-    font-size: 22pt; /* Como a Coiny é uma fonte "gordinha", 22pt costuma ficar ótimo */
-    font-weight: normal;
+    font-family: 'CoinyCustom', sans-serif;
+    font-size: 22pt;
     text-align: center;
     padding: 0 10px;
     line-height: 1.1;
