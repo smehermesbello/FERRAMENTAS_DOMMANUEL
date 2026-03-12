@@ -49,24 +49,13 @@ async function generatePreview() {
 
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
-    const btn = document.querySelector('.btn-download');
-    btn.innerText = "⏳ GERANDO...";
-
     const opt = {
         margin: 0,
         filename: 'Etiquetas_Dom_Manuel.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            scrollY: 0,
-            backgroundColor: '#ffffff' // Mata a página cinza forçando branco total
-        },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, backgroundColor: '#ffffff' },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['css', 'legacy'] }
     };
-
-    html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = "BAIXAR PDF";
-    });
+    html2pdf().set(opt).from(element).save();
 }
