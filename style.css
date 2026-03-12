@@ -156,11 +156,13 @@ body {
 /* FONTE PERSONALIZADA DO ESTUDANTE */
 .nome-aluno {
     flex: 1;
-    font-family: 'ChocolateVanilla', sans-serif; /* A fonte do seu repositório */
-    font-size: 26pt; /* Fontes manuscritas costumam precisar de um tamanho maior */
+    font-family: 'MinhaFontePersonalizada', sans-serif; /* Usa o nome que você criou acima */
+    font-size: 22pt; /* Como a Coiny é uma fonte "gordinha", 22pt costuma ficar ótimo */
+    font-weight: normal;
     text-align: center;
     padding: 0 10px;
-    line-height: 1;
+    line-height: 1.1;
+    text-transform: uppercase;
     word-wrap: break-word;
     cursor: text;
 }
