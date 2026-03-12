@@ -34,60 +34,39 @@ body {
 .btn-main { height: 130px; border-radius: 15px; border: 2px solid #eee; background: #fff; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
 .btn-main:hover:not(:disabled) { transform: translateY(-3px); border-color: #3498db; }
 
-.btn-back, .btn-back-small { background: #eee; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; }
-.btn-execute, .btn-download { padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; color: #fff; cursor: pointer; font-weight: bold; }
-
 /* SWITCH */
 .modern-switch { position: relative; display: flex; width: 320px; height: 55px; background: #eee; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box; }
 .modern-switch input { display: none; }
 .switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px); background: #fff; border-radius: 25px; transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 1; }
+.switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px); background: #fff; border-radius: 25px; transition: 0.3s; z-index: 1; }
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
-#manha:checked ~ label[for="manha"] { color: var(--verde); }
-#tarde:checked ~ label[for="tarde"] { color: var(--azul); }
 
-/* --- ETIQUETAS --- */
+/* --- ETIQUETAS (A4) --- */
 .page-a4 { width: 21cm; height: 29.6cm; background: #fff !important; margin: 0 auto; display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm); justify-content: center; align-content: center; page-break-after: always; }
 .etiqueta { width: 9cm; height: 6.3cm; border: 2px solid #000; display: flex; flex-direction: column; box-sizing: border-box; }
-.etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 10px; box-sizing: border-box; }
-/* PONTILHADO REDUZIDO PARA 3PX */
-.linha-manha { border-bottom: 3px dotted var(--verde) !important; }
-.linha-tarde { border-bottom: 3px dotted var(--azul) !important; }
-.etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; color: #000; line-height: 1.1; }
+.etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 10px; border-bottom: 3px dotted #ccc; }
+.linha-manha { border-bottom-color: var(--verde) !important; }
+.linha-tarde { border-bottom-color: var(--azul) !important; }
 
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; box-sizing: border-box; }
-
-/* MOLDURA PARA PDF */
-.container-foto {
-    position: relative;
-    width: 3.2cm;
-    height: 4.2cm;
-    min-width: 3.2cm;
-    box-sizing: border-box;
+/* --- CARÔMETRO (WIDESCREEN) --- */
+.page-widescreen { 
+    width: 33.867cm; height: 19.05cm; 
+    margin: 0 auto; position: relative; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    background-size: cover; background-position: center; page-break-after: always;
 }
+.bg-manha { background-image: url('FUNDOMANHA.jpg'); }
+.bg-tarde { background-image: url('FUNDOTARDE.jpg'); }
 
-.foto-aluno {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+.container-foto { position: relative; box-sizing: border-box; }
+.foto-aluno { display: block; object-fit: cover; }
+.moldura-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; border: 2px solid transparent; box-sizing: border-box; }
+.moldura-verde { border-color: var(--verde) !important; }
+.moldura-azul { border-color: var(--azul) !important; }
 
-.moldura-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    box-sizing: border-box;
-    /* ESPESSURA REDUZIDA PARA 2PX */
-    border: 2px solid transparent; 
-}
+.nome-aluno { font-family: 'SFT-Round', sans-serif; text-transform: uppercase; text-align: center; color: #000; word-wrap: break-word; }
 
-.moldura-verde { border: 2px solid var(--verde) !important; }
-.moldura-azul { border: 2px solid var(--azul) !important; }
-
-.nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; color: #000; text-transform: uppercase; }
-.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 20px auto; }
+/* Ajustes de tamanho Carômetro */
+.caro-foto { width: 9cm; height: 12cm; }
+.caro-nome { font-size: 42pt; margin-top: 30px; width: 80%; }
