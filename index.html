@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Etiquetas - Dom Manuel</title>
+    <title>Sistema Dom Manuel</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="main-window">
         <img src="LOGO.jpg" alt="Logo" class="corner-logo">
         
@@ -26,35 +29,30 @@
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2>Configuração</h2>
-                <div class="config-item">
-                    <label>Fotos:</label><br>
+                <div class="field">
+                    <label>1. Fotos dos Alunos:</label>
                     <input type="file" id="file-input" accept="image/*" multiple>
                 </div>
-                <div class="config-item">
-                    <label>Turno:</label>
-                    <div class="turno-selector">
-                        <label class="turno-card">
-                            <input type="radio" name="turno" value="manha" checked>
-                            <span class="card-content">☀️ Manhã</span>
-                        </label>
-                        <label class="turno-card">
-                            <input type="radio" name="turno" value="tarde">
-                            <span class="card-content">🌙 Tarde</span>
-                        </label>
+                <div class="field">
+                    <label>2. Turno:</label>
+                    <div class="turno-row">
+                        <label><input type="radio" name="turno" value="manha" checked> ☀️ Manhã</label>
+                        <label><input type="radio" name="turno" value="tarde"> 🌙 Tarde</label>
                     </div>
                 </div>
-                <button class="btn-execute" onclick="generatePreview()">GERAR</button>
+                <button class="btn-execute" onclick="generatePreview()">GERAR ETIQUETAS</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-controls">
-                <button onclick="showScreen('screen-config')">← Ajustar</button>
-                <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF SEM ERROS</button>
+                <button class="btn-action" onclick="showScreen('screen-config')">← Ajustar</button>
+                <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF</button>
             </div>
             <div id="pdf-area"></div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
