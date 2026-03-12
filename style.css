@@ -1,4 +1,4 @@
-/* Registro da Fonte Local */
+/* 1. REGISTRO DA FONTE */
 @font-face {
     font-family: 'SFT-Round';
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
@@ -7,6 +7,7 @@
     font-display: swap;
 }
 
+/* 2. VARIÁVEIS E BASE */
 :root {
     --verde-musgo: #4A5D23;
     --azul-intenso: #003399;
@@ -15,47 +16,53 @@
 
 body {
     margin: 0;
-    height: 100vh;
+    padding: 0;
+    min-height: 100vh;
     background: url('FUNDO.png') no-repeat center center fixed;
     background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
-/* JANELA DO SISTEMA */
+/* 3. JANELA DO SISTEMA (GLASSMORPHISM) */
 .main-window {
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(255, 255, 255, 0.98);
     width: 95%;
     max-width: 1100px;
     height: 85vh;
     border-radius: 40px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.2);
     position: relative;
-    padding: 60px;
+    padding: 40px;
     box-sizing: border-box;
     overflow-y: auto;
 }
 
-.corner-logo { position: absolute; top: 30px; right: 45px; width: 110px; }
+.corner-logo { position: absolute; top: 20px; right: 30px; width: 100px; }
 .hidden { display: none !important; }
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 
-/* MENU E BOTÕES */
-.main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin: 0; }
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 40px; }
-.btn-main { height: 120px; font-size: 1.4rem; font-weight: bold; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; transition: 0.3s; }
-.btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+/* 4. COMPONENTES DE INTERFACE */
+.main-title { font-size: 3rem; font-weight: 900; color: var(--text-dark); margin: 0; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 30px; }
+.btn-main { height: 100px; font-size: 1.2rem; font-weight: bold; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; transition: 0.3s; }
+.btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-/* CONFIGURAÇÃO */
-.config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; border: 1px solid #eee; }
-.turno-selector { display: flex; gap: 15px; margin: 15px 0; }
-.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
+.config-container { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid #eee; margin: 0 auto; }
+.turno-selector { display: flex; gap: 10px; margin: 15px 0; }
+.card-content { display: block; padding: 12px; background: #f0f0f0; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; }
+.turno-card { flex: 1; }
+.turno-card input { display: none; }
 .turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
-.btn-execute { width: 100%; padding: 20px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; }
 
-/* ETIQUETAS (PADRÃO A4) */
+.btn-execute { width: 100%; padding: 18px; border-radius: 10px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
+.btn-back { position: absolute; top: 20px; left: 30px; padding: 8px 15px; cursor: pointer; }
+
+/* 5. ÁREA DE IMPRESSÃO (A4) */
+#pdf-area { display: block; width: 21cm; margin: 0 auto; }
+
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
@@ -64,23 +71,27 @@ body {
     grid-template-columns: 9cm 9cm;
     grid-auto-rows: 6.3cm;
     justify-content: center;
+    align-content: start;
+    padding-top: 1cm;
     page-break-after: always;
-    margin: 0 auto 20px auto;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
 .etiqueta {
     width: 9cm;
     height: 6.3cm;
-    border: 0.1mm solid #eee;
+    border: 0.1mm solid #f0f0f0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     box-sizing: border-box;
+    position: relative;
 }
 
-.etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
-.etiqueta-logo { width: 1.3cm; height: auto; margin-right: 10px; }
-.etiqueta-escola { font-size: 10pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
+.etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 0.3cm; border-bottom: 0.1mm solid #eee; }
+.etiqueta-logo { width: 1.2cm; height: auto; margin-right: 10px; }
+.etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.2; color: #000; }
 
 .etiqueta-corpo {
     flex: 1;
@@ -88,37 +99,36 @@ body {
     align-items: center;
     padding: 10px;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
-.foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
-.borda-manha { border: 3.5px solid var(--verde-musgo); }
-.borda-tarde { border: 3.5px solid var(--azul-intenso); }
+.foto-aluno { width: 3.2cm; height: 4.2cm; object-fit: cover; flex-shrink: 0; }
+.borda-manha { border: 3px solid var(--verde-musgo); }
+.borda-tarde { border: 3px solid var(--azul-intenso); }
 
-/* NOME DO ALUNO - TRAVA DE PADRONIZAÇÃO */
+/* 6. PADRONIZAÇÃO ABSOLUTA DO NOME */
 .nome-aluno {
     flex: 1;
-    font-family: 'SFT-Round', 'Fredoka', 'Arial Black', sans-serif;
+    font-family: 'SFT-Round', 'Fredoka', sans-serif;
     
-    /* TAMANHO ÚNICO E IMUTÁVEL PARA TODOS OS ESTUDANTES */
+    /* TRAVA DE TAMANHO: SEMPRE 15PT */
     font-size: 15pt !important; 
     
     text-align: center;
-    padding: 0 10px;
+    padding: 0 8px;
     line-height: 1.1;
     text-transform: uppercase;
     color: #000;
-    
-    /* Força quebra de linha mantendo o tamanho da letra */
-    display: block;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    
-    /* Alinhamento vertical */
-    margin-top: auto;
-    margin-bottom: auto;
+    font-weight: 900;
+
+    /* Força quebra de linha sem mudar tamanho da letra */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    word-break: break-word;
+    overflow: hidden;
 }
 
-.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin: 0 auto 15px auto; }
-.btn-download { background: #e67e22; color: white; border: none; padding: 15px 35px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-.btn-back-small { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+/* CONTROLES DE PREVIEW */
+.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin: 0 auto 20px auto; padding-top: 10px; }
+.btn-download { background: #e67e22; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
