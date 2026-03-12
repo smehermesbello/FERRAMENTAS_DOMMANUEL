@@ -8,7 +8,7 @@ async function generatePreview() {
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const pdfArea = document.getElementById('pdf-area');
 
-    if (fileInput.files.length === 0) return alert("Selecione as fotos.");
+    if (fileInput.files.length === 0) return alert("Por favor, selecione as fotos.");
 
     pdfArea.innerHTML = ""; 
     showScreen('screen-preview');
@@ -23,10 +23,11 @@ async function generatePreview() {
             const imgSrc = await lerArquivo(file);
             let nomeOriginal = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Lógica de ajuste de fonte baseado no tamanho do nome
+            // Ajuste dinâmico para fontes Black (pesadas)
             let fontSize = "18pt";
-            if (nomeOriginal.length > 20) fontSize = "14pt";
-            if (nomeOriginal.length > 30) fontSize = "11pt";
+            if (nomeOriginal.length > 18) fontSize = "14pt";
+            if (nomeOriginal.length > 25) fontSize = "11pt";
+            if (nomeOriginal.length > 35) fontSize = "9pt";
 
             const etiqueta = document.createElement('div');
             etiqueta.className = 'etiqueta';
@@ -56,12 +57,18 @@ function lerArquivo(file) {
 
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
+    const btn = document.querySelector('.btn-download');
+    btn.innerText = "GERANDO PDF...";
+    
     const opt = {
         margin: 0,
-        filename: 'Etiquetas_Dom_Manuel.pdf',
+        filename: 'Etiquetas_Escola_Dom_Manuel.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { scale: 2, useCORS: true },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
-    html2pdf().set(opt).from(element).save();
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        btn.innerText = "BAIXAR PDF FINAL";
+    });
 }
