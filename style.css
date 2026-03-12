@@ -51,8 +51,9 @@ body {
 .page-a4 { width: 21cm; height: 29.6cm; background: #fff !important; margin: 0 auto; display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm); justify-content: center; align-content: center; page-break-after: always; }
 .etiqueta { width: 9cm; height: 6.3cm; border: 2px solid #000; display: flex; flex-direction: column; box-sizing: border-box; }
 .etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 10px; box-sizing: border-box; }
-.linha-manha { border-bottom: 4px dotted var(--verde) !important; }
-.linha-tarde { border-bottom: 4px dotted var(--azul) !important; }
+/* PONTILHADO REDUZIDO PARA 3PX */
+.linha-manha { border-bottom: 3px dotted var(--verde) !important; }
+.linha-tarde { border-bottom: 3px dotted var(--azul) !important; }
 .etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; color: #000; line-height: 1.1; }
 
 .etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; box-sizing: border-box; }
@@ -81,12 +82,12 @@ body {
     height: 100%;
     pointer-events: none;
     box-sizing: border-box;
-    /* ESPESSURA REDUZIDA PARA 3PX */
-    border: 3px solid transparent; 
+    /* ESPESSURA REDUZIDA PARA 2PX */
+    border: 2px solid transparent; 
 }
 
-.moldura-verde { border: 3px solid var(--verde) !important; }
-.moldura-azul { border: 3px solid var(--azul) !important; }
+.moldura-verde { border: 2px solid var(--verde) !important; }
+.moldura-azul { border: 2px solid var(--azul) !important; }
 
 .nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; color: #000; text-transform: uppercase; }
 .preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 20px auto; }
