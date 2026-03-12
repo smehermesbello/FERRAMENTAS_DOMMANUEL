@@ -13,7 +13,7 @@ async function generatePreview() {
     
     const turno = turnoRadio.value;
     const classeLinha = (turno === 'manha') ? 'linha-manha' : 'linha-tarde';
-    const classeBorda = (turno === 'manha') ? 'borda-manha' : 'borda-tarde';
+    const classeMoldura = (turno === 'manha') ? 'moldura-verde' : 'moldura-azul';
 
     await document.fonts.ready;
     area.innerHTML = "";
@@ -34,16 +34,17 @@ async function generatePreview() {
 
             const nome = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Note que aplicamos a classe de borda na DIV (moldura-foto)
+            // Estrutura mudou: Agora temos a foto E uma div de moldura por cima dela
             page.innerHTML += `
                 <div class="etiqueta">
                     <div class="etiqueta-topo ${classeLinha}">
-                        <img src="LOGO.jpg" class="etiqueta-logo">
+                        <img src="LOGO.jpg" style="width:1.1cm; margin-right:8px;">
                         <div class="etiqueta-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
                     </div>
                     <div class="etiqueta-corpo">
-                        <div class="moldura-foto ${classeBorda}">
+                        <div class="container-foto">
                             <img src="${src}" class="foto-aluno">
+                            <div class="moldura-overlay ${classeMoldura}"></div>
                         </div>
                         <div class="nome-aluno" contenteditable="true">${nome}</div>
                     </div>
@@ -60,7 +61,7 @@ function downloadPDF() {
         filename: 'ETIQUETAS_DOM_MANUEL.pdf',
         image: { type: 'jpeg', quality: 1.0 },
         html2canvas: { 
-            scale: 3, // Aumenta a resolução para evitar falhas em detalhes pequenos
+            scale: 2, 
             useCORS: true, 
             scrollY: 0, 
             backgroundColor: '#ffffff'
