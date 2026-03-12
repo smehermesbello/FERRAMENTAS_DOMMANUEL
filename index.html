@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="main-window">
-        <img src="LOGO.jpg" alt="Logo" class="corner-logo">
+        <img src="LOGO.jpg" class="corner-logo">
         
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
@@ -19,8 +19,6 @@
                 <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
                 <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
-                <button class="btn-main" disabled>🖼️ FORMATAÇÃO DE FOTOS</button>
-                <button class="btn-main" disabled>🍴 FORMATAÇÃO CARDÁPIO</button>
             </div>
         </div>
 
@@ -48,7 +46,7 @@
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-toolbar">
-                <button onclick="showScreen('screen-config')">← AJUSTAR</button>
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <div id="download-buttons"></div>
             </div>
             <div id="pdf-area-wrapper">
