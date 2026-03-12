@@ -34,7 +34,6 @@ async function generatePreview() {
 
             const nome = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Note que injetamos a classeBordaFoto diretamente na tag <img>
             page.innerHTML += `
                 <div class="etiqueta">
                     <div class="etiqueta-topo ${classeLinha}">
