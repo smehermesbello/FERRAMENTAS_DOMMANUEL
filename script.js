@@ -10,7 +10,7 @@ async function generatePreview() {
 
     if (fileInput.files.length === 0) return alert("Selecione as fotos.");
 
-    // Aguarda carregar a fonte antes de calcular o layout
+    // Aguarda carregar as fontes
     await document.fonts.ready;
 
     pdfArea.innerHTML = ""; 
@@ -26,12 +26,6 @@ async function generatePreview() {
             const imgSrc = await lerArquivo(file);
             let nomeOriginal = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Ajuste dinâmico de fonte para nomes longos
-            let fontSize = "18pt";
-            if (nomeOriginal.length > 15) fontSize = "15pt";
-            if (nomeOriginal.length > 22) fontSize = "12pt";
-            if (nomeOriginal.length > 32) fontSize = "10pt";
-
             const etiqueta = document.createElement('div');
             etiqueta.className = 'etiqueta';
             etiqueta.innerHTML = `
@@ -41,7 +35,7 @@ async function generatePreview() {
                 </div>
                 <div class="etiqueta-corpo">
                     <img src="${imgSrc}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
-                    <div class="nome-aluno" contenteditable="true" style="font-size: ${fontSize}">${nomeOriginal}</div>
+                    <div class="nome-aluno" contenteditable="true">${nomeOriginal}</div>
                 </div>
             `;
             page.appendChild(etiqueta);
@@ -61,17 +55,13 @@ function lerArquivo(file) {
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btn = document.querySelector('.btn-download');
-    btn.innerText = "⏳ A GERAR PDF...";
+    btn.innerText = "⏳ GERANDO PDF...";
     
     const opt = {
         margin: 0,
-        filename: 'Etiquetas_Dom_Manuel.pdf',
+        filename: 'Etiquetas_Dom_Manuel_Padronizadas.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            letterRendering: true 
-        },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
 
