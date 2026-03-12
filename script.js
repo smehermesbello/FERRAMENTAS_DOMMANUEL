@@ -1,16 +1,16 @@
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+    const target = document.getElementById(id);
+    if(target) target.classList.remove('hidden');
 }
 
 async function generatePreview() {
     const input = document.getElementById('file-input');
-    const turnoRadio = document.querySelector('input[name="turno"]:checked');
+    const turno = document.querySelector('input[name="turno"]:checked').value;
     const area = document.getElementById('pdf-area');
 
-    if (!input.files.length) return alert("Por favor, selecione as fotos.");
+    if (!input.files.length) return alert("Selecione fotos.");
     
-    const turno = turnoRadio.value;
     await document.fonts.ready;
     area.innerHTML = "";
     showScreen('screen-preview');
@@ -30,19 +30,17 @@ async function generatePreview() {
 
             const nome = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            const etiq = document.createElement('div');
-            etiq.className = 'etiqueta';
-            etiq.innerHTML = `
-                <div class="etiqueta-topo">
-                    <img src="LOGO.jpg" class="etiqueta-logo">
-                    <div class="etiqueta-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
-                </div>
-                <div class="etiqueta-corpo">
-                    <img src="${src}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
-                    <div class="nome-aluno" contenteditable="true">${nome}</div>
-                </div>
-            `;
-            page.appendChild(etiq);
+            page.innerHTML += `
+                <div class="etiqueta">
+                    <div class="etiqueta-topo">
+                        <img src="LOGO.jpg" class="etiqueta-logo">
+                        <div class="etiqueta-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
+                    </div>
+                    <div class="etiqueta-corpo">
+                        <img src="${src}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
+                        <div class="nome-aluno" contenteditable="true">${nome}</div>
+                    </div>
+                </div>`;
         }
         area.appendChild(page);
     }
@@ -51,28 +49,24 @@ async function generatePreview() {
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btn = document.querySelector('.btn-download');
-    
-    btn.innerText = "✨ PROCESSANDO...";
-    btn.disabled = true;
+    btn.innerText = "⏳ LIMPANDO E GERANDO...";
 
-    // Ajuste fino para o html2pdf não capturar o fundo da tela
+    // Configuração agressiva para remover fundos e páginas extras
     const opt = {
         margin: 0,
         filename: 'Etiquetas_Dom_Manuel.pdf',
-        image: { type: 'jpeg', quality: 1.0 },
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
             scrollY: 0,
-            letterRendering: true,
-            backgroundColor: null // Evita que o fundo cinza da tela seja capturado
+            backgroundColor: '#ffffff' // Força fundo branco total
         },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'] }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = "BAIXAR PDF";
-        btn.disabled = false;
+        btn.innerText = "BAIXAR PDF SEM ERROS";
     });
 }
