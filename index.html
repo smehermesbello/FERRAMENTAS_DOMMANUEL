@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Dom Manuel - Gestão</title>
+    <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -28,23 +28,21 @@
         <div id="screen-config" class="screen flex-center hidden">
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 style="margin-bottom: 30px;">Gerador de Etiquetas</h2>
+                <h2 class="title-up">GERADOR DE ETIQUETAS</h2>
                 
                 <div class="field">
-                    <label>1. Carregar fotos dos alunos:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple style="margin-top:15px;">
+                    <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple class="custom-file-input">
                 </div>
 
                 <div class="field">
-                    <label>2. Selecione o Turno:</label>
+                    <label>2. SELECIONE O TURNO:</label>
                     <div class="modern-switch">
                         <input type="radio" id="manha" name="turno" value="manha" checked>
                         <input type="radio" id="tarde" name="turno" value="tarde">
-                        
                         <div class="switch-slider"></div>
-                        
-                        <label for="manha" class="switch-option">☀️ Manhã</label>
-                        <label for="tarde" class="switch-option">🌙 Tarde</label>
+                        <label for="manha" class="switch-option">☀️ MANHÃ</label>
+                        <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
 
@@ -54,7 +52,7 @@
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-controls">
-                <button class="btn-action" onclick="showScreen('screen-config')">← Ajustar</button>
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF</button>
             </div>
             <div id="pdf-area"></div>
