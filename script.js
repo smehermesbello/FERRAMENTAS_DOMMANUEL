@@ -1,89 +1,68 @@
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(screenId).classList.remove('hidden');
-}
-
-async function generatePreview() {
-    const fileInput = document.getElementById('file-input');
-    const turnoSelect = document.querySelector('input[name="turno"]:checked');
-    const pdfArea = document.getElementById('pdf-area');
-
-    if (fileInput.files.length === 0) return alert("Por favor, selecione as fotos.");
-    if (!turnoSelect) return alert("Selecione o turno.");
-
-    const turno = turnoSelect.value;
-
-    // Aguarda o navegador processar as fontes
-    await document.fonts.ready;
-
-    pdfArea.innerHTML = ""; 
-    showScreen('screen-preview');
-
-    const files = Array.from(fileInput.files);
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Etiquetas - Dom Manuel</title>
     
-    // Processa 8 etiquetas por página A4
-    for (let i = 0; i < files.length; i += 8) {
-        const page = document.createElement('div');
-        page.className = 'page-a4';
-        const lote = files.slice(i, i + 8);
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
 
-        for (let file of lote) {
-            const imgSrc = await lerArquivo(file);
-            // Remove a extensão e caracteres especiais do nome do arquivo
-            let nomeLimpo = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
-            
-            const etiqueta = document.createElement('div');
-            etiqueta.className = 'etiqueta';
-            etiqueta.innerHTML = `
-                <div class="etiqueta-topo">
-                    <img src="LOGO.jpg" class="etiqueta-logo">
-                    <div class="etiqueta-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</div>
+    <div class="main-window">
+        <img src="LOGO.jpg" alt="Logo" class="corner-logo">
+        
+        <div id="screen-menu" class="screen flex-center">
+            <h1 class="main-title">GESTÃO ESCOLAR</h1>
+            <p class="subtitle">Módulo de Etiquetas Padronizadas</p>
+            <div class="button-grid">
+                <button class="btn-main" onclick="showScreen('screen-config')">
+                    <span class="icon">🏷️</span> ETIQUETAS
+                </button>
+                <button class="btn-main" disabled><span class="icon">📸</span> CARÔMETRO</button>
+                <button class="btn-main" disabled><span class="icon">📋</span> LISTAGEM</button>
+                <button class="btn-main" disabled><span class="icon">🪪</span> CARTEIRINHA</button>
+            </div>
+        </div>
+
+        <div id="screen-config" class="screen flex-center hidden">
+            <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
+            <div class="config-container">
+                <div class="config-item">
+                    <label>1. Carregar fotos dos alunos:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple>
                 </div>
-                <div class="etiqueta-corpo">
-                    <img src="${imgSrc}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
-                    <div class="nome-aluno" contenteditable="true">${nomeLimpo}</div>
+                <div class="config-item">
+                    <label>2. Selecionar o Turno:</label>
+                    <div class="turno-selector">
+                        <label class="turno-card">
+                            <input type="radio" name="turno" value="manha" checked>
+                            <span class="card-content">☀️ Manhã</span>
+                        </label>
+                        <label class="turno-card">
+                            <input type="radio" name="turno" value="tarde">
+                            <span class="card-content">🌙 Tarde</span>
+                        </label>
+                    </div>
                 </div>
-            `;
-            page.appendChild(etiqueta);
-        }
-        pdfArea.appendChild(page);
-    }
-}
+                <button class="btn-execute" onclick="generatePreview()">GERAR E EDITAR</button>
+            </div>
+        </div>
 
-function lerArquivo(file) {
-    return new Promise(resolve => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.readAsDataURL(file);
-    });
-}
+        <div id="screen-preview" class="screen hidden">
+            <div class="preview-controls">
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← Ajustar</button>
+                <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF FINAL</button>
+            </div>
+            <div id="pdf-area">
+                </div>
+        </div>
+    </div>
 
-function downloadPDF() {
-    const element = document.getElementById('pdf-area');
-    const btn = document.querySelector('.btn-download');
-    const originalText = btn.innerText;
-    
-    btn.innerText = "⏳ GERANDO ARQUIVO...";
-    btn.disabled = true;
-    
-    const opt = {
-        margin: 0,
-        filename: 'Etiquetas_Dom_Manuel_Final.pdf',
-        image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            letterRendering: true 
-        },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = originalText;
-        btn.disabled = false;
-    }).catch(err => {
-        console.error(err);
-        btn.innerText = "ERRO AO GERAR";
-        btn.disabled = false;
-    });
-}
+    <script src="script.js"></script>
+</body>
+</html>
