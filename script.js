@@ -8,10 +8,10 @@ async function generatePreview() {
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const pdfArea = document.getElementById('pdf-area');
 
-    if (fileInput.files.length === 0) return alert("Por favor, selecione as fotos.");
+    if (fileInput.files.length === 0) return alert("Selecione as fotos.");
 
-    // Garante que a fonte personalizada foi carregada antes de gerar
-    await document.fonts.load('10pt "SFT-Round"');
+    // Aguarda carregar a fonte antes de calcular o layout
+    await document.fonts.ready;
 
     pdfArea.innerHTML = ""; 
     showScreen('screen-preview');
@@ -26,11 +26,11 @@ async function generatePreview() {
             const imgSrc = await lerArquivo(file);
             let nomeOriginal = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Lógica de Redução de Fonte para SFT Round Black
+            // Ajuste dinâmico de fonte para nomes longos
             let fontSize = "18pt";
             if (nomeOriginal.length > 15) fontSize = "15pt";
             if (nomeOriginal.length > 22) fontSize = "12pt";
-            if (nomeOriginal.length > 30) fontSize = "10pt";
+            if (nomeOriginal.length > 32) fontSize = "10pt";
 
             const etiqueta = document.createElement('div');
             etiqueta.className = 'etiqueta';
@@ -61,30 +61,21 @@ function lerArquivo(file) {
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btn = document.querySelector('.btn-download');
-    const textoOriginal = btn.innerText;
-    
-    btn.innerText = "⚙️ PROCESSANDO...";
-    btn.disabled = true;
+    btn.innerText = "⏳ A GERAR PDF...";
     
     const opt = {
         margin: 0,
-        filename: 'Etiquetas_Escola_Dom_Manuel.pdf',
+        filename: 'Etiquetas_Dom_Manuel.pdf',
         image: { type: 'jpeg', quality: 1.0 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
-            letterRendering: true,
-            logging: false 
+            letterRendering: true 
         },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = textoOriginal;
-        btn.disabled = false;
-    }).catch(err => {
-        console.error("Erro no PDF:", err);
-        btn.innerText = "ERRO AO GERAR";
-        btn.disabled = false;
+        btn.innerText = "BAIXAR PDF FINAL";
     });
 }
