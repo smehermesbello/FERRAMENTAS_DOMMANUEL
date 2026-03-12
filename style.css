@@ -4,6 +4,7 @@
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
     font-weight: 900;
     font-style: normal;
+    font-display: swap;
 }
 
 :root {
@@ -23,6 +24,7 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* JANELA DO SISTEMA */
 .main-window {
     background: rgba(255, 255, 255, 0.97);
     width: 95%;
@@ -40,20 +42,20 @@ body {
 .hidden { display: none !important; }
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 
-/* MENU */
-.main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin-bottom: 10px; }
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
+/* MENU E BOTÕES */
+.main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin: 0; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 40px; }
 .btn-main { height: 120px; font-size: 1.4rem; font-weight: bold; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; transition: 0.3s; }
 .btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-/* CONFIG */
+/* CONFIGURAÇÃO */
 .config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; border: 1px solid #eee; }
-.turno-selector { display: flex; gap: 15px; margin-top: 10px; }
-.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; font-weight: bold; cursor: pointer; }
+.turno-selector { display: flex; gap: 15px; margin: 15px 0; }
+.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 .turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
-.btn-execute { width: 100%; padding: 20px; margin-top: 25px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; }
+.btn-execute { width: 100%; padding: 20px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; }
 
-/* ETIQUETAS - PADRONIZAÇÃO A4 */
+/* ETIQUETAS (PADRÃO A4) */
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
@@ -63,16 +65,16 @@ body {
     grid-auto-rows: 6.3cm;
     justify-content: center;
     page-break-after: always;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
 }
 
-.etiqueta { 
-    width: 9cm; 
-    height: 6.3cm; 
-    border: 0.1mm solid #eee; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
+.etiqueta {
+    width: 9cm;
+    height: 6.3cm;
+    border: 0.1mm solid #eee;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     box-sizing: border-box;
 }
 
@@ -80,37 +82,43 @@ body {
 .etiqueta-logo { width: 1.3cm; height: auto; margin-right: 10px; }
 .etiqueta-escola { font-size: 10pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
 
-.etiqueta-corpo { 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    padding: 10px; 
-    overflow: hidden; 
+.etiqueta-corpo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
 .borda-manha { border: 3.5px solid var(--verde-musgo); }
 .borda-tarde { border: 3.5px solid var(--azul-intenso); }
 
+/* NOME DO ALUNO - TRAVA DE PADRONIZAÇÃO */
 .nome-aluno {
     flex: 1;
     font-family: 'SFT-Round', 'Fredoka', 'Arial Black', sans-serif;
-    /* TAMANHO PADRONIZADO PARA TODOS */
-    font-size: 16pt; 
+    
+    /* TAMANHO ÚNICO E IMUTÁVEL PARA TODOS OS ESTUDANTES */
+    font-size: 15pt !important; 
+    
     text-align: center;
     padding: 0 10px;
-    line-height: 1.0;
+    line-height: 1.1;
     text-transform: uppercase;
+    color: #000;
     
-    /* Quebra de linha inteligente */
+    /* Força quebra de linha mantendo o tamanho da letra */
+    display: block;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+    
+    /* Alinhamento vertical */
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
-.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin-bottom: 15px; }
+.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin: 0 auto 15px auto; }
 .btn-download { background: #e67e22; color: white; border: none; padding: 15px 35px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+.btn-back-small { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
