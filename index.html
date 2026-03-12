@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Dom Manuel</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+    <title>Sistema Dom Manuel - Gestão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,24 +20,32 @@
                 <button class="btn-main" disabled>📸 CARÔMETRO</button>
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
                 <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
+                <button class="btn-main" disabled>🖼️ FORMATAÇÃO DE FOTOS</button>
+                <button class="btn-main" disabled>🍴 FORMATAÇÃO CARDÁPIO</button>
             </div>
         </div>
 
         <div id="screen-config" class="screen flex-center hidden">
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2>Configuração</h2>
+                <h2 style="margin-bottom: 30px;">Gerador de Etiquetas</h2>
+                
                 <div class="field">
-                    <label>1. Fotos dos Alunos:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple>
+                    <label>1. Carregar fotos dos alunos:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple style="margin-top:15px;">
                 </div>
+
                 <div class="field">
-                    <label>2. Turno:</label>
-                    <div class="turno-row">
-                        <label><input type="radio" name="turno" value="manha" checked> ☀️ Manhã</label>
-                        <label><input type="radio" name="turno" value="tarde"> 🌙 Tarde</label>
+                    <label>2. Selecione o Turno:</label>
+                    <div class="switch-container">
+                        <input type="radio" id="manha" name="turno" value="manha" checked>
+                        <input type="radio" id="tarde" name="turno" value="tarde">
+                        <div class="switch-selection"></div>
+                        <label for="manha" class="switch-label">☀️ Manhã</label>
+                        <label for="tarde" class="switch-label">🌙 Tarde</label>
                     </div>
                 </div>
+
                 <button class="btn-execute" onclick="generatePreview()">GERAR ETIQUETAS</button>
             </div>
         </div>
