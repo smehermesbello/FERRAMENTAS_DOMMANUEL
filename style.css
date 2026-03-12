@@ -1,7 +1,7 @@
 @font-face {
-    font-family: 'CoinyCustom';
-    src: url('Coiny-Cyrillic.ttf') format('truetype');
-    font-weight: normal;
+    font-family: 'SFT-Round';
+    src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
+    font-weight: bold;
     font-style: normal;
 }
 
@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Calibri', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .main-window {
@@ -53,13 +53,13 @@ body {
     transition: 0.3s;
 }
 
-.btn-main:hover:not(:disabled) { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-.config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; }
 .turno-selector { display: flex; gap: 15px; margin-top: 10px; }
 .turno-card { flex: 1; cursor: pointer; }
 .turno-card input { display: none; }
-.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; text-align: center; font-weight: bold; }
+.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; font-weight: bold; }
 .turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
 
 .btn-execute { width: 100%; padding: 20px; margin-top: 20px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
@@ -87,7 +87,7 @@ body {
 
 .etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
 .etiqueta-logo { width: 1.4cm; height: auto; margin-right: 10px; }
-.etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; }
+.etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; color: #000; }
 
 .etiqueta-corpo {
     flex: 1;
@@ -104,8 +104,8 @@ body {
 
 .nome-aluno {
     flex: 1;
-    font-family: 'CoinyCustom', sans-serif;
-    font-size: 18pt; /* Tamanho base reduzido */
+    font-family: 'SFT-Round', sans-serif;
+    font-size: 18pt;
     text-align: center;
     padding-left: 10px;
     line-height: 1.1;
