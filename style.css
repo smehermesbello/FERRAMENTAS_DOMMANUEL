@@ -1,7 +1,7 @@
 /* IMPORTAÇÃO DA FONTE DO REPOSITÓRIO */
 @font-face {
-    font-family: 'ChocolateVanilla';
-    src: url('Chocolate and Vanilla.ttf') format('truetype');
+    font-family: 'MinhaFontePersonalizada'; /* Nome interno para o código */
+    src: url('Coiny-Cyrillic.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
