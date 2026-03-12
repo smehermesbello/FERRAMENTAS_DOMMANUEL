@@ -26,7 +26,7 @@ body {
     font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
-/* 3. JANELA DO SISTEMA (GLASSMORPHISM) */
+/* 3. JANELA DO SISTEMA */
 .main-window {
     background: rgba(255, 255, 255, 0.98);
     width: 95%;
@@ -60,23 +60,30 @@ body {
 .btn-execute { width: 100%; padding: 18px; border-radius: 10px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
 .btn-back { position: absolute; top: 20px; left: 30px; padding: 8px 15px; cursor: pointer; }
 
-/* 5. ÁREA DE IMPRESSÃO (A4) */
-#pdf-area { display: block; width: 21cm; margin: 0 auto; }
+/* 5. ÁREA DE IMPRESSÃO (Ajustada para evitar páginas em branco) */
+#pdf-area { 
+    display: block; 
+    width: 21cm; 
+    margin: 0 auto; 
+    padding: 0;
+}
 
 .page-a4 {
     width: 21cm;
-    height: 29.5cm; /* Reduzido de 29.7 para 29.5 para evitar a página em branco */
+    height: 29.6cm; /* Um pouco menor que o 29.7cm oficial para dar margem */
     background: white;
     display: grid;
     grid-template-columns: 9cm 9cm;
     grid-auto-rows: 6.3cm;
     justify-content: center;
     align-content: start;
-    padding-top: 0.5cm; /* Pequeno recuo no topo */
-    page-break-after: always;
-    page-break-inside: avoid; /* Instrução extra para não quebrar dentro da página */
+    padding-top: 0.5cm;
     box-sizing: border-box;
-    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    /* Remove sombras e margens externas que podem bugar o PDF */
+    margin: 0; 
+    page-break-after: always;
 }
 
 .etiqueta {
@@ -87,7 +94,6 @@ body {
     flex-direction: column;
     overflow: hidden;
     box-sizing: border-box;
-    position: relative;
 }
 
 .etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 0.3cm; border-bottom: 0.1mm solid #eee; }
@@ -106,30 +112,23 @@ body {
 .borda-manha { border: 3px solid var(--verde-musgo); }
 .borda-tarde { border: 3px solid var(--azul-intenso); }
 
-/* 6. PADRONIZAÇÃO ABSOLUTA DO NOME */
 .nome-aluno {
     flex: 1;
     font-family: 'SFT-Round', 'Fredoka', sans-serif;
-    
-    /* TRAVA DE TAMANHO: SEMPRE 15PT */
     font-size: 15pt !important; 
-    
     text-align: center;
     padding: 0 8px;
     line-height: 1.1;
     text-transform: uppercase;
     color: #000;
     font-weight: 900;
-
-    /* Força quebra de linha sem mudar tamanho da letra */
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     word-break: break-word;
-    overflow: hidden;
 }
 
-/* CONTROLES DE PREVIEW */
-.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin: 0 auto 20px auto; padding-top: 10px; }
+/* CONTROLES */
+.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin: 0 auto 10px auto; padding-top: 10px; }
 .btn-download { background: #e67e22; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
