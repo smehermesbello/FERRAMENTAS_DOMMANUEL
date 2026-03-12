@@ -18,7 +18,7 @@ async function generatePreview() {
     const pdfArea = document.getElementById('pdf-area');
 
     if (fileInput.files.length === 0) {
-        alert("Selecione as fotos primeiro.");
+        alert("Selecione as fotos dos alunos.");
         return;
     }
 
@@ -35,7 +35,7 @@ async function generatePreview() {
 
         for (let file of lote) {
             const imgSrc = await lerArquivo(file);
-            let nomeLimpo = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ");
+            let nomeLimpo = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
 
             const etiqueta = document.createElement('div');
             etiqueta.className = 'etiqueta';
@@ -67,19 +67,20 @@ function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btin = document.querySelector('.btn-download');
     
-    btin.innerText = "⏳ PROCESSANDO FONTE...";
+    btin.innerText = "⏳ RENDERIZANDO PDF...";
     btin.disabled = true;
 
-    // Aguarda um pouco mais para garantir que a fonte .ttf local foi renderizada
+    // Aguarda a renderização da fonte Coiny antes de salvar
     setTimeout(() => {
         const opt = {
             margin: 0,
-            filename: 'Etiquetas_Dom_Manuel.pdf',
+            filename: 'Etiquetas_Escola_Dom_Manuel.pdf',
             image: { type: 'jpeg', quality: 1.0 },
             html2canvas: { 
                 scale: 2, 
                 useCORS: true,
-                letterRendering: true // Melhora o render de fontes manuscritas
+                letterRendering: false,
+                backgroundColor: "#FFFFFF"
             },
             jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
         };
@@ -88,5 +89,5 @@ function downloadPDF() {
             btin.innerText = "BAIXAR PDF FINAL";
             btin.disabled = false;
         });
-    }, 1500); 
+    }, 1200); // Delay de 1.2s para garantir a fonte
 }
