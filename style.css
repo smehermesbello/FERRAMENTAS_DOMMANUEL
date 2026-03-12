@@ -52,20 +52,4 @@ body {
 .etiqueta-logo { width: 1.1cm; margin-right: 8px; }
 .etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; color: #000; line-height: 1.1; }
 
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; box-sizing: border-box; }
-
-/* CORREÇÃO DEFINITIVA PARA AS BORDAS NO PDF */
-.foto-aluno { 
-    width: 3.2cm; 
-    height: 4.2cm; 
-    object-fit: cover; 
-    display: block;
-    box-sizing: border-box; /* Crucial para a borda não "fugir" no PDF */
-    border-radius: 4px;
-}
-
-.borda-manha { border: 5px solid var(--verde) !important; }
-.borda-tarde { border: 5px solid var(--azul) !important; }
-
-.nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; color: #000; text-transform: uppercase; }
-.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 0 auto 20px auto; }
+.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding:
