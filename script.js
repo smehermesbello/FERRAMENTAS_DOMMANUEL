@@ -1,47 +1,71 @@
+// Variável para controlar qual ferramenta o usuário abriu
 let currentMode = 'etiqueta';
 
+// 1. FUNÇÕES DE NAVEGAÇÃO
 function showScreen(id) {
+    // Esconde todas as telas
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+    // Mostra a tela desejada
+    const target = document.getElementById(id);
+    if (target) target.classList.remove('hidden');
 }
 
 function openConfig(mode) {
     currentMode = mode;
-    document.getElementById('config-title').innerText = mode === 'etiqueta' ? 'GERADOR DE ETIQUETAS' : 'GERADOR DE CARÔMETRO';
+    const title = document.getElementById('config-title');
+    
+    // Altera o título da tela de configuração dependendo da escolha
+    if (mode === 'etiqueta') {
+        title.innerText = "GERADOR DE ETIQUETAS";
+    } else {
+        title.innerText = "GERADOR DE CARÔMETRO";
+    }
+    
     showScreen('screen-config');
 }
 
+// 2. FUNÇÃO QUE DECIDE O QUE GERAR
 async function startGeneration() {
     const input = document.getElementById('file-input');
-    if (!input.files.length) return alert("Por favor, selecione as fotos!");
+    if (!input.files.length) {
+        return alert("POR FAVOR, SELECIONE AS FOTOS PRIMEIRO!");
+    }
     
+    // Mostra a tela de preview imediatamente
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>Processando imagens... aguarde.</h2>";
+    area.innerHTML = "<h2 style='color:white; text-align:center;'>PROCESSANDO... AGUARDE.</h2>";
 
-    if (currentMode === 'etiqueta') await generateEtiquetas();
-    else await generateCarometro();
+    // Decide qual função rodar
+    if (currentMode === 'etiqueta') {
+        await generateEtiquetas();
+    } else {
+        await generateCarometro();
+    }
 }
 
-// Promessa para garantir carregamento da imagem
+// 3. AUXILIAR: CARREGAR IMAGEM COM SEGURANÇA (Evita PDF em branco)
 function getBase64(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
     });
 }
 
+// 4. MÓDULO DE ETIQUETAS (O código que já funcionava)
 async function generateEtiquetas() {
     const files = Array.from(document.getElementById('file-input').files);
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const area = document.getElementById('pdf-area');
+    
     const molduraClass = turno === 'manha' ? 'moldura-verde' : 'moldura-azul';
-    const corLinha = turno === 'manha' ? 'var(--verde)' : 'var(--azul)';
+    const corLinha = turno === 'manha' ? '#4A5D23' : '#003399';
 
-    setupDownloadButtons(['pdf']);
+    setupDownloadButtons(['pdf']); // Só PDF para etiquetas
     area.innerHTML = "";
 
+    // Lógica de 8 por página (A4)
     for (let i = 0; i < files.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
@@ -59,10 +83,10 @@ async function generateEtiquetas() {
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px; box-sizing:border-box;">
                         <div class="container-foto" style="width:3.2cm; height:4.2cm;">
-                            <img src="${imgSrc}" class="foto-aluno">
+                            <img src="${imgSrc}" class="foto-aluno" style="width:100%; height:100%; object-fit:cover;">
                             <div class="moldura-overlay ${molduraClass}"></div>
                         </div>
-                        <div class="nome-aluno" style="font-size:14pt; flex:1;">${nome}</div>
+                        <div class="nome-aluno" style="font-size:16pt; flex:1; font-family:'SFT-Round';">${nome}</div>
                     </div>
                 </div>`;
         }
@@ -70,14 +94,16 @@ async function generateEtiquetas() {
     }
 }
 
+// 5. MÓDULO DE CARÔMETRO (Widescreen - 1 por página)
 async function generateCarometro() {
     const files = Array.from(document.getElementById('file-input').files);
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const area = document.getElementById('pdf-area');
+    
     const bgClass = turno === 'manha' ? 'bg-manha' : 'bg-tarde';
     const molduraClass = turno === 'manha' ? 'moldura-verde' : 'moldura-azul';
 
-    setupDownloadButtons(['pdf', 'ppt']);
+    setupDownloadButtons(['pdf', 'ppt']); // PDF e PPT para carômetro
     area.innerHTML = "";
 
     for (const file of files) {
@@ -88,36 +114,49 @@ async function generateCarometro() {
         page.className = `page-widescreen ${bgClass}`;
         page.innerHTML = `
             <div class="container-foto" style="width:9cm; height:12cm;">
-                <img src="${imgSrc}" class="foto-aluno">
+                <img src="${imgSrc}" class="foto-aluno" style="width:100%; height:100%; object-fit:cover;">
                 <div class="moldura-overlay ${molduraClass}"></div>
             </div>
-            <div class="nome-aluno" style="font-size:42pt; margin-top:30px; width:85%;">${nome}</div>`;
+            <div class="nome-aluno" style="font-size:42pt; margin-top:30px; width:85%; font-family:'SFT-Round';">${nome}</div>`;
         area.appendChild(page);
     }
 }
 
+// 6. CONTROLE DE BOTÕES DE DOWNLOAD
 function setupDownloadButtons(types) {
     const container = document.getElementById('download-buttons');
     container.innerHTML = "";
-    if (types.includes('pdf')) container.innerHTML += `<button class="btn-download" onclick="downloadPDF()" style="background:#27ae60">BAIXAR PDF</button>`;
-    if (types.includes('ppt')) container.innerHTML += `<button class="btn-download" onclick="downloadPPT()" style="background:#d35400">BAIXAR PPTX</button>`;
+    
+    if (types.includes('pdf')) {
+        container.innerHTML += `<button class="btn-download" onclick="downloadPDF()" style="background:#27ae60">BAIXAR PDF</button>`;
+    }
+    if (types.includes('ppt')) {
+        container.innerHTML += `<button class="btn-download" onclick="downloadPPT()" style="background:#d35400">BAIXAR POWERPOINT</button>`;
+    }
 }
 
+// 7. EXPORTAÇÃO PDF
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const isCaro = currentMode === 'carometro';
+    
     const opt = {
         margin: 0,
-        filename: 'DOM_MANUEL_ARQUIVO.pdf',
+        filename: currentMode === 'etiqueta' ? 'ETIQUETAS.pdf' : 'CAROMETRO.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'cm', format: isCaro ? [33.867, 19.05] : 'a4', orientation: isCaro ? 'l' : 'p' }
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { 
+            unit: 'cm', 
+            format: isCaro ? [33.867, 19.05] : 'a4', 
+            orientation: isCaro ? 'landscape' : 'portrait' 
+        }
     };
     html2pdf().set(opt).from(element).save();
 }
 
+// 8. EXPORTAÇÃO POWERPOINT (PPTX)
 async function downloadPPT() {
-    let pptx = new PptxGenJS();
+    const pptx = new PptxGenJS();
     pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
     pptx.layout = 'WIDE';
 
@@ -125,15 +164,17 @@ async function downloadPPT() {
     const fundo = turno === 'manha' ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
     const corBorda = turno === 'manha' ? '4A5D23' : '003399';
 
-    const slides = document.querySelectorAll('.page-widescreen');
-    for (let el of slides) {
+    const pages = document.querySelectorAll('.page-widescreen');
+    
+    pages.forEach(page => {
         let slide = pptx.addSlide();
         slide.background = { path: fundo };
-        const imgSrc = el.querySelector('.foto-aluno').src;
-        const nome = el.querySelector('.nome-aluno').innerText;
+        const imgSrc = page.querySelector('.foto-aluno').src;
+        const nome = page.querySelector('.nome-aluno').innerText;
 
         slide.addImage({ data: imgSrc, x: 4.6, y: 0.5, w: 4.1, h: 5.4, line: {color: corBorda, pt: 2} });
-        slide.addText(nome, { x: 0, y: 6.2, w: '100%', align: 'center', fontFace: 'Arial', fontSize: 40, bold: true, color: '000000' });
-    }
+        slide.addText(nome, { x: 0, y: 6.2, w: '100%', align: 'center', fontFace: 'Arial', fontSize: 40, bold: true });
+    });
+    
     pptx.writeFile({ fileName: "CAROMETRO_DOM_MANUEL.pptx" });
 }
