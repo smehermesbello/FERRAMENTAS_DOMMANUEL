@@ -1,8 +1,10 @@
+/* Registro da Fonte com Fallback */
 @font-face {
     font-family: 'SFT-Round';
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
-    font-weight: bold;
+    font-weight: 900;
     font-style: normal;
+    font-display: swap;
 }
 
 :root {
@@ -19,7 +21,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 .main-window {
@@ -36,35 +38,17 @@ body {
 }
 
 .corner-logo { position: absolute; top: 30px; right: 45px; width: 110px; }
-.flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .hidden { display: none !important; }
+.flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 
+/* MENU E BOTÕES */
 .main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin: 0; }
 .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 40px; }
-
-.btn-main {
-    height: 120px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
+.btn-main { height: 120px; font-size: 1.4rem; font-weight: bold; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; transition: 0.3s; }
 .btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-.config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; }
-.turno-selector { display: flex; gap: 15px; margin-top: 10px; }
-.turno-card { flex: 1; cursor: pointer; }
-.turno-card input { display: none; }
-.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; font-weight: bold; }
-.turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
-
-.btn-execute { width: 100%; padding: 20px; margin-top: 20px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
-
-/* ETIQUETAS */
+/* ETIQUETAS (PADRÃO A4) */
+#pdf-area { display: flex; flex-direction: column; align-items: center; }
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
@@ -74,6 +58,8 @@ body {
     grid-auto-rows: 6.3cm;
     justify-content: center;
     page-break-after: always;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 .etiqueta {
@@ -83,11 +69,12 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
-.etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
-.etiqueta-logo { width: 1.4cm; height: auto; margin-right: 10px; }
-.etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; color: #000; }
+.etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; border-bottom: 0.1mm solid #f9f9f9; }
+.etiqueta-logo { width: 1.3cm; height: auto; margin-right: 10px; }
+.etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
 
 .etiqueta-corpo {
     flex: 1;
@@ -98,7 +85,7 @@ body {
     overflow: hidden;
 }
 
-.foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
+.foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; border-radius: 4px; }
 .borda-manha { border: 3px solid var(--verde-musgo); }
 .borda-tarde { border: 3px solid var(--azul-intenso); }
 
@@ -108,14 +95,15 @@ body {
     font-size: 18pt;
     text-align: center;
     padding-left: 10px;
-    line-height: 1.1;
+    line-height: 0.95; /* Ajustado para fontes Black */
     text-transform: uppercase;
     word-wrap: break-word;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
+    color: #000;
 }
 
-.preview-controls { display: flex; justify-content: space-between; padding-bottom: 20px; }
+.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin-bottom: 20px; }
 .btn-download { background: #e67e22; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; }
