@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,8 +19,8 @@
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
             <div class="button-grid">
-                <button class="btn-main" onclick="showScreen('screen-config')">🏷️ ETIQUETAS</button>
-                <button class="btn-main" disabled>📸 CARÔMETRO</button>
+                <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
+                <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
                 <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
                 <button class="btn-main" disabled>🖼️ FORMATAÇÃO DE FOTOS</button>
@@ -28,7 +31,7 @@
         <div id="screen-config" class="screen flex-center hidden">
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 class="title-up">GERADOR DE ETIQUETAS</h2>
+                <h2 id="config-title" class="title-up">CONFIGURAÇÃO</h2>
                 
                 <div class="field">
                     <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
@@ -46,14 +49,15 @@
                     </div>
                 </div>
 
-                <button class="btn-execute" onclick="generatePreview()">GERAR ETIQUETAS</button>
+                <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-controls">
                 <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
-                <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF</button>
+                <div id="download-buttons" style="display: flex; gap: 10px;">
+                    </div>
             </div>
             <div id="pdf-area"></div>
         </div>
