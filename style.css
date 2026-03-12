@@ -8,6 +8,7 @@
     --verde-musgo: #4A5D23;
     --azul-intenso: #003399;
     --text-dark: #2c3e50;
+    --bg-switch: #e0e0e0;
 }
 
 body {
@@ -36,45 +37,89 @@ body {
 .btn-main { 
     height: 130px; border-radius: 20px; border: 2px solid #eee; background: white; 
     cursor: pointer; font-weight: 700; font-size: 1.3rem; color: #34495e;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
 }
-.btn-main:hover:not(:disabled) { transform: scale(1.03); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: #3498db; }
+.btn-main:hover:not(:disabled) { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: #3498db; }
 .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #f9f9f9; }
 
-/* SWITCH DESLIZANTE */
-.switch-container {
-    position: relative; display: flex; width: 100%; max-width: 320px; height: 55px;
-    background: #f0f0f0; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box;
+/* NOVO SWITCH MODERNO DESLIZANTE */
+.modern-switch {
+    position: relative;
+    display: flex;
+    width: 320px;
+    height: 60px;
+    background: var(--bg-switch);
+    border-radius: 30px;
+    margin: 20px auto;
+    padding: 5px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
 }
-.switch-container input { display: none; }
-.switch-label { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; transition: 0.3s; }
-.switch-selection {
-    position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px);
-    background: white; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1;
+
+.modern-switch input { display: none; }
+
+.switch-option {
+    flex: 1;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #666;
+    transition: color 0.3s ease;
+    cursor: pointer;
 }
-#manha:checked ~ .switch-selection { transform: translateX(0); }
-#tarde:checked ~ .switch-selection { transform: translateX(100%); }
+
+.switch-slider {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(50% - 5px);
+    height: calc(100% - 10px);
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    z-index: 1;
+}
+
+/* Lógica de deslizamento */
+#manha:checked ~ .switch-slider { transform: translateX(0); }
+#tarde:checked ~ .switch-slider { transform: translateX(100%); }
+
 #manha:checked ~ label[for="manha"] { color: var(--verde-musgo); }
 #tarde:checked ~ label[for="tarde"] { color: var(--azul-intenso); }
 
 /* CONFIGURAÇÃO */
-.config-container { width: 100%; max-width: 500px; }
-.btn-back { margin-bottom: 20px; cursor: pointer; padding: 10px; border: none; background: none; font-weight: bold; }
-.btn-execute { width: 100%; padding: 20px; border-radius: 15px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
+.field { margin-bottom: 25px; width: 100%; }
+.btn-execute { width: 100%; padding: 20px; border-radius: 15px; border: none; background: #27ae60; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
 
-/* ETIQUETAS */
+/* ETIQUETAS COM LINHA REFORÇADA */
 #pdf-area { background: transparent; padding: 0; }
 .page-a4 {
     width: 21cm; height: 29.6cm; background: white !important; margin: 0 auto;
     display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm);
     justify-content: center; align-content: center; page-break-after: always;
 }
-.etiqueta { width: 9cm; height: 6.3cm; border: 0.1mm solid #eee; display: flex; flex-direction: column; box-sizing: border-box; }
-.etiqueta-topo { 
-    height: 1.8cm; display: flex; align-items: center; padding: 0 12px; 
-    border-bottom: 0.5px solid #ccc; /* LINHA DIVISÓRIA FINA */
+
+.etiqueta { 
+    width: 9cm; height: 6.3cm; 
+    border: 0.1mm solid #f0f0f0; 
+    display: flex; flex-direction: column; 
+    box-sizing: border-box; 
 }
+
+/* LINHA DE DIVISÃO SUPERIOR - AJUSTADA */
+.etiqueta-topo { 
+    height: 1.8cm; 
+    display: flex; 
+    align-items: center; 
+    padding: 0 12px; 
+    border-bottom: 1.5px solid #888; /* Linha mais escura para garantir visualização */
+    box-sizing: border-box;
+}
+
 .etiqueta-logo { width: 1.2cm; margin-right: 10px; }
 .etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; color: #000; line-height: 1.2; }
 .etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; }
@@ -84,7 +129,5 @@ body {
 .nome-aluno {
     flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important;
     text-align: center; padding: 0 10px; text-transform: uppercase;
-    display: flex; align-items: center; justify-content: center; height: 100%; word-break: break-word; color: #000;
+    display: flex; align-items: center; justify-content: center; height: 100%; color: #000;
 }
-
-.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 0 auto 20px auto; }
