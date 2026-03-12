@@ -5,18 +5,23 @@ function showScreen(screenId) {
 
 async function generatePreview() {
     const fileInput = document.getElementById('file-input');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const turnoSelect = document.querySelector('input[name="turno"]:checked');
     const pdfArea = document.getElementById('pdf-area');
 
-    if (fileInput.files.length === 0) return alert("Selecione as fotos.");
+    if (fileInput.files.length === 0) return alert("Por favor, selecione as fotos.");
+    if (!turnoSelect) return alert("Selecione o turno.");
 
-    // Aguarda carregar as fontes
+    const turno = turnoSelect.value;
+
+    // Aguarda o navegador processar as fontes
     await document.fonts.ready;
 
     pdfArea.innerHTML = ""; 
     showScreen('screen-preview');
 
     const files = Array.from(fileInput.files);
+    
+    // Processa 8 etiquetas por página A4
     for (let i = 0; i < files.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
@@ -24,7 +29,8 @@ async function generatePreview() {
 
         for (let file of lote) {
             const imgSrc = await lerArquivo(file);
-            let nomeOriginal = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
+            // Remove a extensão e caracteres especiais do nome do arquivo
+            let nomeLimpo = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
             const etiqueta = document.createElement('div');
             etiqueta.className = 'etiqueta';
@@ -35,7 +41,7 @@ async function generatePreview() {
                 </div>
                 <div class="etiqueta-corpo">
                     <img src="${imgSrc}" class="foto-aluno ${turno === 'manha' ? 'borda-manha' : 'borda-tarde'}">
-                    <div class="nome-aluno" contenteditable="true">${nomeOriginal}</div>
+                    <div class="nome-aluno" contenteditable="true">${nomeLimpo}</div>
                 </div>
             `;
             page.appendChild(etiqueta);
@@ -55,17 +61,29 @@ function lerArquivo(file) {
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btn = document.querySelector('.btn-download');
-    btn.innerText = "⏳ GERANDO PDF...";
+    const originalText = btn.innerText;
+    
+    btn.innerText = "⏳ GERANDO ARQUIVO...";
+    btn.disabled = true;
     
     const opt = {
         margin: 0,
-        filename: 'Etiquetas_Dom_Manuel_Padronizadas.pdf',
+        filename: 'Etiquetas_Dom_Manuel_Final.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            letterRendering: true 
+        },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = "BAIXAR PDF FINAL";
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }).catch(err => {
+        console.error(err);
+        btn.innerText = "ERRO AO GERAR";
+        btn.disabled = false;
     });
 }
