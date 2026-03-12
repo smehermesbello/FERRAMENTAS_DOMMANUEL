@@ -8,7 +8,7 @@ async function generatePreview() {
     const turnoRadio = document.querySelector('input[name="turno"]:checked');
     const area = document.getElementById('pdf-area');
 
-    if (!input.files.length) return alert("Selecione as fotos!");
+    if (!input.files.length) return alert("Por favor, selecione as fotos.");
     
     const turno = turnoRadio.value;
     await document.fonts.ready;
@@ -16,8 +16,6 @@ async function generatePreview() {
     showScreen('screen-preview');
 
     const files = Array.from(input.files);
-    
-    // Processa 8 etiquetas por folha A4
     for (let i = 0; i < files.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
@@ -54,23 +52,27 @@ function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btn = document.querySelector('.btn-download');
     
-    btn.innerText = "GERANDO...";
-    
+    btn.innerText = "✨ PROCESSANDO...";
+    btn.disabled = true;
+
+    // Ajuste fino para o html2pdf não capturar o fundo da tela
     const opt = {
         margin: 0,
-        filename: 'etiquetas_dom_manuel.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: 'Etiquetas_Dom_Manuel.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
             scrollY: 0,
-            letterRendering: true
+            letterRendering: true,
+            backgroundColor: null // Evita que o fundo cinza da tela seja capturado
         },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: 'css', after: '.page-a4' }
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
         btn.innerText = "BAIXAR PDF";
+        btn.disabled = false;
     });
 }
