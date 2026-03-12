@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Formatação Escolar - Dom Manuel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -15,22 +14,22 @@
         
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
-            <p class="subtitle">Selecione o módulo de formatação</p>
+            <p class="subtitle">Escolha o módulo de formatação</p>
             
             <div class="button-grid">
-                <button class="btn-main glass-effect" onclick="showScreen('screen-config')">
+                <button class="btn-main" onclick="showScreen('screen-config')">
                     <span class="icon">🏷️</span>
                     Etiquetas
                 </button>
-                <button class="btn-main glass-effect" disabled>
+                <button class="btn-main" disabled>
                     <span class="icon">📸</span>
                     Carômetro
                 </button>
-                <button class="btn-main glass-effect" disabled>
+                <button class="btn-main" disabled>
                     <span class="icon">📋</span>
                     Listagem
                 </button>
-                <button class="btn-main glass-effect" disabled>
+                <button class="btn-main" disabled>
                     <span class="icon">🪪</span>
                     Carteirinha
                 </button>
@@ -39,14 +38,13 @@
         </div>
 
         <div id="screen-config" class="screen flex-center hidden">
-            <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR AO MENU</button>
+            <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
             <h2 class="section-title">Configurar Etiquetas</h2>
             
             <div class="config-container">
                 <div class="config-item">
                     <label>1. Envie as fotos dos alunos:</label>
                     <input type="file" id="file-input" accept="image/*" multiple>
-                    <p class="hint">O nome do arquivo será usado como nome do aluno.</p>
                 </div>
 
                 <div class="config-item">
@@ -63,18 +61,16 @@
                     </div>
                 </div>
 
-                <button class="btn-execute" onclick="generatePreview()">VER RESULTADOS E EDITAR</button>
+                <button class="btn-execute" onclick="generatePreview()">GERAR E EDITAR NOMES</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-controls">
-                <button class="btn-back-small" onclick="showScreen('screen-config')">← Ajustar Fotos</button>
-                <h2 class="preview-title">Páginas Geradas (A4)</h2>
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← Ajustar</button>
+                <h2 class="preview-title">Visualização de Impressão</h2>
                 <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF FINAL</button>
             </div>
-            
-            <p class="edit-hint">⚠️ Você pode clicar nos nomes abaixo para corrigir manualmente antes de imprimir.</p>
             
             <div id="pdf-area">
                 </div>
