@@ -8,7 +8,6 @@
     --verde-musgo: #4A5D23;
     --azul-intenso: #003399;
     --preto-linha: #000000;
-    --text-dark: #1a1a1a;
 }
 
 body {
@@ -19,7 +18,6 @@ body {
     display: flex; justify-content: center; align-items: center;
 }
 
-/* JANELA PRINCIPAL */
 .main-window {
     background: rgba(255, 255, 255, 0.98);
     width: 95%; max-width: 1200px; height: 90vh;
@@ -31,69 +29,50 @@ body {
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .corner-logo { position: absolute; top: 25px; right: 30px; width: 100px; }
 
-/* TEXTOS EM CAIXA ALTA */
-.main-title, .title-up, label, button, .switch-option {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+/* TEXTOS E BOTÕES EM CAIXA ALTA */
+.main-title, label, button, .switch-option { text-transform: uppercase; letter-spacing: 1px; }
 
-/* BOTÕES DO MENU PRINCIPAL */
 .button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 950px; }
+.btn-main { height: 130px; border-radius: 15px; border: 2px solid #eee; background: white; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: 0.3s; }
+.btn-main:hover:not(:disabled) { transform: scale(1.02); border-color: #3498db; }
 
-.btn-main { 
-    height: 130px; border-radius: 15px; border: 2px solid #eee; background: white; 
-    cursor: pointer; font-weight: 700; font-size: 1.1rem; color: var(--text-dark);
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.btn-main:hover:not(:disabled) { transform: scale(1.02); border-color: #3498db; background: #fafafa; }
-.btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-back, .btn-back-small { background: #f0f0f0; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-execute, .btn-download { padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; color: white; font-weight: 700; cursor: pointer; }
 
-/* BOTÕES DE AÇÃO (VOLTAR, AJUSTAR, EXECUTAR, BAIXAR) */
-.btn-back, .btn-back-small {
-    background: #f0f0f0; border: none; padding: 12px 25px; border-radius: 10px;
-    font-weight: 700; cursor: pointer; color: #555; transition: 0.3s; margin-bottom: 10px;
-}
-.btn-back:hover, .btn-back-small:hover { background: #e0e0e0; color: #000; }
-
-.btn-execute, .btn-download {
-    padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; 
-    color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; 
-    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); transition: 0.3s;
-}
-.btn-execute:hover, .btn-download:hover { background: #2ecc71; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4); }
-
-/* SWITCH DESLIZANTE MODERNO */
-.modern-switch {
-    position: relative; display: flex; width: 320px; height: 55px;
-    background: #eee; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box;
-}
+/* SWITCH TURNOS */
+.modern-switch { position: relative; display: flex; width: 320px; height: 55px; background: #eee; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box; }
 .modern-switch input { display: none; }
-.switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
-.switch-slider {
-    position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px);
-    background: white; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 1;
-}
+.switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; }
+.switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px); background: white; border-radius: 25px; transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 1; }
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
-#manha:checked ~ label[for="manha"] { color: var(--verde-musgo); }
-#tarde:checked ~ label[for="tarde"] { color: var(--azul-intenso); }
 
-/* --- ÁREA DAS ETIQUETAS (PDF) --- */
-.page-a4 {
-    width: 21cm; height: 29.6cm; background: white !important; margin: 0 auto;
-    display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm);
-    justify-content: center; align-content: center; page-break-after: always;
-}
+/* --- ETIQUETAS (DESIGN FINAL) --- */
+.page-a4 { width: 21cm; height: 29.6cm; background: white !important; margin: 0 auto; display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm); justify-content: center; align-content: center; page-break-after: always; }
 
-/* CONTORNO PRETO EXTERNO */
-.etiqueta { 
-    width: 9cm; height: 6.3cm; 
-    border: 1.5px solid var(--preto-linha); 
-    display: flex; flex-direction: column; 
+.etiqueta { width: 9cm; height: 6.3cm; border: 1.5px solid var(--preto-linha); display: flex; flex-direction: column; box-sizing: border-box; }
+
+.etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 12px; box-sizing: border-box; }
+.linha-manha { border-bottom: 3.5px dotted var(--verde-musgo) !important; }
+.linha-tarde { border-bottom: 3.5px dotted var(--azul-intenso) !important; }
+
+.etiqueta-logo { width: 1.1cm; margin-right: 10px; }
+.etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
+
+.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; }
+
+/* AQUI ESTÁ A CORREÇÃO DAS BORDAS DAS FOTOS */
+.foto-aluno { 
+    width: 3.2cm; 
+    height: 4.2cm; 
+    object-fit: cover; 
+    border-radius: 5px; 
     box-sizing: border-box; 
+    display: block;
 }
 
-/* TOPO COM LINHA PONTILHADA COLORIDA */
-.etiqueta-topo { 
-    height: 1.8cm; display: flex; align-items: center; padding: 0 12px;
+/* Seletores ultra-específicos para forçar a borda */
+img.foto-aluno.borda-manha { border: 4px solid var(--verde-musgo) !important; }
+img.foto-aluno.borda-tarde { border: 4px solid var(--azul-intenso) !important; }
+
+.nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; text-transform: uppercase; color: #000; }
