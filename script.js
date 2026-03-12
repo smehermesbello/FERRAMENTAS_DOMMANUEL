@@ -6,11 +6,12 @@ function showScreen(id) {
 
 async function generatePreview() {
     const input = document.getElementById('file-input');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const turnoRadio = document.querySelector('input[name="turno"]:checked');
     const area = document.getElementById('pdf-area');
 
-    if (!input.files.length) return alert("Selecione fotos.");
+    if (!input.files.length) return alert("Por favor, selecione as fotos.");
     
+    const turno = turnoRadio.value;
     await document.fonts.ready;
     area.innerHTML = "";
     showScreen('screen-preview');
@@ -49,9 +50,8 @@ async function generatePreview() {
 function downloadPDF() {
     const element = document.getElementById('pdf-area');
     const btn = document.querySelector('.btn-download');
-    btn.innerText = "⏳ LIMPANDO E GERANDO...";
+    btn.innerText = "⏳ GERANDO...";
 
-    // Configuração agressiva para remover fundos e páginas extras
     const opt = {
         margin: 0,
         filename: 'Etiquetas_Dom_Manuel.pdf',
@@ -60,13 +60,13 @@ function downloadPDF() {
             scale: 2, 
             useCORS: true, 
             scrollY: 0,
-            backgroundColor: '#ffffff' // Força fundo branco total
+            backgroundColor: '#ffffff' // Mata a página cinza forçando branco total
         },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['css', 'legacy'] }
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = "BAIXAR PDF SEM ERROS";
+        btn.innerText = "BAIXAR PDF";
     });
 }
