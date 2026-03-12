@@ -65,17 +65,18 @@ body {
 
 .page-a4 {
     width: 21cm;
-    height: 29.7cm;
+    height: 29.5cm; /* Reduzido de 29.7 para 29.5 para evitar a página em branco */
     background: white;
     display: grid;
     grid-template-columns: 9cm 9cm;
     grid-auto-rows: 6.3cm;
     justify-content: center;
     align-content: start;
-    padding-top: 1cm;
+    padding-top: 0.5cm; /* Pequeno recuo no topo */
     page-break-after: always;
+    page-break-inside: avoid; /* Instrução extra para não quebrar dentro da página */
     box-sizing: border-box;
-    margin-bottom: 20px;
+    margin: 0 auto;
 }
 
 .etiqueta {
