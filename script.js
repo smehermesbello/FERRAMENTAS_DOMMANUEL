@@ -34,7 +34,6 @@ async function generatePreview() {
 
             const nome = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Estrutura mudou: Agora temos a foto E uma div de moldura por cima dela
             page.innerHTML += `
                 <div class="etiqueta">
                     <div class="etiqueta-topo ${classeLinha}">
