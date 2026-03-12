@@ -34,13 +34,13 @@ body {
 .btn-main { height: 130px; border-radius: 15px; border: 2px solid #eee; background: #fff; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
 .btn-main:hover:not(:disabled) { transform: translateY(-3px); border-color: #3498db; }
 
-.btn-back, .btn-back-small { background: #eee; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; color: #444; }
-.btn-execute, .btn-download { padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; color: #fff; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.btn-back, .btn-back-small { background: #eee; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; }
+.btn-execute, .btn-download { padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; color: #fff; cursor: pointer; font-weight: bold; }
 
-/* SWITCH DESLIZANTE */
+/* SWITCH */
 .modern-switch { position: relative; display: flex; width: 320px; height: 55px; background: #eee; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box; }
 .modern-switch input { display: none; }
-.switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+.switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px); background: #fff; border-radius: 25px; transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 1; }
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
@@ -49,26 +49,20 @@ body {
 
 /* --- ETIQUETAS --- */
 .page-a4 { width: 21cm; height: 29.6cm; background: #fff !important; margin: 0 auto; display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm); justify-content: center; align-content: center; page-break-after: always; }
-
-.etiqueta { width: 9cm; height: 6.3cm; border: 2px solid #000; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden; }
-
+.etiqueta { width: 9cm; height: 6.3cm; border: 2px solid #000; display: flex; flex-direction: column; box-sizing: border-box; }
 .etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 10px; box-sizing: border-box; }
 .linha-manha { border-bottom: 4px dotted var(--verde) !important; }
 .linha-tarde { border-bottom: 4px dotted var(--azul) !important; }
-
-.etiqueta-logo { width: 1.1cm; margin-right: 8px; }
 .etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; color: #000; line-height: 1.1; }
 
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 12px; box-sizing: border-box; }
+.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; box-sizing: border-box; }
 
-/* MOLDURA DA FOTO (RESOLUÇÃO DO PDF) */
-.moldura-foto {
+/* RECONSTRUÇÃO DA MOLDURA PARA PDF */
+.container-foto {
+    position: relative; /* Base para os elementos internos */
     width: 3.2cm;
     height: 4.2cm;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    display: block;
+    min-width: 3.2cm;
     box-sizing: border-box;
 }
 
@@ -79,9 +73,21 @@ body {
     display: block;
 }
 
-/* Criando a borda usando Shadow interna - Infalível para PDF */
-.borda-manha { box-shadow: inset 0 0 0 5px var(--verde) !important; }
-.borda-tarde { box-shadow: inset 0 0 0 5px var(--azul) !important; }
+/* O QUADRO REAL: Um elemento que fica por cima da foto */
+.moldura-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Não atrapalha cliques */
+    box-sizing: border-box;
+    border: 5px solid transparent; /* Reservando espaço */
+}
 
-.nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; color: #000; text-transform: uppercase; line-height: 1.2; }
+/* Cores aplicadas diretamente na borda da moldura overlay */
+.moldura-verde { border: 5px solid var(--verde) !important; }
+.moldura-azul { border: 5px solid var(--azul) !important; }
+
+.nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; color: #000; text-transform: uppercase; }
 .preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 20px auto; }
