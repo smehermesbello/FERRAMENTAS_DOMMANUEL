@@ -91,24 +91,25 @@ function downloadPDF() {
 
     const opt = {
         margin: 0,
-        filename: 'Etiquetas_Escola_Dom_Manuel.pdf',
-        image: { type: 'jpeg', quality: 1.0 },
+        filename: 'Etiquetas_Dom_Manuel_Final.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
-            letterRendering: true 
+            letterRendering: true,
+            scrollY: 0 // Garante que o PDF comece do topo
         },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
+        // A mágica para remover a página em branco:
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
-    // Executa a biblioteca html2pdf
     html2pdf().set(opt).from(element).save().then(() => {
         btn.innerText = originalText;
         btn.disabled = false;
     }).catch(err => {
         console.error("Erro ao gerar PDF:", err);
-        alert("Erro ao gerar PDF. Tente novamente.");
-        btn.innerText = "TENTAR NOVAMENTE";
+        btn.innerText = "ERRO AO GERAR";
         btn.disabled = false;
     });
 }
