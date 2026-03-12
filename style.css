@@ -29,17 +29,14 @@ body {
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .corner-logo { position: absolute; top: 25px; right: 30px; width: 100px; }
 
-/* TEXTOS E BOTÕES EM CAIXA ALTA */
+/* BOTÕES E SWITCH */
 .main-title, label, button, .switch-option { text-transform: uppercase; letter-spacing: 1px; }
-
 .button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 950px; }
 .btn-main { height: 130px; border-radius: 15px; border: 2px solid #eee; background: white; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: 0.3s; }
 .btn-main:hover:not(:disabled) { transform: scale(1.02); border-color: #3498db; }
-
 .btn-back, .btn-back-small { background: #f0f0f0; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 .btn-execute, .btn-download { padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; color: white; font-weight: 700; cursor: pointer; }
 
-/* SWITCH TURNOS */
 .modern-switch { position: relative; display: flex; width: 320px; height: 55px; background: #eee; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box; }
 .modern-switch input { display: none; }
 .switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; }
@@ -47,32 +44,37 @@ body {
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
 
-/* --- ETIQUETAS (DESIGN FINAL) --- */
+/* --- ETIQUETAS --- */
 .page-a4 { width: 21cm; height: 29.6cm; background: white !important; margin: 0 auto; display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm); justify-content: center; align-content: center; page-break-after: always; }
-
 .etiqueta { width: 9cm; height: 6.3cm; border: 1.5px solid var(--preto-linha); display: flex; flex-direction: column; box-sizing: border-box; }
-
 .etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 12px; box-sizing: border-box; }
 .linha-manha { border-bottom: 3.5px dotted var(--verde-musgo) !important; }
 .linha-tarde { border-bottom: 3.5px dotted var(--azul-intenso) !important; }
-
 .etiqueta-logo { width: 1.1cm; margin-right: 10px; }
 .etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
+.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; overflow: hidden; }
 
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; gap: 10px; }
-
-/* AQUI ESTÁ A CORREÇÃO DAS BORDAS DAS FOTOS */
-.foto-aluno { 
-    width: 3.2cm; 
-    height: 4.2cm; 
-    object-fit: cover; 
-    border-radius: 5px; 
-    box-sizing: border-box; 
-    display: block;
+/* RECORTE FINAL: FORÇANDO A BORDA DA IMAGEM */
+#pdf-area img.foto-aluno {
+    width: 3.2cm !important;
+    height: 4.2cm !important;
+    object-fit: cover !important;
+    border-radius: 6px !important;
+    display: block !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
 }
 
-/* Seletores ultra-específicos para forçar a borda */
-img.foto-aluno.borda-manha { border: 4px solid var(--verde-musgo) !important; }
-img.foto-aluno.borda-tarde { border: 4px solid var(--azul-intenso) !important; }
+/* Seletores de ID têm a maior prioridade possível no CSS */
+#pdf-area .borda-manha { 
+    border: 5px solid #4A5D23 !important; 
+    outline: none !important;
+}
+
+#pdf-area .borda-tarde { 
+    border: 5px solid #003399 !important; 
+    outline: none !important;
+}
 
 .nome-aluno { flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important; text-align: center; text-transform: uppercase; color: #000; }
+.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 0 auto 20px auto; }
