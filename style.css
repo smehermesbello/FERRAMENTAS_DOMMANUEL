@@ -53,7 +53,7 @@ body {
 .turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
 .btn-execute { width: 100%; padding: 20px; margin-top: 25px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; }
 
-/* ETIQUETAS */
+/* ETIQUETAS - PADRONIZAÇÃO A4 */
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
@@ -66,26 +66,46 @@ body {
     margin-bottom: 20px;
 }
 
-.etiqueta { width: 9cm; height: 6.3cm; border: 0.1mm solid #eee; display: flex; flex-direction: column; overflow: hidden; }
+.etiqueta { 
+    width: 9cm; 
+    height: 6.3cm; 
+    border: 0.1mm solid #eee; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
 .etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
 .etiqueta-logo { width: 1.3cm; height: auto; margin-right: 10px; }
-.etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
+.etiqueta-escola { font-size: 10pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
 
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; overflow: hidden; }
+.etiqueta-corpo { 
+    flex: 1; 
+    display: flex; 
+    align-items: center; 
+    padding: 10px; 
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
 .foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
 .borda-manha { border: 3.5px solid var(--verde-musgo); }
 .borda-tarde { border: 3.5px solid var(--azul-intenso); }
 
 .nome-aluno {
     flex: 1;
-    /* ORDEM DE PRIORIDADE: SFT Local -> Fredoka Google -> Arial Black */
     font-family: 'SFT-Round', 'Fredoka', 'Arial Black', sans-serif;
-    font-size: 18pt;
+    /* TAMANHO PADRONIZADO PARA TODOS */
+    font-size: 16pt; 
     text-align: center;
-    padding-left: 12px;
-    line-height: 0.9;
+    padding: 0 10px;
+    line-height: 1.0;
     text-transform: uppercase;
+    
+    /* Quebra de linha inteligente */
     word-wrap: break-word;
+    overflow-wrap: break-word;
     display: flex;
     align-items: center;
     justify-content: center;
