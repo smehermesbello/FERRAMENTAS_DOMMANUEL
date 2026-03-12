@@ -1,10 +1,9 @@
-/* Registro da Fonte com Fallback */
+/* Registro da Fonte Local */
 @font-face {
     font-family: 'SFT-Round';
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
     font-weight: 900;
     font-style: normal;
-    font-display: swap;
 }
 
 :root {
@@ -25,7 +24,7 @@ body {
 }
 
 .main-window {
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.97);
     width: 95%;
     max-width: 1100px;
     height: 85vh;
@@ -41,14 +40,20 @@ body {
 .hidden { display: none !important; }
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 
-/* MENU E BOTÕES */
-.main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin: 0; }
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 40px; }
+/* MENU */
+.main-title { font-size: 3.5rem; font-weight: 900; color: var(--text-dark); margin-bottom: 10px; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
 .btn-main { height: 120px; font-size: 1.4rem; font-weight: bold; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; transition: 0.3s; }
 .btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-/* ETIQUETAS (PADRÃO A4) */
-#pdf-area { display: flex; flex-direction: column; align-items: center; }
+/* CONFIG */
+.config-container { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 600px; border: 1px solid #eee; }
+.turno-selector { display: flex; gap: 15px; margin-top: 10px; }
+.card-content { display: block; padding: 15px; background: #f0f0f0; border-radius: 12px; font-weight: bold; cursor: pointer; }
+.turno-card input:checked + .card-content { background: var(--text-dark); color: white; }
+.btn-execute { width: 100%; padding: 20px; margin-top: 25px; border-radius: 12px; border: none; background: #27ae60; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; }
+
+/* ETIQUETAS */
 .page-a4 {
     width: 21cm;
     height: 29.7cm;
@@ -58,52 +63,34 @@ body {
     grid-auto-rows: 6.3cm;
     justify-content: center;
     page-break-after: always;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 
-.etiqueta {
-    width: 9cm;
-    height: 6.3cm;
-    border: 0.1mm solid #eee;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
-.etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; border-bottom: 0.1mm solid #f9f9f9; }
+.etiqueta { width: 9cm; height: 6.3cm; border: 0.1mm solid #eee; display: flex; flex-direction: column; overflow: hidden; }
+.etiqueta-topo { height: 1.75cm; display: flex; align-items: center; padding: 0 0.3cm; }
 .etiqueta-logo { width: 1.3cm; height: auto; margin-right: 10px; }
 .etiqueta-escola { font-size: 11pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; color: #000; }
 
-.etiqueta-corpo {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-.foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; border-radius: 4px; }
-.borda-manha { border: 3px solid var(--verde-musgo); }
-.borda-tarde { border: 3px solid var(--azul-intenso); }
+.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; overflow: hidden; }
+.foto-aluno { width: 3cm; height: 4cm; object-fit: cover; flex-shrink: 0; }
+.borda-manha { border: 3.5px solid var(--verde-musgo); }
+.borda-tarde { border: 3.5px solid var(--azul-intenso); }
 
 .nome-aluno {
     flex: 1;
-    font-family: 'SFT-Round', sans-serif;
+    /* ORDEM DE PRIORIDADE: SFT Local -> Fredoka Google -> Arial Black */
+    font-family: 'SFT-Round', 'Fredoka', 'Arial Black', sans-serif;
     font-size: 18pt;
     text-align: center;
-    padding-left: 10px;
-    line-height: 0.95; /* Ajustado para fontes Black */
+    padding-left: 12px;
+    line-height: 0.9;
     text-transform: uppercase;
     word-wrap: break-word;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #000;
 }
 
-.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin-bottom: 20px; }
-.btn-download { background: #e67e22; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+.preview-controls { display: flex; justify-content: space-between; width: 100%; max-width: 21cm; margin-bottom: 15px; }
+.btn-download { background: #e67e22; color: white; border: none; padding: 15px 35px; border-radius: 10px; font-weight: bold; cursor: pointer; }
