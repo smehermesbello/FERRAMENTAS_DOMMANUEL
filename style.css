@@ -1,3 +1,4 @@
+/* Registro da Fonte */
 @font-face {
     font-family: 'SFT-Round';
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
@@ -8,7 +9,7 @@ body {
     margin: 0; padding: 0; min-height: 100vh;
     background: url('FUNDO.png') no-repeat center center fixed;
     background-size: cover;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     display: flex; justify-content: center; align-items: center;
 }
 
@@ -20,48 +21,52 @@ body {
 }
 
 .hidden { display: none !important; }
-.flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+.flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .corner-logo { position: absolute; top: 20px; right: 20px; width: 80px; }
 
-/* BOTÕES */
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 700px; margin-top: 20px; }
-.btn-main { padding: 30px; border-radius: 15px; border: 1px solid #ddd; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
-.btn-main:hover { background: #f9f9f9; transform: translateY(-3px); }
+/* Menu e Botões */
+.main-title { font-size: 3rem; color: #2c3e50; margin-bottom: 20px; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; }
+.btn-main { padding: 30px; border-radius: 15px; border: 1px solid #ddd; background: white; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
+.btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-/* ÁREA DO PDF - CRÍTICO */
+/* Configuração */
+.config-container { width: 100%; max-width: 450px; background: #fff; padding: 20px; border-radius: 20px; }
+.field { margin-bottom: 20px; text-align: left; }
+.turno-row { display: flex; gap: 20px; margin-top: 10px; }
+.btn-execute { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+/* ÁREA DO PDF - CONFIGURAÇÃO MILIMÉTRICA */
 #pdf-area {
-    background: transparent !important; /* Remove qualquer cor de fundo */
-    padding: 0 !important;
-    margin: 0 auto !important;
+    background: transparent !important;
+    padding: 0; margin: 0;
 }
 
 .page-a4 {
     width: 21cm;
-    height: 29.6cm; /* 1mm a menos para não transbordar */
+    height: 29.6cm; /* Milímetro de segurança contra página cinza/em branco */
     background: white !important;
-    margin: 0 auto !important;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 9cm 9cm;
     grid-template-rows: repeat(4, 6.3cm);
     justify-content: center;
     align-content: center;
-    page-break-after: always; /* Força quebra de página */
-    page-break-inside: avoid;
+    page-break-after: always;
     overflow: hidden;
     position: relative;
-    box-shadow: none !important; /* Remove sombras que o PDF entende como conteúdo */
+    box-shadow: none !important;
 }
 
-/* ETIQUETA */
 .etiqueta {
     width: 9cm; height: 6.3cm;
-    border: 0.05mm solid #eee; /* Borda quase invisível */
+    border: 0.01mm solid #eee; /* Borda mínima */
     display: flex; flex-direction: column; box-sizing: border-box;
 }
 
 .etiqueta-topo { height: 1.8cm; display: flex; align-items: center; padding: 0 10px; }
 .etiqueta-logo { width: 1.1cm; margin-right: 8px; }
-.etiqueta-escola { font-size: 9pt; font-weight: bold; text-align: center; flex: 1; color: #000; }
+.etiqueta-escola { font-size: 9pt; font-weight: bold; text-align: center; flex: 1; color: #000; line-height: 1.2; }
 
 .etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; }
 .foto-aluno { width: 3.2cm; height: 4.2cm; object-fit: cover; }
@@ -69,12 +74,12 @@ body {
 .borda-tarde { border: 3.5px solid #003399; }
 
 .nome-aluno {
-    flex: 1; font-family: 'SFT-Round', sans-serif;
+    flex: 1; font-family: 'SFT-Round', 'Fredoka', sans-serif;
     font-size: 16pt !important; text-align: center;
     padding: 0 10px; text-transform: uppercase;
     display: flex; align-items: center; justify-content: center;
     height: 100%; word-break: break-word; color: #000;
 }
 
-/* CONTROLES PREVIEW */
-.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 0 auto 20px auto; padding: 10px; background: #eee; border-radius: 10px; }
+/* Controles Preview */
+.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 0 auto 20px auto; padding: 10px; }
