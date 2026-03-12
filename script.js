@@ -34,7 +34,6 @@ async function generatePreview() {
 
             const nome = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ").toUpperCase();
             
-            // Gerando HTML com as classes injetadas
             page.innerHTML += `
                 <div class="etiqueta">
                     <div class="etiqueta-topo ${classeLinha}">
@@ -56,8 +55,14 @@ function downloadPDF() {
     const opt = {
         margin: 0,
         filename: 'ETIQUETAS.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0, backgroundColor: '#ffffff' },
+        image: { type: 'jpeg', quality: 1.0 }, // Qualidade máxima
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0, 
+            backgroundColor: '#ffffff',
+            logging: false 
+        },
         jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['css', 'legacy'] }
     };
