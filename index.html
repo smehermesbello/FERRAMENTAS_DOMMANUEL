@@ -2,13 +2,17 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="main-window">
         <img src="LOGO.jpg" alt="Logo" class="corner-logo">
         
@@ -28,12 +32,14 @@
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 id="config-title" class="title-up">CONFIGURAÇÃO</h2>
+                
                 <div class="field">
-                    <label>FOTOS DOS ALUNOS:</label>
+                    <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
                     <input type="file" id="file-input" accept="image/*" multiple class="custom-file-input">
                 </div>
+
                 <div class="field">
-                    <label>TURNO:</label>
+                    <label>2. SELECIONE O TURNO:</label>
                     <div class="modern-switch">
                         <input type="radio" id="manha" name="turno" value="manha" checked>
                         <input type="radio" id="tarde" name="turno" value="tarde">
@@ -42,13 +48,14 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
+
                 <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-toolbar">
-                <button class="btn-back-small" onclick="showScreen('screen-config')">← VOLTAR</button>
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <div id="download-buttons"></div>
             </div>
             <div id="pdf-area-wrapper">
@@ -56,6 +63,7 @@
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
