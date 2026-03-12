@@ -21,6 +21,7 @@
             <div class="button-grid">
                 <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
+                
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
                 <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
                 <button class="btn-main" disabled>🖼️ FORMATAÇÃO DE FOTOS</button>
@@ -30,11 +31,11 @@
 
         <div id="screen-config" class="screen flex-center hidden">
             <div class="config-container">
-                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR AO MENU</button>
                 <h2 id="config-title" class="title-up">CONFIGURAÇÃO</h2>
                 
                 <div class="field">
-                    <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
+                    <label>1. SELECIONE AS FOTOS DOS ALUNOS:</label>
                     <input type="file" id="file-input" accept="image/*" multiple class="custom-file-input">
                 </div>
 
@@ -44,4 +45,27 @@
                         <input type="radio" id="manha" name="turno" value="manha" checked>
                         <input type="radio" id="tarde" name="turno" value="tarde">
                         <div class="switch-slider"></div>
-                        <label for
+                        <label for="manha" class="switch-option">☀️ MANHÃ</label>
+                        <label for="tarde" class="switch-option">🌙 TARDE</label>
+                    </div>
+                </div>
+
+                <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button>
+            </div>
+        </div>
+
+        <div id="screen-preview" class="screen hidden">
+            <div class="preview-controls">
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← VOLTAR</button>
+                <div id="download-buttons" style="display: flex; gap: 10px;">
+                    </div>
+            </div>
+            <div id="pdf-area-container">
+                <div id="pdf-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
