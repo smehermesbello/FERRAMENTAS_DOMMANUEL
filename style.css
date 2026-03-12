@@ -31,12 +31,13 @@ body {
 .flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
 .corner-logo { position: absolute; top: 25px; right: 30px; width: 100px; }
 
-/* BOTÕES GERAIS EM CAIXA ALTA E MODERNOS */
-.main-title, .title-up, label, button {
+/* TEXTOS EM CAIXA ALTA */
+.main-title, .title-up, label, button, .switch-option {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
+/* BOTÕES DO MENU PRINCIPAL */
 .button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 950px; }
 
 .btn-main { 
@@ -45,35 +46,29 @@ body {
     transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .btn-main:hover:not(:disabled) { transform: scale(1.02); border-color: #3498db; background: #fafafa; }
+.btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* BOTÃO VOLTAR E AJUSTAR */
+/* BOTÕES DE AÇÃO (VOLTAR, AJUSTAR, EXECUTAR, BAIXAR) */
 .btn-back, .btn-back-small {
-    background: #f0f0f0; border: none; padding: 10px 20px; border-radius: 8px;
-    font-weight: 700; cursor: pointer; color: #555; transition: 0.3s;
+    background: #f0f0f0; border: none; padding: 12px 25px; border-radius: 10px;
+    font-weight: 700; cursor: pointer; color: #555; transition: 0.3s; margin-bottom: 10px;
 }
 .btn-back:hover, .btn-back-small:hover { background: #e0e0e0; color: #000; }
 
-/* BOTÃO EXECUTAR E BAIXAR */
 .btn-execute, .btn-download {
-    padding: 18px 40px; border-radius: 12px; border: none; background: #27ae60; 
+    padding: 18px 45px; border-radius: 12px; border: none; background: #27ae60; 
     color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; 
     box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); transition: 0.3s;
 }
 .btn-execute:hover, .btn-download:hover { background: #2ecc71; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4); }
 
-/* INPUT DE ARQUIVO */
-.custom-file-input {
-    background: #f8f9fa; border: 2px dashed #ccc; padding: 20px; border-radius: 12px;
-    width: 100%; box-sizing: border-box; cursor: pointer;
-}
-
-/* SWITCH TURNOS */
+/* SWITCH DESLIZANTE MODERNO */
 .modern-switch {
     position: relative; display: flex; width: 320px; height: 55px;
-    background: #eee; border-radius: 30px; margin: 15px auto; padding: 5px;
+    background: #eee; border-radius: 30px; margin: 20px auto; padding: 5px; box-sizing: border-box;
 }
 .modern-switch input { display: none; }
-.switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; transition: 0.3s; }
+.switch-option { flex: 1; z-index: 2; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
 .switch-slider {
     position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px);
     background: white; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -84,43 +79,21 @@ body {
 #manha:checked ~ label[for="manha"] { color: var(--verde-musgo); }
 #tarde:checked ~ label[for="tarde"] { color: var(--azul-intenso); }
 
-/* --- ETIQUETAS (IMPRESSÃO) --- */
-#pdf-area { background: transparent; }
-
+/* --- ÁREA DAS ETIQUETAS (PDF) --- */
 .page-a4 {
     width: 21cm; height: 29.6cm; background: white !important; margin: 0 auto;
     display: grid; grid-template-columns: 9cm 9cm; grid-template-rows: repeat(4, 6.3cm);
     justify-content: center; align-content: center; page-break-after: always;
 }
 
-/* CONTORNO PRETO DAS ETIQUETAS */
+/* CONTORNO PRETO EXTERNO */
 .etiqueta { 
     width: 9cm; height: 6.3cm; 
-    border: 1.5px solid var(--preto-linha); /* Linha maior e preta escura */
+    border: 1.5px solid var(--preto-linha); 
     display: flex; flex-direction: column; 
     box-sizing: border-box; 
 }
 
-/* LINHA DIVISÓRIA PONTILHADA COLORIDA */
+/* TOPO COM LINHA PONTILHADA COLORIDA */
 .etiqueta-topo { 
     height: 1.8cm; display: flex; align-items: center; padding: 0 12px;
-    box-sizing: border-box;
-}
-
-/* Classes dinâmicas para a linha divisória pontilhada */
-.linha-manha { border-bottom: 2.5px dotted var(--verde-musgo); }
-.linha-tarde { border-bottom: 2.5px dotted var(--azul-intenso); }
-
-.etiqueta-logo { width: 1.1cm; margin-right: 10px; }
-.etiqueta-escola { font-size: 9.5pt; font-weight: bold; text-align: center; flex: 1; line-height: 1.1; }
-
-.etiqueta-corpo { flex: 1; display: flex; align-items: center; padding: 10px; }
-.foto-aluno { width: 3.2cm; height: 4.2cm; object-fit: cover; }
-
-.nome-aluno {
-    flex: 1; font-family: 'SFT-Round', sans-serif; font-size: 16pt !important;
-    text-align: center; padding: 0 10px; text-transform: uppercase;
-    display: flex; align-items: center; justify-content: center; height: 100%;
-}
-
-.preview-controls { display: flex; justify-content: space-between; width: 21cm; margin: 0 auto 20px auto; }
