@@ -16,10 +16,9 @@
         
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
-            
             <div class="button-grid">
-                <button class="btn-main" onclick="showScreen('screen-config')">🏷️ ETIQUETAS</button>
-                <button class="btn-main" onclick="showScreen('screen-config-carometro')">📸 CARÔMETRO</button>
+                <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
+                <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
                 <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
                 <button class="btn-main" disabled>🖼️ FORMATAÇÃO DE FOTOS</button>
@@ -30,7 +29,7 @@
         <div id="screen-config" class="screen flex-center hidden">
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 class="title-up">GERADOR DE ETIQUETAS</h2>
+                <h2 class="title-up" id="config-title">GERADOR</h2>
                 
                 <div class="field">
                     <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
@@ -47,51 +46,19 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <button class="btn-execute" onclick="generatePreview()">GERAR ETIQUETAS</button>
-            </div>
-        </div>
 
-        <div id="screen-config-carometro" class="screen flex-center hidden">
-            <div class="config-container">
-                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 class="title-up">GERADOR DE CARÔMETRO</h2>
-                
-                <div class="field">
-                    <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
-                    <input type="file" id="file-input-caro" accept="image/*" multiple class="custom-file-input">
-                </div>
-
-                <div class="field">
-                    <label>2. SELECIONE O TURNO:</label>
-                    <div class="modern-switch">
-                        <input type="radio" id="manha-caro" name="turno-caro" value="manha" checked>
-                        <input type="radio" id="tarde-caro" name="turno-caro" value="tarde">
-                        <div class="switch-slider"></div>
-                        <label for="manha-caro" class="switch-option">☀️ MANHÃ</label>
-                        <label for="tarde-caro" class="switch-option">🌙 TARDE</label>
-                    </div>
-                </div>
-                <button class="btn-execute" onclick="generateCarometro()">GERAR CARÔMETRO</button>
+                <button class="btn-execute" id="btn-start" onclick="startGeneration()">GERAR AGORA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
-            <div class="preview-controls">
+            <div class="preview-controls" id="preview-header">
                 <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
-                <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF</button>
+                <div id="download-actions">
+                    <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF</button>
+                    </div>
             </div>
             <div id="pdf-area"></div>
-        </div>
-
-        <div id="screen-preview-caro" class="screen hidden">
-            <div class="preview-controls-caro">
-                <button class="btn-back-small" onclick="showScreen('screen-config-carometro')">← AJUSTAR</button>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-download" onclick="downloadCarometroPDF()">BAIXAR PDF</button>
-                    <button class="btn-download" style="background:#e67e22;" onclick="downloadCarometroPPT()">BAIXAR PPT</button>
-                </div>
-            </div>
-            <div id="pdf-area-caro"></div>
         </div>
     </div>
 
