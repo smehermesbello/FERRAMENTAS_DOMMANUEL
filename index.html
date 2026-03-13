@@ -25,12 +25,12 @@
         </div>
 
         <div id="screen-config" class="screen flex-center hidden">
-            <div class="glass-card">
+            <div class="config-card">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 id="config-title">CONFIGURAÇÃO</h2>
+                <h2 id="config-title">GERADOR</h2>
                 <div class="field">
-                    <label>FOTOS DOS ESTUDANTES:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
+                    <label>FOTOS DOS ALUNOS:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple class="input-file">
                 </div>
                 <div class="field">
                     <label>TURNO:</label>
@@ -42,16 +42,16 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button>
+                <button class="btn-execute" onclick="processImages()">GERAR AGORA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
-            <div class="preview-toolbar">
+            <div class="preview-header">
                 <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
-                <div id="download-buttons"></div>
+                <div id="action-buttons"></div>
             </div>
-            <div id="pdf-area-wrapper">
+            <div id="capture-area-wrapper">
                 <div id="pdf-area"></div>
             </div>
         </div>
