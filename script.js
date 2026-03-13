@@ -2,7 +2,8 @@ let currentMode = 'etiqueta';
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+    const target = document.getElementById(id);
+    if(target) target.classList.remove('hidden');
 }
 
 function openConfig(mode) {
@@ -11,31 +12,39 @@ function openConfig(mode) {
     showScreen('screen-config');
 }
 
+// ESTA FUNÇÃO PRECISA TER ESSE NOME EXATO
 async function startGeneration() {
-    const files = document.getElementById('file-input').files;
-    if (!files.length) return alert("Selecione fotos!");
+    const input = document.getElementById('file-input');
+    if (!input.files.length) {
+        alert("POR FAVOR, SELECIONE AS FOTOS.");
+        return;
+    }
+
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>CONSTRUINDO PRÉVIA...</h2>";
-    
-    if (currentMode === 'etiqueta') await genEtiquetas(files);
-    else await genCarometro(files);
+    area.innerHTML = "<h2 style='color:white'>PREPARANDO ARQUIVOS...</h2>";
+
+    if (currentMode === 'etiqueta') {
+        await renderEtiquetas(input.files);
+    } else {
+        await renderCarometro(input.files);
+    }
 }
 
-function toBase64(file) {
+function fileToBase64(file) {
     return new Promise(res => {
-        const r = new FileReader();
-        r.onload = e => res(e.target.result);
-        r.readAsDataURL(file);
+        const reader = new FileReader();
+        reader.onload = e => res(e.target.result);
+        reader.readAsDataURL(file);
     });
 }
 
-async function genEtiquetas(files) {
+async function renderEtiquetas(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
     
-    setupBtns(['pdf']);
+    setBtns(['pdf']);
     area.innerHTML = "";
     const arr = Array.from(files);
 
@@ -44,10 +53,10 @@ async function genEtiquetas(files) {
         page.className = 'page-a4';
         const lote = arr.slice(i, i + 8);
         for (const f of lote) {
-            const src = await toBase64(f);
+            const src = await fileToBase64(f);
             const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:white; box-sizing:border-box;">
+                <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:white;">
                     <div style="height:17.5mm; border-bottom:2px dotted ${cor}; display:flex; align-items:center; padding:5px;">
                         <img src="LOGO.jpg" style="height:12mm; margin-right:5px;">
                         <span style="font-size:10pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
@@ -64,17 +73,17 @@ async function genEtiquetas(files) {
     }
 }
 
-async function genCarometro(files) {
+async function renderCarometro(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
     const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
 
-    setupBtns(['pdf', 'ppt']);
+    setBtns(['pdf', 'ppt']);
     area.innerHTML = "";
 
     for (const f of Array.from(files)) {
-        const src = await toBase64(f);
+        const src = await fileToBase64(f);
         const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
         const page = document.createElement('div');
         page.className = 'page-widescreen';
@@ -88,37 +97,29 @@ async function genCarometro(files) {
     }
 }
 
-function setupBtns(types) {
+function setBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" style="background:#27ae60; color:white; border:none; padding:10px 25px; border-radius:10px; cursor:pointer; font-weight:700;">BAIXAR PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" style="background:#e67e22; color:white; border:none; padding:10px 25px; border-radius:10px; cursor:pointer; font-weight:700; margin-left:10px;">BAIXAR PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="downloadPDF()" class="btn-execute" style="width:150px; margin:0; background:#27ae60;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="downloadPPT()" class="btn-execute" style="width:150px; margin-left:10px; background:#e67e22;">PPTX</button>`;
 }
 
-function doPDF() {
+function downloadPDF() {
     const area = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
     
-    // SOLUÇÃO PARA O "MEIO BRANCO": 
-    // Clonamos a área e removemos restrições de altura durante a captura
     const opt = {
         margin: 0,
-        filename: currentMode + '_DomManuel.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false,
-            letterRendering: true,
-            scrollY: -window.scrollY // Reseta o scroll para o topo absoluto
-        },
+        filename: currentMode + '_Escolar.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
 
     html2pdf().set(opt).from(area).save();
 }
 
-function doPPT() {
+function downloadPPT() {
     const pptx = new PptxGenJS();
     pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
     pptx.layout = 'WIDE';
@@ -130,9 +131,8 @@ function doPPT() {
         slide.background = { path: bg };
         const img = p.querySelector('img').src;
         const nome = p.querySelector('div[contenteditable]').innerText;
-        // Foto com borda simulada e arredondamento (o PPT não arredonda imagem via código facilmente, então focamos na posição)
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
         slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial Black' });
     });
-    pptx.writeFile({ fileName: 'Carometro_Escolar.pptx' });
+    pptx.writeFile({ fileName: 'Carometro_DomManuel.pptx' });
 }
