@@ -10,11 +10,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="main-window">
         <img src="LOGO.jpg" alt="Logo" class="corner-logo">
         
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
+            
             <div class="button-grid">
                 <button class="btn-main" onclick="showScreen('screen-config')">🏷️ ETIQUETAS</button>
                 <button class="btn-main" onclick="showScreen('screen-config-carometro')">📸 CARÔMETRO</button>
@@ -29,10 +31,12 @@
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 class="title-up">GERADOR DE ETIQUETAS</h2>
+                
                 <div class="field">
                     <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
                     <input type="file" id="file-input" accept="image/*" multiple class="custom-file-input">
                 </div>
+
                 <div class="field">
                     <label>2. SELECIONE O TURNO:</label>
                     <div class="modern-switch">
@@ -51,10 +55,12 @@
             <div class="config-container">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 class="title-up">GERADOR DE CARÔMETRO</h2>
+                
                 <div class="field">
                     <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
                     <input type="file" id="file-input-caro" accept="image/*" multiple class="custom-file-input">
                 </div>
+
                 <div class="field">
                     <label>2. SELECIONE O TURNO:</label>
                     <div class="modern-switch">
@@ -78,9 +84,9 @@
         </div>
 
         <div id="screen-preview-caro" class="screen hidden">
-            <div class="preview-controls">
+            <div class="preview-controls-caro">
                 <button class="btn-back-small" onclick="showScreen('screen-config-carometro')">← AJUSTAR</button>
-                <div style="display:flex; gap:10px;">
+                <div style="display: flex; gap: 10px;">
                     <button class="btn-download" onclick="downloadCarometroPDF()">BAIXAR PDF</button>
                     <button class="btn-download" style="background:#e67e22;" onclick="downloadCarometroPPT()">BAIXAR PPT</button>
                 </div>
@@ -88,6 +94,7 @@
             <div id="pdf-area-caro"></div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
