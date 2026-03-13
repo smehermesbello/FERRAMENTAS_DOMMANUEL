@@ -2,68 +2,72 @@ let currentMode = 'etiqueta';
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden'); [cite: 10]
+    document.getElementById(id).classList.remove('hidden');
 }
 
 function openConfig(mode) {
     currentMode = mode;
-    document.getElementById('config-title').innerText = mode.toUpperCase();
+    document.getElementById('config-title').innerText = "GERADOR DE " + mode.toUpperCase();
     showScreen('screen-config');
 }
 
 async function startGeneration() {
     const files = document.getElementById('file-input').files;
-    if (!files.length) return alert("Selecione as fotos!"); [cite: 12]
+    if (!files.length) return alert("Selecione fotos primeiro!");
     
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "Gerando prévia...";
+    area.innerHTML = "<h2 style='color:white'>CARREGANDO...</h2>";
 
     if (currentMode === 'etiqueta') await genEtiquetas(files);
     else await genCarometro(files);
 }
 
-// Renderiza Etiquetas (8 por página A4)
+function getBase64(file) {
+    return new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => res(e.target.result);
+        r.readAsDataURL(file);
+    });
+}
+
+// ETIQUETAS (8 por página)
 async function genEtiquetas(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
     const mClass = (turno === 'manha') ? 'moldura-verde' : 'moldura-azul';
-    
+    const corLinha = (turno === 'manha') ? '#4A5D23' : '#003399';
+
     setupBtns(['pdf']);
     area.innerHTML = "";
     const arr = Array.from(files);
 
     for (let i = 0; i < arr.length; i += 8) {
         const page = document.createElement('div');
-        page.className = 'page-a4'; [cite: 15]
-        const lote = arr.slice(i, i + 8); [cite: 14]
+        page.className = 'page-a4';
+        const lote = arr.slice(i, i + 8);
         for (const f of lote) {
-            const src = await new Promise(res => {
-                const r = new FileReader();
-                r.onload = e => res(e.target.result);
-                r.readAsDataURL(f);
-            });
-            const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase(); [cite: 17]
+            const src = await getBase64(f);
+            const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:0.5pt solid #000; display:flex; flex-direction:column; box-sizing:border-box; background:#fff;">
-                    <div style="height:17.5mm; border-bottom:1px solid #ccc; display:flex; align-items:center; padding:5px;">
+                <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:#fff;">
+                    <div style="height:17.5mm; border-bottom:2.5px dotted ${corLinha}; display:flex; align-items:center; padding:5px;">
                         <img src="LOGO.jpg" style="height:12mm; margin-right:5px;">
-                        <span style="font-family:Calibri; font-size:12pt; flex:1; text-align:center;">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <span style="font-size:11pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
                         <div class="container-foto ${mClass}" style="width:30mm; height:40mm;">
                             <img src="${src}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
-                        <div class="nome-aluno" contenteditable="true" style="font-size:20pt; flex:1;">${nome}</div>
+                        <div class="nome-aluno" contenteditable="true" style="font-size:18pt; flex:1;">${nome}</div>
                     </div>
-                </div>`; [cite: 18, 19, 20]
+                </div>`;
         }
-        area.appendChild(page); [cite: 21]
+        area.appendChild(page);
     }
 }
 
-// Renderiza Carômetro (1 por página Widescreen)
+// CARÔMETRO (Widescreen)
 async function genCarometro(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -74,11 +78,7 @@ async function genCarometro(files) {
     area.innerHTML = "";
 
     for (const f of Array.from(files)) {
-        const reader = new FileReader();
-        const src = await new Promise(res => {
-            reader.onload = e => res(e.target.result);
-            reader.readAsDataURL(f);
-        });
+        const src = await getBase64(f);
         const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
         const page = document.createElement('div');
         page.className = 'page-widescreen';
@@ -87,7 +87,7 @@ async function genCarometro(files) {
             <div class="container-foto ${mClass}" style="width:10cm; height:13cm;">
                 <img src="${src}" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <div class="nome-aluno" contenteditable="true" style="font-size:42pt; margin-top:20px; width:90%;">${nome}</div>`;
+            <div class="nome-aluno" contenteditable="true" style="font-size:42pt; margin-top:20px;">${nome}</div>`;
         area.appendChild(page);
     }
 }
@@ -95,8 +95,8 @@ async function genCarometro(files) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-download">PDF</button>`; [cite: 8]
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-download" style="background:orange; margin-left:10px;">PPT</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" style="background:green; color:white; padding:10px 20px; border-radius:5px; border:none; cursor:pointer;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" style="background:orange; color:white; padding:10px 20px; border-radius:5px; border:none; cursor:pointer; margin-left:10px;">PPTX</button>`;
 }
 
 function doPDF() {
@@ -105,10 +105,10 @@ function doPDF() {
     const opt = {
         margin: 0,
         filename: 'Documento.pdf',
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, [cite: 22]
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' } [cite: 23]
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
-    html2pdf().set(opt).from(el).save(); [cite: 24]
+    html2pdf().set(opt).from(el).save();
 }
 
 function doPPT() {
