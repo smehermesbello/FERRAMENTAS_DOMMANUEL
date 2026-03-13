@@ -1,12 +1,10 @@
-/* MANTER TODOS OS ESTILOS ORIGINAIS ATÉ O FINAL */
-/* ... (Inserir aqui o conteúdo original do seu style.txt) ... */
+/* ... (Mantém o código anterior de @font-face e .main-window) ... */
 
-/* ADICIONAR ESTILOS DO CARÔMETRO ABAIXO */
-
+/* CONFIGURAÇÃO DO CARÔMETRO WIDESCREEN */
 .page-widescreen {
     width: 33.867cm;
     height: 19.05cm;
-    margin: 20px auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,40 +12,43 @@
     background-size: cover;
     background-position: center;
     page-break-after: always;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
-.fundo-manha-caro { background-image: url('FUNDOMANHA.jpg'); }
-.fundo-tarde-caro { background-image: url('FUNDOTARDE.jpg'); }
+.bg-manha { background-image: url('FUNDOMANHA.jpg') !important; }
+.bg-tarde { background-image: url('FUNDOTARDE.jpg') !important; }
 
-.foto-carometro-display {
-    height: 11cm;
-    width: auto;
-    border: 6px solid #fff;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    margin-bottom: 25px;
+/* AJUSTE DA FOTO NO CARÔMETRO */
+.carometro-foto-container {
+    width: 10cm; /* Tamanho grande para carômetro */
+    height: 13cm;
+    margin-bottom: 20px;
 }
 
-.nome-carometro-display {
+.nome-aluno-carometro {
     font-family: 'SFT-Round', sans-serif;
-    font-size: 42pt;
-    color: #fff;
+    font-size: 42pt; /* Fonte grande para widescreen */
+    color: #000;
     text-transform: uppercase;
     text-align: center;
-    text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
-    max-width: 90%;
+    width: 80%;
+    word-wrap: break-word;
     line-height: 1.2;
 }
 
-.preview-controls-caro { 
+/* Ajuste do Preview para suportar Widescreen lateralmente */
+#pdf-area { 
     display: flex; 
-    justify-content: space-between; 
-    width: 33.867cm; 
-    margin: 20px auto; 
+    flex-direction: column; 
+    align-items: center; 
+    padding-bottom: 50px;
 }
 
-/* Escalonar o preview do carômetro para caber na tela do navegador */
-#pdf-area-caro {
-    transform: scale(0.4);
-    transform-origin: top center;
+.preview-controls { 
+    display: flex; 
+    justify-content: space-between; 
+    width: 95%; 
+    margin: 20px auto; 
+    z-index: 10;
 }
