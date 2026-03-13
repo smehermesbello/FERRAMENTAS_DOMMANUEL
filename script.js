@@ -11,16 +11,27 @@ function openConfig(mode) {
     showScreen('screen-config');
 }
 
-async function startGeneration() {
-    const files = document.getElementById('file-input').files;
-    if (!files.length) return alert("Selecione as fotos!");
+// FUNÇÃO CHAMADA PELO BOTÃO
+async function executarGeracao() {
+    console.log("Botão clicado!"); // Aparecerá no console (F12) para teste
+    const input = document.getElementById('file-input');
     
+    if (!input.files || input.files.length === 0) {
+        alert("POR FAVOR, SELECIONE AS FOTOS.");
+        return;
+    }
+
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>A PROCESSAR...</h2>";
-    
-    if (currentMode === 'etiqueta') await genEtiquetas(files);
-    else await genCarometro(files);
+    area.innerHTML = "<h2 style='color:white'>GERANDO ARQUIVOS...</h2>";
+
+    try {
+        if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
+        else await renderCarometro(input.files);
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao processar imagens.");
+    }
 }
 
 const toBase64 = f => new Promise(res => {
@@ -29,11 +40,11 @@ const toBase64 = f => new Promise(res => {
     r.readAsDataURL(f);
 });
 
-async function genEtiquetas(files) {
+async function renderEtiquetas(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    setupDownloadBtns(['pdf']);
+    setupBtns(['pdf']);
     area.innerHTML = "";
     const arr = Array.from(files);
 
@@ -62,12 +73,12 @@ async function genEtiquetas(files) {
     }
 }
 
-async function genCarometro(files) {
+async function renderCarometro(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
     const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    setupDownloadBtns(['pdf', 'ppt']);
+    setupBtns(['pdf', 'ppt']);
     area.innerHTML = "";
 
     for (const f of Array.from(files)) {
@@ -76,20 +87,20 @@ async function genCarometro(files) {
         const page = document.createElement('div');
         page.className = 'page-widescreen';
         page.style.backgroundImage = `url('${bg}')`;
-        page.innerHTML += `
+        page.innerHTML = `
             <div class="container-carometro" style="border-color:${cor};">
                 <img src="${src}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black;" contenteditable="true">${nome}</div>`;
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black; text-align:center;" contenteditable="true">${nome}</div>`;
         area.appendChild(page);
     }
 }
 
-function setupDownloadBtns(types) {
+function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="width:140px; margin:0;">PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="width:140px; margin-left:10px; background:orange;">PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="width:120px; margin:0;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="width:120px; margin-left:10px; background:orange;">PPTX</button>`;
 }
 
 function doPDF() {
@@ -98,7 +109,6 @@ function doPDF() {
     const opt = {
         margin: 0,
         filename: 'DomManuel.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
@@ -118,4 +128,7 @@ function doPPT() {
         const img = p.querySelector('img').src;
         const nome = p.querySelector('div[contenteditable]').innerText;
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
-        slide.addText(nome, { x:0,
+        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial Black' });
+    });
+    pptx.writeFile({ fileName: 'Carometro.pptx' });
+}
