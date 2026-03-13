@@ -2,7 +2,6 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -10,13 +9,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="main-window">
-        <img src="LOGO.jpg" alt="Logo" class="corner-logo">
+        <img src="LOGO.jpg" alt="Logo" class="corner-logo"> [cite: 30]
         
-        <div id="screen-menu" class="screen flex-center">
+        <div id="screen-menu" class="screen flex-center"> [cite: 10]
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
-            <div class="button-grid">
+            <div class="button-grid"> [cite: 2, 32]
                 <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
@@ -26,42 +24,38 @@
             </div>
         </div>
 
-        <div id="screen-config" class="screen flex-center hidden">
+        <div id="screen-config" class="screen flex-center hidden"> [cite: 3]
             <div class="config-container">
-                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 class="title-up" id="config-title">GERADOR</h2>
-                
-                <div class="field">
-                    <label>1. CARREGAR FOTOS DOS ALUNOS:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple class="custom-file-input">
+                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button> [cite: 33]
+                <h2 id="config-title" class="title-up">GERADOR</h2> [cite: 4]
+                <div class="field"> [cite: 5]
+                    <label>FOTOS DOS ALUNOS:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple>
                 </div>
-
-                <div class="field">
-                    <label>2. SELECIONE O TURNO:</label>
-                    <div class="modern-switch">
+                <div class="field"> [cite: 6]
+                    <label>TURNO:</label>
+                    <div class="modern-switch"> [cite: 7, 36]
                         <input type="radio" id="manha" name="turno" value="manha" checked>
                         <input type="radio" id="tarde" name="turno" value="tarde">
-                        <div class="switch-slider"></div>
+                        <div class="switch-slider"></div> [cite: 38]
                         <label for="manha" class="switch-option">☀️ MANHÃ</label>
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-
-                <button class="btn-execute" id="btn-start" onclick="startGeneration()">GERAR AGORA</button>
+                <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button> [cite: 8]
             </div>
         </div>
 
-        <div id="screen-preview" class="screen hidden">
-            <div class="preview-controls" id="preview-header">
+        <div id="screen-preview" class="screen hidden"> [cite: 9]
+            <div class="preview-toolbar">
                 <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
-                <div id="download-actions">
-                    <button class="btn-download" onclick="downloadPDF()">BAIXAR PDF</button>
-                    </div>
+                <div id="download-buttons"></div>
             </div>
-            <div id="pdf-area"></div>
+            <div id="pdf-area-wrapper">
+                <div id="pdf-area"></div> [cite: 21]
+            </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
