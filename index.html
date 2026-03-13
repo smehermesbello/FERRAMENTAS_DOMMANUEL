@@ -10,12 +10,9 @@
 </head>
 <body>
     <div class="main-window">
-        <img src="LOGO.jpg" alt="Logo" class="corner-logo"> [cite: 30]
-        
-        <div id="screen-menu" class="screen flex-center"> [cite: 10]
+        <img src="LOGO.jpg" alt="Logo" class="corner-logo"> <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
-            <div class="button-grid"> [cite: 2, 32]
-                <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
+            <div class="button-grid"> <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-main" disabled>📋 LISTAGEM</button>
                 <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
@@ -24,35 +21,34 @@
             </div>
         </div>
 
-        <div id="screen-config" class="screen flex-center hidden"> [cite: 3]
+        <div id="screen-config" class="screen flex-center hidden">
             <div class="config-container">
-                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button> [cite: 33]
-                <h2 id="config-title" class="title-up">GERADOR</h2> [cite: 4]
-                <div class="field"> [cite: 5]
+                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                <h2 id="config-title" class="title-up">GERADOR</h2>
+                <div class="field">
                     <label>FOTOS DOS ALUNOS:</label>
                     <input type="file" id="file-input" accept="image/*" multiple>
                 </div>
-                <div class="field"> [cite: 6]
+                <div class="field">
                     <label>TURNO:</label>
-                    <div class="modern-switch"> [cite: 7, 36]
-                        <input type="radio" id="manha" name="turno" value="manha" checked>
+                    <div class="modern-switch"> <input type="radio" id="manha" name="turno" value="manha" checked>
                         <input type="radio" id="tarde" name="turno" value="tarde">
-                        <div class="switch-slider"></div> [cite: 38]
+                        <div class="switch-slider"></div>
                         <label for="manha" class="switch-option">☀️ MANHÃ</label>
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button> [cite: 8]
+                <button class="btn-execute" onclick="startGeneration()">GERAR AGORA</button>
             </div>
         </div>
 
-        <div id="screen-preview" class="screen hidden"> [cite: 9]
+        <div id="screen-preview" class="screen hidden">
             <div class="preview-toolbar">
                 <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <div id="download-buttons"></div>
             </div>
             <div id="pdf-area-wrapper">
-                <div id="pdf-area"></div> [cite: 21]
+                <div id="pdf-area"></div>
             </div>
         </div>
     </div>
