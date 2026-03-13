@@ -6,51 +6,40 @@
 :root { --verde: #4A5D23; --azul: #003399; }
 
 body { 
-    margin: 0; padding: 0; 
+    margin: 0; padding: 0; height: 100vh;
     background: url('FUNDO.png') no-repeat center center fixed; 
-    background-size: cover; [cite: 26, 27]
-    font-family: 'Fredoka', sans-serif;
-    overflow: hidden;
+    background-size: cover; font-family: 'Fredoka', sans-serif;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 
 .main-window { 
-    background: rgba(255, 255, 255, 0.9); 
-    backdrop-filter: blur(10px); /* Efeito Liquid Glass */
-    width: 95vw; height: 95vh; margin: 2.5vh auto; 
-    border-radius: 30px; position: relative; 
-    display: flex; flex-direction: column; overflow: hidden;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(15px); /* Efeito Liquid Glass */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 95vw; height: 92vh; border-radius: 30px; 
+    position: relative; display: flex; flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2); overflow: hidden;
 }
 
-.corner-logo { position: absolute; top: 20px; right: 20px; width: 80px; z-index: 100; } [cite: 30]
+.corner-logo { position: absolute; top: 20px; right: 20px; width: 90px; z-index: 10; }
 
-.screen { flex: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; }
+.screen { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; align-items: center; }
 .hidden { display: none !important; }
-.flex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; } [cite: 29]
 
-/* BOTÕES MAIORES */
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 900px; } 
-.btn-main { height: 120px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.7); cursor: pointer; font-weight: 700; font-size: 1.1rem; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 900px; margin-top: 30px; }
+.btn-main { height: 110px; border-radius: 15px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-weight: 700; font-size: 1.1rem; transition: 0.3s; }
+.btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-/* ETIQUETAS A4 */
-.page-a4 { 
-    width: 210mm; height: 297mm; background: #fff !important; 
-    margin: 10px auto; display: grid; 
-    grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); 
-    justify-content: center; align-content: center; [cite: 41]
-}
+/* PÁGINAS */
+.page-a4 { width: 210mm; height: 297mm; background: #fff !important; margin: 20px auto; display: grid; grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+.page-widescreen { width: 338.67mm; height: 190.5mm; background: #fff !important; margin: 20px auto; display: flex; flex-direction: column; align-items: center; justify-content: center; background-size: cover; position: relative; box-shadow: 0 0 15px rgba(0,0,0,0.3); }
 
-/* CARÔMETRO WIDESCREEN */
-.page-widescreen { 
-    width: 338.67mm; height: 190.5mm; 
-    margin: 10px auto; display: flex; flex-direction: column; 
-    align-items: center; justify-content: center; 
-    background-size: 100% 100%; position: relative; 
-}
+/* ELEMENTOS */
+.container-foto { border: 2.25pt solid transparent; box-sizing: border-box; } /* [cite: 46] */
+.moldura-verde { border-color: var(--verde) !important; }
+.moldura-azul { border-color: var(--azul) !important; }
 
-/* MOLDURAS */
-.container-foto { border: 2.25pt solid transparent; box-sizing: border-box; } [cite: 46]
-.moldura-verde { border-color: var(--verde) !important; } [cite: 49]
-.moldura-azul { border-color: var(--azul) !important; } [cite: 50]
+.nome-aluno { font-family: 'SFT-Round', sans-serif; text-transform: uppercase; text-align: center; color: #000; }
 
-.nome-aluno { font-family: 'SFT-Round', sans-serif; text-transform: uppercase; text-align: center; font-weight: 900; } [cite: 51]
+.preview-toolbar { width: 100%; background: #fff; padding: 10px 20px; display: flex; justify-content: space-between; border-bottom: 2px solid #eee; position: sticky; top: 0; z-index: 20; }
+#pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow: auto; width: 100%; }
