@@ -101,10 +101,18 @@ function setupBtns(types) {
 }
 
 function doPDF() {
-    const element = document.getElementById('pdf-area');
+    const source = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
     
-    // Configurações reforçadas para exportação limpa
+    // CRIAR UM CLONE ISOLADO PARA EVITAR ERROS DE INTERFACE
+    const worker = document.createElement('div');
+    worker.style.position = 'fixed';
+    worker.style.top = '-10000px'; // Fica fora da tela
+    worker.style.left = '0';
+    worker.style.width = isW ? '338.67mm' : '210mm';
+    worker.innerHTML = source.innerHTML;
+    document.body.appendChild(worker);
+
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro_DomManuel.pdf' : 'Etiquetas_DomManuel.pdf',
@@ -112,21 +120,20 @@ function doPDF() {
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
-            scrollY: 0,
-            scrollX: 0,
-            windowWidth: isW ? 1280 : 800,
-            logging: false
+            logging: false,
+            letterRendering: true,
+            windowWidth: isW ? 1280 : 800
         },
         jsPDF: { 
             unit: 'mm', 
             format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p',
-            putOnlyUsedFonts: true
+            orientation: isW ? 'l' : 'p' 
         }
     };
 
-    // Gera o PDF a partir do elemento de prévia
-    html2pdf().set(opt).from(element).save();
+    html2pdf().set(opt).from(worker).save().then(() => {
+        document.body.removeChild(worker); // Remove o lixo após baixar
+    });
 }
 
 function doPPT() {
