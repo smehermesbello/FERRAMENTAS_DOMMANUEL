@@ -36,14 +36,14 @@ body {
 .page-a4 { 
     width: 210mm; height: 297mm; background: white !important; 
     display: grid; grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); 
-    justify-content: center; align-content: start; margin-bottom: 0; page-break-after: always;
+    justify-content: center; align-content: start; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 /* Configuração de Carômetro (Widescreen) */
 .page-widescreen { 
     width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    position: relative; page-break-after: always;
+    position: relative; box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 .foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; } 
