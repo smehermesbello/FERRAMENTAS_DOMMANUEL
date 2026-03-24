@@ -55,7 +55,7 @@ async function renderEtiquetas(files) {
             page.innerHTML += `
                 <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:white; box-sizing: border-box;">
                     <div style="height:17.5mm; border-bottom:2px dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.jpg" style="height:12mm; margin-right:5px;">
+                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
                         <span style="font-size:10pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
