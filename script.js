@@ -19,7 +19,7 @@ async function executarGeracao() {
     }
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>PREPARANDO ARQUIVO...</h2>";
+    area.innerHTML = "<h2 style='color:white'>PREPARANDO...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
@@ -46,6 +46,11 @@ async function renderEtiquetas(files) {
     for (let i = 0; i < arr.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
+        
+        // AQUI ESTÁ A MARGEM DE SEGURANÇA: 12mm de topo na página
+        page.style.paddingTop = "12mm"; 
+        page.style.boxSizing = "border-box";
+
         const lote = arr.slice(i, i + 8);
         for (const f of lote) {
             const src = await toBase64(f);
@@ -68,6 +73,7 @@ async function renderEtiquetas(files) {
     }
 }
 
+// CARÔMETRO MANTIDO EXATAMENTE COMO VOCÊ PEDIU
 async function renderCarometro(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -109,7 +115,7 @@ function doPDF() {
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
-            scrollY: 0, // Garante que comece do topo real do elemento
+            scrollY: 0, 
             scrollX: 0,
             windowWidth: isW ? 1400 : 1000 
         },
@@ -127,7 +133,7 @@ function doPPT() {
     const pptx = new PptxGenJS();
     pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
     pptx.layout = 'WIDE';
-    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const turno = document.querySelector('input[name=\"turno\"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
 
     document.querySelectorAll('.page-widescreen').forEach(p => {
