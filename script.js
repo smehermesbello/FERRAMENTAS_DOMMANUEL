@@ -17,16 +17,14 @@ async function executarGeracao() {
         alert("POR FAVOR, SELECIONE AS FOTOS.");
         return;
     }
-
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>CONSTRUINDO PRÉVIA...</h2>";
+    area.innerHTML = "<h2 style='color:white'>A PREPARAR...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
-        console.error(err);
         alert("Erro ao processar imagens.");
     }
 }
@@ -101,39 +99,29 @@ function setupBtns(types) {
 }
 
 function doPDF() {
-    const source = document.getElementById('pdf-area');
+    const area = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
     
-    // CRIAR UM CLONE ISOLADO PARA EVITAR ERROS DE INTERFACE
-    const worker = document.createElement('div');
-    worker.style.position = 'fixed';
-    worker.style.top = '-10000px'; // Fica fora da tela
-    worker.style.left = '0';
-    worker.style.width = isW ? '338.67mm' : '210mm';
-    worker.innerHTML = source.innerHTML;
-    document.body.appendChild(worker);
-
+    // CONFIGURAÇÃO DE ISOLAMENTO TOTAL
     const opt = {
         margin: 0,
-        filename: isW ? 'Carometro_DomManuel.pdf' : 'Etiquetas_DomManuel.pdf',
+        filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false,
-            letterRendering: true,
-            windowWidth: isW ? 1280 : 800
-        },
-        jsPDF: { 
-            unit: 'mm', 
-            format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p' 
-        }
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
 
-    html2pdf().set(opt).from(worker).save().then(() => {
-        document.body.removeChild(worker); // Remove o lixo após baixar
+    // A mágica: Criamos um clone do conteúdo e limpamos margens de visualização
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = area.innerHTML;
+    
+    // Removemos qualquer sombra ou margem que exista na visualização para o PDF ser puro
+    tempDiv.querySelectorAll('.page-a4, .page-widescreen').forEach(p => {
+        p.style.margin = "0";
+        p.style.boxShadow = "none";
     });
+
+    html2pdf().set(opt).from(tempDiv).save();
 }
 
 function doPPT() {
@@ -151,5 +139,5 @@ function doPPT() {
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
         slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial Black' });
     });
-    pptx.writeFile({ fileName: 'Carometro_DomManuel.pptx' });
+    pptx.writeFile({ fileName: 'Carometro.pptx' });
 }
