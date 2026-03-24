@@ -32,7 +32,7 @@ body {
 
 #pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-/* CONFIGURAÇÃO ETIQUETAS A4 COM MARGEM DE SEGURANÇA */
+/* ETIQUETAS A4 - Voltou ao padrão original para não dar erro de página em branco */
 .page-a4 { 
     width: 210mm; 
     height: 297mm; 
@@ -42,12 +42,11 @@ body {
     grid-template-rows: repeat(4, 63mm); 
     justify-content: center; 
     align-content: start; 
-    padding-top: 12mm; /* Margem superior de segurança (1.2cm) */
-    box-sizing: border-box; /* Garante que o padding não aumente o tamanho da folha */
+    gap: 0;
     margin-bottom: 20px;
 }
 
-/* CARÔMETRO - SEM ALTERAÇÕES */
+/* CARÔMETRO - RIGIDAMENTE MANTIDO COMO ESTAVA */
 .page-widescreen { 
     width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -56,7 +55,6 @@ body {
 .foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; } 
 .container-carometro { border: 2.25pt solid transparent; border-radius: 18px; padding: 2px; }
 
-/* COMPONENTES */
 .modern-switch { position: relative; display: flex; width: 320px; height: 50px; background: #ddd; border-radius: 25px; padding: 5px; box-sizing: border-box; }
 .modern-switch input { display: none; }
 .switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; }
