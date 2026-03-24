@@ -3,10 +3,7 @@
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
 }
 
-:root { 
-    --verde: #4A5D23; 
-    --azul: #003399; 
-}
+:root { --verde: #4A5D23; --azul: #003399; }
 
 body { 
     margin: 0; padding: 0; height: 100vh;
@@ -35,14 +32,22 @@ body {
 
 #pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-/* Configuração de Etiquetas (A4) */
+/* ETIQUETAS (A4) - Adicionado padding superior para não cortar na impressão */
 .page-a4 { 
-    width: 210mm; height: 297mm; background: white !important; 
-    display: grid; grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); 
-    justify-content: center; align-content: start; margin-bottom: 20px;
+    width: 210mm; 
+    height: 297mm; 
+    background: white !important; 
+    display: grid; 
+    grid-template-columns: 90mm 90mm; 
+    grid-template-rows: repeat(4, 63mm); 
+    justify-content: center; 
+    align-content: start; 
+    padding-top: 10mm; /* Margem de segurança superior */
+    gap: 0;
+    margin-bottom: 20px;
 }
 
-/* Configuração de Carômetro (Widescreen) */
+/* CARÔMETRO */
 .page-widescreen { 
     width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
