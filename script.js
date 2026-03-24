@@ -19,13 +19,13 @@ async function executarGeracao() {
     }
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>PREPARANDO...</h2>";
+    area.innerHTML = "<h2 style='color:white'>PREPARANDO ARQUIVO...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
-        alert("Erro ao processar imagens.");
+        alert("Erro ao processar.");
     }
 }
 
@@ -106,15 +106,25 @@ function doPDF() {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: isW ? 1400 : 1000 },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0, // Garante que comece do topo real do elemento
+            scrollX: 0,
+            windowWidth: isW ? 1400 : 1000 
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        }
     };
 
     html2pdf().set(opt).from(element).save();
 }
 
 function doPPT() {
-    const pptx = new PptgenJS(); // Certifique-se que a biblioteca carregou corretamente
+    const pptx = new PptxGenJS();
     pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
     pptx.layout = 'WIDE';
     const turno = document.querySelector('input[name="turno"]:checked').value;
