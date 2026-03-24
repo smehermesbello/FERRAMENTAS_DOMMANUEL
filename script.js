@@ -11,11 +11,8 @@ function openConfig(mode) {
     showScreen('screen-config');
 }
 
-// FUNÇÃO CHAMADA PELO BOTÃO
 async function executarGeracao() {
-    console.log("Botão clicado!"); // Aparecerá no console (F12) para teste
     const input = document.getElementById('file-input');
-    
     if (!input.files || input.files.length === 0) {
         alert("POR FAVOR, SELECIONE AS FOTOS.");
         return;
@@ -23,14 +20,14 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>GERANDO ARQUIVOS...</h2>";
+    area.innerHTML = "<h2 style='color:white'>PROCESSANDO...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
         console.error(err);
-        alert("Erro ao processar imagens.");
+        alert("Erro ao processar.");
     }
 }
 
@@ -56,9 +53,9 @@ async function renderEtiquetas(files) {
             const src = await toBase64(f);
             const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:white;">
+                <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:white; box-sizing: border-box;">
                     <div style="height:17.5mm; border-bottom:2px dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.jpg" style="height:12mm;">
+                        <img src="LOGO.jpg" style="height:12mm; margin-right:5px;">
                         <span style="font-size:10pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
@@ -99,7 +96,7 @@ async function renderCarometro(files) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="width:120px; margin:0;">PDF</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="width:120px; margin:0; background:#27ae60;">PDF</button>`;
     if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="width:120px; margin-left:10px; background:orange;">PPTX</button>`;
 }
 
@@ -108,9 +105,19 @@ function doPDF() {
     const isW = currentMode === 'carometro';
     const opt = {
         margin: 0,
-        filename: 'DomManuel.pdf',
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
+        filename: isW ? 'Carometro_DomManuel.pdf' : 'Etiquetas_DomManuel.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            windowWidth: isW ? 1400 : 850 
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        }
     };
     html2pdf().set(opt).from(element).save();
 }
@@ -130,5 +137,5 @@ function doPPT() {
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
         slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial Black' });
     });
-    pptx.writeFile({ fileName: 'Carometro.pptx' });
+    pptx.writeFile({ fileName: 'Carometro_DomManuel.pptx' });
 }
