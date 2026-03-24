@@ -104,7 +104,7 @@ function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
     
-    // Configurações críticas para evitar o "meio em branco"
+    // Configurações reforçadas para exportação limpa
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro_DomManuel.pdf' : 'Etiquetas_DomManuel.pdf',
@@ -113,16 +113,19 @@ function doPDF() {
             scale: 2, 
             useCORS: true, 
             scrollY: 0,
-            windowWidth: isW ? 1280 : 800, // Força uma largura estável para renderização
+            scrollX: 0,
+            windowWidth: isW ? 1280 : 800,
             logging: false
         },
         jsPDF: { 
             unit: 'mm', 
             format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p' 
+            orientation: isW ? 'l' : 'p',
+            putOnlyUsedFonts: true
         }
     };
 
+    // Gera o PDF a partir do elemento de prévia
     html2pdf().set(opt).from(element).save();
 }
 
