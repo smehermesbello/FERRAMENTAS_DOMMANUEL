@@ -20,14 +20,14 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>PROCESSANDO...</h2>";
+    area.innerHTML = "<h2 style='color:white'>CONSTRUINDO PRÉVIA...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
         console.error(err);
-        alert("Erro ao processar.");
+        alert("Erro ao processar imagens.");
     }
 }
 
@@ -103,6 +103,8 @@ function setupBtns(types) {
 function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
+    
+    // Configurações críticas para evitar o "meio em branco"
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro_DomManuel.pdf' : 'Etiquetas_DomManuel.pdf',
@@ -111,7 +113,8 @@ function doPDF() {
             scale: 2, 
             useCORS: true, 
             scrollY: 0,
-            windowWidth: isW ? 1400 : 850 
+            windowWidth: isW ? 1280 : 800, // Força uma largura estável para renderização
+            logging: false
         },
         jsPDF: { 
             unit: 'mm', 
@@ -119,6 +122,7 @@ function doPDF() {
             orientation: isW ? 'l' : 'p' 
         }
     };
+
     html2pdf().set(opt).from(element).save();
 }
 
