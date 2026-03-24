@@ -17,16 +17,14 @@ async function executarGeracao() {
         alert("POR FAVOR, SELECIONE AS FOTOS.");
         return;
     }
-
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>PREPARANDO PRÉVIA...</h2>";
+    area.innerHTML = "<h2 style='color:white'>PREPARANDO...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
-        console.error(err);
         alert("Erro ao processar imagens.");
     }
 }
@@ -104,39 +102,19 @@ function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
     
-    // Configurações para evitar cortes e áreas brancas
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            scrollY: 0,
-            scrollX: 0,
-            windowWidth: isW ? 1280 : 800
-        },
-        jsPDF: { 
-            unit: 'mm', 
-            format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p' 
-        }
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: isW ? 1400 : 1000 },
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
 
-    // Cria um container temporário para isolar o conteúdo da interface do usuário
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = element.innerHTML;
-    
-    // Remove margens de visualização para o PDF
-    tempContainer.querySelectorAll('.page-a4, .page-widescreen').forEach(p => {
-        p.style.margin = "0";
-    });
-
-    html2pdf().set(opt).from(tempContainer).save();
+    html2pdf().set(opt).from(element).save();
 }
 
 function doPPT() {
-    const pptx = new PptxGenJS();
+    const pptx = new PptgenJS(); // Certifique-se que a biblioteca carregou corretamente
     pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
     pptx.layout = 'WIDE';
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -148,7 +126,7 @@ function doPPT() {
         const img = p.querySelector('img').src;
         const nome = p.querySelector('div[contenteditable]').innerText;
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
-        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial Black' });
+        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, fontFace:'Arial' });
     });
     pptx.writeFile({ fileName: 'Carometro.pptx' });
 }
