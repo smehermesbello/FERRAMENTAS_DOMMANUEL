@@ -3,7 +3,10 @@
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
 }
 
-:root { --verde: #4A5D23; --azul: #003399; }
+:root { 
+    --verde: #4A5D23; 
+    --azul: #003399; 
+}
 
 body { 
     margin: 0; padding: 0; height: 100vh;
@@ -19,7 +22,7 @@ body {
 }
 
 .corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
-.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; }
+.screen { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
 .hidden { display: none !important; }
 
 .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
@@ -32,18 +35,17 @@ body {
 
 #pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-/* Configuração de Etiquetas (A4) */
+/* Estilo das Páginas no Preview */
 .page-a4 { 
     width: 210mm; height: 297mm; background: white !important; 
     display: grid; grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); 
-    justify-content: center; align-content: start; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    justify-content: center; align-content: start; margin-bottom: 20px;
 }
 
-/* Configuração de Carômetro (Widescreen) */
 .page-widescreen { 
     width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    position: relative; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    position: relative; margin-bottom: 20px;
 }
 
 .foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; } 
@@ -55,8 +57,3 @@ body {
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
 .switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
-
-/* Forçar cores na impressão */
-@media print {
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-}
