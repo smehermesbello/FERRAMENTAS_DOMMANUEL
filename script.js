@@ -17,14 +17,16 @@ async function executarGeracao() {
         alert("POR FAVOR, SELECIONE AS FOTOS.");
         return;
     }
+
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>A PREPARAR...</h2>";
+    area.innerHTML = "<h2 style='color:white'>PREPARANDO PRÉVIA...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
+        console.error(err);
         alert("Erro ao processar imagens.");
     }
 }
@@ -99,29 +101,38 @@ function setupBtns(types) {
 }
 
 function doPDF() {
-    const area = document.getElementById('pdf-area');
+    const element = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
     
-    // CONFIGURAÇÃO DE ISOLAMENTO TOTAL
+    // Configurações para evitar cortes e áreas brancas
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
         image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            scrollX: 0,
+            windowWidth: isW ? 1280 : 800
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        }
     };
 
-    // A mágica: Criamos um clone do conteúdo e limpamos margens de visualização
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = area.innerHTML;
+    // Cria um container temporário para isolar o conteúdo da interface do usuário
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = element.innerHTML;
     
-    // Removemos qualquer sombra ou margem que exista na visualização para o PDF ser puro
-    tempDiv.querySelectorAll('.page-a4, .page-widescreen').forEach(p => {
+    // Remove margens de visualização para o PDF
+    tempContainer.querySelectorAll('.page-a4, .page-widescreen').forEach(p => {
         p.style.margin = "0";
-        p.style.boxShadow = "none";
     });
 
-    html2pdf().set(opt).from(tempDiv).save();
+    html2pdf().set(opt).from(tempContainer).save();
 }
 
 function doPPT() {
