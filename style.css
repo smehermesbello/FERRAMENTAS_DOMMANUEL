@@ -4,7 +4,7 @@
 }
 
 :root { --verde: #4A5D23; --azul: #003399; }
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
 body { 
     margin: 0; padding: 0; height: 100vh;
@@ -20,43 +20,38 @@ body {
 }
 
 .corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
-.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; position: relative; }
+.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; }
 .hidden { display: none !important; }
 
-/* BOTÕES */
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
-.btn-main { height: 100px; border-radius: 15px; border: none; background: white; font-weight: 700; cursor: pointer; transition: 0.3s; z-index: 10; }
-.btn-main:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
-.btn-execute {
-    padding: 18px 30px; border-radius: 12px; border: none;
-    background: #27ae60; color: white; font-weight: 700; 
-    cursor: pointer !important; position: relative; z-index: 999; 
-    pointer-events: auto !important; margin-top: 25px;
-}
-
-/* PÁGINAS PDF */
+/* ETIQUETAS A4 */
 .page-a4 { 
-    width: 210mm; height: 297mm; background: white !important; 
+    width: 210mm; height: 296mm; background: white !important; 
     display: grid; grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); 
-    justify-content: center; align-content: start; padding-top: 12mm;
-    page-break-after: always; overflow: hidden; margin-bottom: 20px;
+    justify-content: center; align-content: start; padding-top: 10mm;
+    page-break-after: always; break-after: page;
 }
 
+/* CARÔMETRO WIDE */
 .page-widescreen { 
-    width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
+    width: 338.67mm; height: 190.4mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    position: relative; page-break-after: always; overflow: hidden;
+    page-break-after: always; break-after: page;
 }
 
-.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
+.container-carometro { border-style: solid; border-radius: 18px; padding: 3px; display: block; }
+.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; display: block; }
 
-/* SWITCH */
-.modern-switch { position: relative; display: flex; width: 320px; height: 50px; background: #ddd; border-radius: 25px; padding: 5px; box-sizing: border-box; }
+/* INTERFACE */
+.glass-card { background: rgba(255, 255, 255, 0.8); padding: 30px; border-radius: 20px; width: 400px; text-align: center; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
+.btn-main { height: 100px; border-radius: 15px; border: none; background: white; font-weight: 700; cursor: pointer; }
+.btn-execute { padding: 15px 30px; border-radius: 12px; border: none; background: #27ae60; color: white; font-weight: 700; cursor: pointer; }
+
+#pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
+
+.modern-switch { position: relative; display: flex; width: 100%; height: 50px; background: #ddd; border-radius: 25px; padding: 5px; }
 .modern-switch input { display: none; }
 .switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; }
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
 .switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
-
-#pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
