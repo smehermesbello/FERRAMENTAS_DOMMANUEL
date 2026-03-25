@@ -5,7 +5,7 @@
 
 :root { --verde: #4A5D23; --azul: #003399; }
 
-* { box-sizing: border-box; } /* CRÍTICO: Evita vazamento de pixels */
+* { box-sizing: border-box; }
 
 body { 
     margin: 0; padding: 0; height: 100vh;
@@ -24,40 +24,32 @@ body {
 .screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; }
 .hidden { display: none !important; }
 
-/* PÁGINA A4 - DEFINIÇÃO DE PRODUÇÃO */
+/* ESTILO DAS ETIQUETAS (Visual Original) */
 .page-a4 { 
-    width: 210mm; 
-    height: 297mm; 
-    background: white !important; 
-    display: grid; 
-    grid-template-columns: 90mm 90mm; 
-    grid-template-rows: repeat(4, 63mm); 
-    gap: 0; /* Removido gap para evitar erros de cálculo no canvas */
-    justify-content: center; 
-    align-content: start; 
-    padding-top: 12mm; /* Margem de segurança */
-    page-break-after: always;
-    overflow: hidden;
-    position: relative;
+    width: 210mm; height: 297mm; background: white !important; 
+    display: grid; grid-template-columns: 90mm 90mm; grid-template-rows: repeat(4, 63mm); 
+    justify-content: center; align-content: start; padding-top: 12mm;
+    page-break-after: always; overflow: hidden;
 }
 
-/* PÁGINA CARÔMETRO */
+/* ESTILO DO CARÔMETRO (Visual Original) */
 .page-widescreen { 
-    width: 338.67mm; height: 190.5mm; 
-    background-size: 100% 100% !important; 
+    width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
     page-break-after: always; overflow: hidden;
 }
 
-.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; } 
+.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
 
-/* INTERFACE */
-#pdf-area-wrapper { background: #333; padding: 20px; flex: 1; overflow: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
-.btn-main { height: 100px; border-radius: 15px; border: none; background: white; font-weight: 700; cursor: pointer; }
-.btn-execute { padding: 15px 30px; border-radius: 12px; border: none; background: #27ae60; color: white; font-weight: 700; cursor: pointer; }
+/* INTERFACE GLASSMorphism */
+.glass-card { background: rgba(255, 255, 255, 0.8); padding: 30px; border-radius: 20px; width: 400px; text-align: center; }
+.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; margin-top: 50px; }
+.btn-main { height: 100px; border-radius: 15px; border: none; background: white; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14pt; }
+.btn-main:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.btn-execute { width: 100%; padding: 18px; border-radius: 12px; border: none; background: #27ae60; color: white; font-weight: 700; cursor: pointer; margin-top: 25px; }
 
-/* SWITCH */
+#pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
+
 .modern-switch { position: relative; display: flex; width: 100%; height: 50px; background: #ddd; border-radius: 25px; padding: 5px; }
 .modern-switch input { display: none; }
 .switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; }
