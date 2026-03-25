@@ -25,7 +25,7 @@ async function executarGeracao() {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
-        alert("Erro ao processar.");
+        alert("Erro ao processar imagens.");
     }
 }
 
@@ -47,7 +47,7 @@ async function renderEtiquetas(files) {
         const page = document.createElement('div');
         page.className = 'page-a4';
         
-        // AQUI ESTÁ A MARGEM DE SEGURANÇA: 12mm de topo na página
+        // MARGEM DE SEGURANÇA SUPERIOR PARA IMPRESSÃO
         page.style.paddingTop = "12mm"; 
         page.style.boxSizing = "border-box";
 
@@ -73,7 +73,6 @@ async function renderEtiquetas(files) {
     }
 }
 
-// CARÔMETRO MANTIDO EXATAMENTE COMO VOCÊ PEDIU
 async function renderCarometro(files) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -111,19 +110,19 @@ function doPDF() {
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
-        image: { type: 'jpeg', quality: 1.0 },
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
             scrollY: 0, 
-            scrollX: 0,
-            windowWidth: isW ? 1400 : 1000 
+            windowWidth: isW ? 1400 : 850 
         },
         jsPDF: { 
             unit: 'mm', 
             format: isW ? [338.67, 190.5] : 'a4', 
             orientation: isW ? 'l' : 'p' 
-        }
+        },
+        pagebreak: { mode: ['css', 'legacy'] } // ESSENCIAL PARA EVITAR PÁGINA EM BRANCO
     };
 
     html2pdf().set(opt).from(element).save();
@@ -133,7 +132,7 @@ function doPPT() {
     const pptx = new PptxGenJS();
     pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
     pptx.layout = 'WIDE';
-    const turno = document.querySelector('input[name=\"turno\"]:checked').value;
+    const turno = document.querySelector('input[name="turno"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
 
     document.querySelectorAll('.page-widescreen').forEach(p => {
