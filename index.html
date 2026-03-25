@@ -3,58 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA DOM MANUEL - GESTÃO</title>
+    <title>SISTEMA DOM MANUEL - GESTÃO PROFISSIONAL</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="main-window">
-        <img src="LOGO.png" alt="Logo" class="corner-logo">
+        <img src="LOGO.png" alt="Logo Escola" class="corner-logo">
         
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
             <div class="button-grid">
                 <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
-                <button class="btn-main" disabled>📋 LISTAGEM</button>
-                <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
+                <button class="btn-main" disabled title="Em breve">📋 LISTAGEM</button>
+                <button class="btn-main" disabled title="Em breve">🪪 CARTEIRINHA</button>
             </div>
         </div>
 
         <div id="screen-config" class="screen flex-center hidden">
             <div class="glass-card">
                 <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                
                 <h2 id="config-title">CONFIGURAÇÃO</h2>
+                
                 <div class="field">
-                    <label>FOTOS DOS ESTUDANTES:</label>
+                    <label for="file-input">FOTOS DOS ESTUDANTES (JPG/PNG):</label>
                     <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
+                    <small style="color: #eee; display: block; margin-top: 5px;">Selecione múltiplos arquivos de uma vez.</small>
                 </div>
+                
                 <div class="field">
-                    <label>TURNO:</label>
+                    <label>TURNO DE IMPRESSÃO:</label>
                     <div class="modern-switch">
                         <input type="radio" id="manha" name="turno" value="manha" checked>
                         <input type="radio" id="tarde" name="turno" value="tarde">
+                        
                         <div class="switch-slider"></div>
+                        
                         <label for="manha" class="switch-option">☀️ MANHÃ</label>
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <button id="btn-gerar" class="btn-execute" onclick="executarGeracao()">GERAR AGORA</button>
+
+                <button id="btn-gerar" class="btn-execute">GERAR DOCUMENTOS</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden">
             <div class="preview-toolbar">
-                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR FOTOS</button>
+                
                 <div id="download-buttons"></div>
             </div>
+
             <div id="pdf-area-wrapper">
-                <div id="pdf-area"></div>
+                <div id="pdf-area">
+                    </div>
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
