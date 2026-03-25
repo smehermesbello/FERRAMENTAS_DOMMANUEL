@@ -11,14 +11,6 @@ function openConfig(mode) {
     showScreen('screen-config');
 }
 
-// Limpeza de nome para evitar XSS e erros de quebra de linha
-function cleanName(fileName) {
-    return fileName.split('.')[0]
-        .replace(/[_-]/g, " ")
-        .replace(/[^\w\s]/gi, '')
-        .toUpperCase();
-}
-
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     if (!input.files || input.files.length === 0) {
@@ -28,16 +20,16 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>CONSTRUINDO AMBIENTE SEGURO...</h2>";
+    area.innerHTML = "<h2 style='color:white'>CARREGANDO...</h2>";
 
-    // Criar URLs temporárias em vez de Base64 (Economiza 90% de RAM)
-    const filesData = Array.from(input.files).map(f => ({
+    // Criar referências de memória leves (Blob URLs)
+    const filesArray = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
-        nome: cleanName(f.name)
+        nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
     }));
 
-    if (currentMode === 'etiqueta') renderEtiquetas(filesData);
-    else renderCarometro(filesData);
+    if (currentMode === 'etiqueta') renderEtiquetas(filesArray);
+    else renderCarometro(filesArray);
 }
 
 function renderEtiquetas(data) {
@@ -52,14 +44,14 @@ function renderEtiquetas(data) {
         const lote = data.slice(i, i + 8);
         lote.forEach(item => {
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:1px solid #eee; display:flex; flex-direction:column; background:white;">
+                <div style="width:90mm; height:63mm; border:1px solid #ccc; display:flex; flex-direction:column; background:white;">
                     <div style="height:17.5mm; border-bottom:2px dotted ${cor}; display:flex; align-items:center; padding:5px;">
                         <img src="LOGO.png" style="height:12mm; margin-right:5px;">
                         <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
                         <div style="width:32mm; height:42mm; border:2.25pt solid ${cor};">
-                            <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;" onload="this.setAttribute('data-loaded', 'true')">
+                            <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
                         <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;">${item.nome}</div>
                     </div>
@@ -67,7 +59,7 @@ function renderEtiquetas(data) {
         });
         area.appendChild(page);
     }
-    updateButtons(['pdf']);
+    setupDownloadBtns(['pdf']);
 }
 
 function renderCarometro(data) {
@@ -83,53 +75,40 @@ function renderCarometro(data) {
         page.style.backgroundImage = `url('${bg}')`;
         page.innerHTML = `
             <div style="border:3pt solid ${cor}; border-radius:18px; padding:2px;">
-                <img src="${item.url}" class="foto-carometro" onload="this.setAttribute('data-loaded', 'true')">
+                <img src="${item.url}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black;">${item.nome}</div>`;
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black; text-align:center;">${item.nome}</div>`;
         area.appendChild(page);
     });
-    updateButtons(['pdf', 'ppt']);
+    setupDownloadBtns(['pdf', 'ppt']);
 }
 
-function updateButtons(types) {
+function setupDownloadBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">BAIXAR PPTX</button>`;
-}
-
-async function waitImages() {
-    const imgs = Array.from(document.querySelectorAll('#pdf-area img'));
-    const promises = imgs.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(res => { img.onload = res; img.onerror = res; });
-    });
-    return Promise.all(promises);
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="width:150px; background:#27ae60; margin:0;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="width:150px; background:orange; margin-left:10px;">PPTX</button>`;
 }
 
 async function doPDF() {
-    const btn = document.querySelector('.btn-execute');
-    btn.innerText = "PROCESSANDO...";
-    btn.disabled = true;
-
-    await waitImages(); // TRAVA SÊNIOR: Espera todas as fotos aparecerem no DOM
+    // Esperar todas as imagens carregarem no navegador antes de tirar o PDF
+    const images = Array.from(document.querySelectorAll('#pdf-area img'));
+    await Promise.all(images.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(res => { img.onload = res; img.onerror = res; });
+    }));
 
     const element = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
-    
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0, logging: false },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
         pagebreak: { mode: ['css', 'legacy'] }
     };
-
-    html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = "BAIXAR PDF";
-        btn.disabled = false;
-    });
+    html2pdf().set(opt).from(element).save();
 }
 
 function doPPT() {
