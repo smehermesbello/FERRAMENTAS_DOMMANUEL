@@ -19,13 +19,13 @@ async function executarGeracao() {
     }
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>PREPARANDO...</h2>";
+    area.innerHTML = "<h2 style='color:white'>CONSTRUINDO PÁGINAS...</h2>";
 
     try {
         if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
         else await renderCarometro(input.files);
     } catch (err) {
-        alert("Erro ao processar imagens.");
+        alert("Erro no processamento das imagens.");
     }
 }
 
@@ -60,7 +60,7 @@ async function renderEtiquetas(files) {
                         <div style="width:32mm; height:42mm; border:2.25pt solid ${cor};">
                             <img src="${src}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
-                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;">${nome}</div>
+                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${nome}</div>
                     </div>
                 </div>`;
         }
@@ -86,7 +86,7 @@ async function renderCarometro(files) {
             <div class="container-carometro" style="border-color:${cor};">
                 <img src="${src}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black; text-align:center;">${nome}</div>`;
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black; text-align:center;" contenteditable="true">${nome}</div>`;
         area.appendChild(page);
     }
 }
@@ -106,9 +106,19 @@ function doPDF() {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
-        pagebreak: { mode: ['css', 'legacy'] } // ESSENCIAL para evitar páginas brancas
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            windowWidth: isW ? 1400 : 850 // Simula janela para renderização estável
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        },
+        // O SEGREDO: Forçar quebra baseada no CSS
+        pagebreak: { mode: ['css', 'legacy'] } 
     };
 
     html2pdf().set(opt).from(element).save();
@@ -125,7 +135,7 @@ function doPPT() {
         const slide = pptx.addSlide();
         slide.background = { path: bg };
         const img = p.querySelector('img').src;
-        const nome = p.querySelector('div:last-child').innerText;
+        const nome = p.querySelector('div[contenteditable]').innerText;
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
         slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true });
     });
