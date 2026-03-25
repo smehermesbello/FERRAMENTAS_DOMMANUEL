@@ -2,7 +2,6 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -18,8 +17,8 @@
             <div class="button-grid">
                 <button class="btn-main" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-main" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
-                <button class="btn-main" disabled style="opacity:0.5">📋 LISTAGEM</button>
-                <button class="btn-main" disabled style="opacity:0.5">🪪 CARTEIRINHA</button>
+                <button class="btn-main" disabled>📋 LISTAGEM</button>
+                <button class="btn-main" disabled>🪪 CARTEIRINHA</button>
             </div>
         </div>
 
@@ -41,7 +40,7 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <button id="btn-gerar" class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
+                <button id="btn-gerar" class="btn-execute" onclick="executarGeracao()">GERAR AGORA</button>
             </div>
         </div>
 
