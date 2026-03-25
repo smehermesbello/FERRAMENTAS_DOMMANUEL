@@ -1,62 +1,143 @@
-@font-face {
-    font-family: 'SFT-Round';
-    src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
+let currentMode = 'etiqueta';
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
 }
 
-:root { --verde: #4A5D23; --azul: #003399; }
-
-body { 
-    margin: 0; padding: 0; height: 100vh;
-    background: url('FUNDO.png') center/cover no-repeat fixed;
-    font-family: 'Fredoka', sans-serif;
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
+function openConfig(mode) {
+    currentMode = mode;
+    document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
+    showScreen('screen-config');
 }
 
-.main-window { 
-    background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(20px);
-    width: 95vw; height: 92vh; border-radius: 30px; position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.5); display: flex; flex-direction: column; overflow: hidden;
+async function executarGeracao() {
+    const input = document.getElementById('file-input');
+    if (!input.files || input.files.length === 0) {
+        alert("POR FAVOR, SELECIONE AS FOTOS.");
+        return;
+    }
+    showScreen('screen-preview');
+    const area = document.getElementById('pdf-area');
+    area.innerHTML = "<h2 style='color:white'>CONSTRUINDO PÁGINAS...</h2>";
+
+    try {
+        if (currentMode === 'etiqueta') await renderEtiquetas(input.files);
+        else await renderCarometro(input.files);
+    } catch (err) {
+        alert("Erro no processamento das imagens.");
+    }
 }
 
-.corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
-.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; }
-.hidden { display: none !important; }
+const toBase64 = f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.readAsDataURL(f);
+});
 
-/* ETIQUETAS A4 - CORREÇÃO DE PÁGINA EM BRANCO */
-.page-a4 { 
-    width: 210mm; 
-    height: 297mm; 
-    background: white !important; 
-    display: grid; 
-    grid-template-columns: 90mm 90mm; 
-    grid-template-rows: repeat(4, 63mm); 
-    justify-content: center; 
-    align-content: start; 
-    padding-top: 12mm; /* Margem de segurança superior */
-    box-sizing: border-box;
-    page-break-after: always; /* Força quebra de página */
+async function renderEtiquetas(files) {
+    const area = document.getElementById('pdf-area');
+    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
+    setupBtns(['pdf']);
+    area.innerHTML = "";
+    const arr = Array.from(files);
+
+    for (let i = 0; i < arr.length; i += 8) {
+        const page = document.createElement('div');
+        page.className = 'page-a4';
+        const lote = arr.slice(i, i + 8);
+        for (const f of lote) {
+            const src = await toBase64(f);
+            const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
+            page.innerHTML += `
+                <div style="width:90mm; height:63mm; border:1px solid #000; display:flex; flex-direction:column; background:white; box-sizing: border-box;">
+                    <div style="height:17.5mm; border-bottom:2px dotted ${cor}; display:flex; align-items:center; padding:5px;">
+                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
+                        <span style="font-size:10pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                    </div>
+                    <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
+                        <div style="width:32mm; height:42mm; border:2.25pt solid ${cor};">
+                            <img src="${src}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${nome}</div>
+                    </div>
+                </div>`;
+        }
+        area.appendChild(page);
+    }
 }
 
-/* CARÔMETRO - MANTIDO ORIGINAL */
-.page-widescreen { 
-    width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
-    display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    position: relative; page-break-after: always;
+async function renderCarometro(files) {
+    const area = document.getElementById('pdf-area');
+    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
+    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
+    setupBtns(['pdf', 'ppt']);
+    area.innerHTML = "";
+
+    for (const f of Array.from(files)) {
+        const src = await toBase64(f);
+        const nome = f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase();
+        const page = document.createElement('div');
+        page.className = 'page-widescreen';
+        page.style.backgroundImage = `url('${bg}')`;
+        page.innerHTML = `
+            <div class="container-carometro" style="border-color:${cor};">
+                <img src="${src}" class="foto-carometro">
+            </div>
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:25px; color:black; text-align:center;" contenteditable="true">${nome}</div>`;
+        area.appendChild(page);
+    }
 }
 
-.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; } 
-.container-carometro { border: 2.25pt solid transparent; border-radius: 18px; padding: 2px; }
+function setupBtns(types) {
+    const div = document.getElementById('download-buttons');
+    div.innerHTML = "";
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="width:120px; margin:0; background:#27ae60;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="width:120px; margin-left:10px; background:orange;">PPTX</button>`;
+}
 
-/* INTERFACE */
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
-.btn-main { height: 100px; border-radius: 15px; border: none; background: white; font-weight: 700; cursor: pointer; transition: 0.3s; }
-.btn-execute { width: 100%; padding: 18px; border-radius: 12px; border: none; background: #27ae60; color: white; font-weight: 700; cursor: pointer; margin-top: 25px; }
+function doPDF() {
+    const element = document.getElementById('pdf-area');
+    const isW = currentMode === 'carometro';
+    
+    const opt = {
+        margin: 0,
+        filename: isW ? 'Carometro.pdf' : 'Etiquetas.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            windowWidth: isW ? 1400 : 850 // Simula janela para renderização estável
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        },
+        // O SEGREDO: Forçar quebra baseada no CSS
+        pagebreak: { mode: ['css', 'legacy'] } 
+    };
 
-#pdf-area-wrapper { background: #444; padding: 20px; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
+    html2pdf().set(opt).from(element).save();
+}
 
-.modern-switch { position: relative; display: flex; width: 320px; height: 50px; background: #ddd; border-radius: 25px; padding: 5px; box-sizing: border-box; }
-.modern-switch input { display: none; }
-.switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; }
-#manha:checked ~ .switch-slider { transform: translateX(0); }
-#tarde:checked ~ .switch-slider { transform: translateX(100%); }
-.switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
+function doPPT() {
+    const pptx = new PptxGenJS();
+    pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
+    pptx.layout = 'WIDE';
+    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
+
+    document.querySelectorAll('.page-widescreen').forEach(p => {
+        const slide = pptx.addSlide();
+        slide.background = { path: bg };
+        const img = p.querySelector('img').src;
+        const nome = p.querySelector('div[contenteditable]').innerText;
+        slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
+        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true });
+    });
+    pptx.writeFile({ fileName: 'Carometro.pptx' });
+}
