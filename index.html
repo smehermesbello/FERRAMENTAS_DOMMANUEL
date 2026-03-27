@@ -18,7 +18,7 @@
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-liquid" disabled>📋 LISTAGEM</button>
-                <button class="btn-liquid" disabled>🪪 CARTEIRINHA</button>
+                <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
             </div>
         </div>
 
@@ -39,6 +39,10 @@
                         <label for="manha" class="switch-option">☀️ MANHÃ</label>
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
+                </div>
+                <div class="field" id="turma-field" style="margin-top: 15px;">
+                    <label>TURMA:</label>
+                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
                 </div>
                 <button id="btn-gerar" class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
