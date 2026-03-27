@@ -40,5 +40,24 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <div class="field" id="turma-field">
-                    <label>TURMA
+                <div class="field">
+                    <label>TURMA:</label>
+                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno">
+                </div>
+                <button id="btn-gerar" class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
+            </div>
+        </div>
+
+        <div id="screen-preview" class="screen hidden">
+            <div class="preview-toolbar">
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
+                <div id="download-buttons"></div>
+            </div>
+            <div id="pdf-area-wrapper">
+                <div id="pdf-area"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
