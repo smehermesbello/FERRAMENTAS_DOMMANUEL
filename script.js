@@ -8,7 +8,6 @@ function showScreen(id) {
 function openConfig(mode) {
     currentMode = mode;
     document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
-    // Mostra/Esconde campo de turma se for carômetro (opcional, aqui deixei visível para etiquetas e crachás)
     showScreen('screen-config');
 }
 
@@ -30,12 +29,33 @@ async function executarGeracao() {
     else renderCarometro(filesData);
 }
 
+// RESTAURADO CARÔMETRO ORIGINAL
+function renderCarometro(data) {
+    const area = document.getElementById('pdf-area');
+    const turno = document.querySelector('input[name="turno"]:checked').value;
+    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
+    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
+    area.innerHTML = "";
+    
+    data.forEach(item => {
+        const page = document.createElement('div');
+        page.className = 'page-widescreen';
+        page.style.backgroundImage = `url('${bg}')`;
+        page.innerHTML = `
+            <div class="container-carometro" style="border-color:${cor}; border-style:solid;">
+                <img src="${item.url}" class="foto-carometro">
+            </div>
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; text-align:center;" contenteditable="true">${item.nome}</div>`;
+        area.appendChild(page);
+    });
+    setupBtns(['pdf', 'ppt']);
+}
+
 function renderEtiquetas(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
     area.innerHTML = "";
-    
     for (let i = 0; i < data.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
@@ -66,11 +86,9 @@ function renderCrachas(data) {
     const turnoTexto = (turnoVal === 'manha') ? 'MANHÃ' : 'TARDE';
     const turma = document.getElementById('input-turma').value.toUpperCase();
     area.innerHTML = "";
-    
     for (let i = 0; i < data.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
-        page.style.gridTemplateRows = "repeat(4, 60mm)"; // 4 linhas de 6cm
         const lote = data.slice(i, i + 8);
         lote.forEach(item => {
             page.innerHTML += `
@@ -98,32 +116,11 @@ function renderCrachas(data) {
     setupBtns(['pdf']);
 }
 
-function renderCarometro(data) {
-    const area = document.getElementById('pdf-area');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    area.innerHTML = "";
-    
-    data.forEach(item => {
-        const page = document.createElement('div');
-        page.className = 'page-widescreen';
-        page.style.backgroundImage = `url('${bg}')`;
-        page.innerHTML = `
-            <div class="container-carometro" style="border-width:6pt; border-color:${cor}; border-style:solid;">
-                <img src="${item.url}" class="foto-carometro">
-            </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; text-align:center;" contenteditable="true">${item.nome}</div>`;
-        area.appendChild(page);
-    });
-    setupBtns(['pdf', 'ppt']);
-}
-
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
-    if (types.includes('ppt') && currentMode === 'carometro') div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">BAIXAR PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">PPTX</button>`;
 }
 
 async function doPDF() {
@@ -131,24 +128,17 @@ async function doPDF() {
     const originalText = btn.innerText;
     btn.innerText = "GERANDO...";
     
-    const images = Array.from(document.querySelectorAll('#pdf-area img'));
-    await Promise.all(images.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(res => { img.onload = res; img.onerror = res; });
-    }));
-
     const element = document.getElementById('pdf-area');
     const isW = currentMode === 'carometro';
-    const filename = currentMode === 'cracha' ? 'Crachas_DomManuel.pdf' : (isW ? 'Carometro_DomManuel.pdf' : 'Etiquetas_DomManuel.pdf');
     
     const opt = {
         margin: 0,
-        filename: filename,
+        filename: isW ? 'Carometro.pdf' : 'Documento.pdf',
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
-        pagebreak: { mode: ['css', 'legacy'] }
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
+
     html2pdf().set(opt).from(element).save().then(() => btn.innerText = originalText);
 }
 
@@ -167,5 +157,5 @@ function doPPT() {
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
         slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, color:'000000' });
     });
-    pptx.writeFile({ fileName: 'Carometro_DomManuel.pptx' });
+    pptx.writeFile({ fileName: 'Carometro.pptx' });
 }
