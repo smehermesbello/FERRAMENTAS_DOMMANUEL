@@ -22,35 +22,38 @@ body {
 .screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; position: relative; }
 .hidden { display: none !important; }
 
-/* BOTÕES LIQUID GLASS - CORRIGIDOS PARA CLIQUE */
-.button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; max-width: 850px; margin-top: 40px; }
 .btn-liquid {
     height: 120px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.3);
-    color: #333; font-weight: 700; font-size: 16pt; cursor: pointer;
-    position: relative; z-index: 10;
+    color: #333; font-weight: 700; font-size: 16pt; cursor: pointer; transition: 0.3s;
 }
-.btn-liquid:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.4); }
+.btn-liquid:hover { background: rgba(255, 255, 255, 0.4); transform: translateY(-3px); }
 
-/* BARRA DE FERRAMENTAS - FIXA NO TOPO E CLICÁVEL */
+/* BARRA DE FERRAMENTAS */
 .preview-toolbar { 
-    width: 100%; display: flex; justify-content: space-between; padding: 10px 20px; 
-    background: rgba(0,0,0,0.2); z-index: 9999; position: sticky; top: 0;
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 30px; background: rgba(0,0,0,0.5); position: sticky; top: 0; z-index: 10000;
 }
 
-.btn-execute, .btn-back, .btn-back-small { cursor: pointer !important; z-index: 10000; position: relative; }
+/* ÁREA DO CONTEÚDO */
+#pdf-area-wrapper { background: #333; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
 
 /* CARÔMETRO ORIGINAL */
 .page-widescreen { 
-    width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
+    width: 338.67mm; height: 190.4mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    page-break-after: always; position: relative; overflow: hidden;
+    position: relative; overflow: hidden; page-break-after: always;
 }
-.container-carometro { border: 2.25pt solid transparent; border-radius: 18px; padding: 2px; }
 .foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
 
-/* ETIQUETAS E CRACHÁS */
-.page-a4 { width: 210mm; height: 296mm; background: white !important; display: grid; grid-template-columns: repeat(2, auto); justify-content: center; align-content: start; padding-top: 10mm; page-break-after: always; }
+/* FOLHA A4 (Etiquetas e Crachás) */
+.page-a4 { 
+    width: 210mm; height: 297mm; background: white !important; 
+    display: grid; grid-template-columns: repeat(2, 92mm); 
+    justify-content: center; align-content: start; padding-top: 10mm; gap: 0;
+    page-break-after: always;
+}
 
-#pdf-area-wrapper { background: #333; padding: 20px; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 1; }
+.btn-execute { padding: 12px 25px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; color: white; background: #27ae60; }
+
+.input-moderno { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-top: 5px; }
