@@ -17,7 +17,7 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white'>PREPARANDO PRÉVIA...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:50px;'>PREPARANDO PRÉVIA...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
@@ -40,13 +40,45 @@ function renderCarometro(data) {
         page.className = 'page-widescreen';
         page.style.backgroundImage = `url('${bg}')`;
         page.innerHTML = `
-            <div class="container-carometro" style="border-color:${cor}; border-style:solid;">
+            <div style="border: 2.25pt solid ${cor}; border-radius:18px; padding:2px;">
                 <img src="${item.url}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; text-align:center;" contenteditable="true">${item.nome}</div>`;
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold;" contenteditable="true">${item.nome}</div>`;
         area.appendChild(page);
     });
     setupBtns(['pdf', 'ppt']);
+}
+
+function renderCrachas(data) {
+    const area = document.getElementById('pdf-area');
+    const turno = (document.querySelector('input[name="turno"]:checked').value === 'manha') ? 'MANHÃ' : 'TARDE';
+    const turma = document.getElementById('input-turma').value.toUpperCase();
+    area.innerHTML = "";
+    for (let i = 0; i < data.length; i += 8) {
+        const page = document.createElement('div');
+        page.className = 'page-a4';
+        data.slice(i, i + 8).forEach(item => {
+            page.innerHTML += `
+                <div style="width:92mm; height:60mm; border:1.5pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
+                    <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
+                        <img src="LOGO.png" style="height:14mm; margin-right:5px;">
+                        <div style="text-align:center; flex:1;">
+                            <div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
+                            <div style="font-size:7pt;">Fone: 3262-1627 / (41) 9107-9242</div>
+                        </div>
+                    </div>
+                    <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
+                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px;">
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-family:'SFT-Round'; font-size:16pt; margin-bottom:5px;" contenteditable="true">${item.nome}</div>
+                            <div style="font-size:10pt;">${turma} - ${turno}</div>
+                        </div>
+                    </div>
+                </div>`;
+        });
+        area.appendChild(page);
+    }
+    setupBtns(['pdf']);
 }
 
 function renderEtiquetas(data) {
@@ -57,55 +89,16 @@ function renderEtiquetas(data) {
     for (let i = 0; i < data.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
-        const lote = data.slice(i, i + 8);
-        lote.forEach(item => {
+        data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; background:white;">
+                <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; margin:1mm;">
                     <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
                         <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
-                        <div style="width:32mm; height:42mm; border:2.5pt solid ${cor}; overflow:hidden;">
-                            <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
-                        <div style="font-family:'SFT-Round'; font-size:16pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
-                    </div>
-                </div>`;
-        });
-        area.appendChild(page);
-    }
-    setupBtns(['pdf']);
-}
-
-function renderCrachas(data) {
-    const area = document.getElementById('pdf-area');
-    const turnoVal = document.querySelector('input[name="turno"]:checked').value;
-    const turnoTexto = (turnoVal === 'manha') ? 'MANHÃ' : 'TARDE';
-    const turma = document.getElementById('input-turma').value.toUpperCase();
-    area.innerHTML = "";
-    for (let i = 0; i < data.length; i += 8) {
-        const page = document.createElement('div');
-        page.className = 'page-a4';
-        const lote = data.slice(i, i + 8);
-        lote.forEach(item => {
-            page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1.5pt solid black; display:flex; flex-direction:column; background:white; position:relative;">
-                    <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #eee;">
-                        <img src="LOGO.png" style="height:14mm; position:absolute; left:5px; top:2px;">
-                        <div style="flex:1; text-align:center; margin-left:18mm;">
-                            <div style="font-size:8pt; font-weight:bold; color:black;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                            <div style="font-size:6pt; color:#333;">Fone: 3262-1627 / (41) 9107-9242</div>
-                        </div>
-                    </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:8px; gap:10px;">
-                        <div style="width:30mm; height:35mm; border-radius:10px; overflow:hidden; border:1px solid #ccc;">
-                            <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
-                        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center;">
-                            <div style="font-family:'SFT-Round'; font-size:18pt; color:black; margin-bottom:2px;" contenteditable="true">${item.nome}</div>
-                            <div style="font-size:10pt; color:#555;">${turma} - ${turnoTexto}</div>
-                        </div>
+                        <img src="${item.url}" style="width:32mm; height:42mm; object-fit:cover; border:2.5pt solid ${cor};">
+                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
                     </div>
                 </div>`;
         });
@@ -117,8 +110,8 @@ function renderCrachas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute" style="background:#27ae60; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer;">BAIXAR PDF</button>`;
-    if (types.includes('ppt') && currentMode === 'carometro') div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; margin-left:10px;">BAIXAR PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">BAIXAR PPTX</button>`;
 }
 
 async function doPDF() {
@@ -128,10 +121,11 @@ async function doPDF() {
     const isW = (currentMode === 'carometro');
     const opt = {
         margin: 0,
-        filename: isW ? 'Carometro.pdf' : 'Documento.pdf',
+        filename: 'Documento_DomManuel.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
+        pagebreak: { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save().then(() => btn.innerText = "BAIXAR PDF");
 }
