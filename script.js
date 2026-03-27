@@ -29,14 +29,12 @@ async function executarGeracao() {
     else renderCarometro(filesData);
 }
 
-// --- CARÔMETRO (RESTAURADO) ---
 function renderCarometro(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
     const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
     area.innerHTML = "";
-    
     data.forEach(item => {
         const page = document.createElement('div');
         page.className = 'page-widescreen';
@@ -51,7 +49,6 @@ function renderCarometro(data) {
     setupBtns(['pdf', 'ppt']);
 }
 
-// --- ETIQUETAS ---
 function renderEtiquetas(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -81,7 +78,6 @@ function renderEtiquetas(data) {
     setupBtns(['pdf']);
 }
 
-// --- CRACHÁS ---
 function renderCrachas(data) {
     const area = document.getElementById('pdf-area');
     const turnoVal = document.querySelector('input[name="turno"]:checked').value;
@@ -121,18 +117,15 @@ function renderCrachas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
-    if (types.includes('ppt') && currentMode === 'carometro') div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">BAIXAR PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute" style="background:#27ae60; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer;">BAIXAR PDF</button>`;
+    if (types.includes('ppt') && currentMode === 'carometro') div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; margin-left:10px;">BAIXAR PPTX</button>`;
 }
 
 async function doPDF() {
     const btn = document.getElementById('btn-pdf');
-    const originalText = btn.innerText;
     btn.innerText = "GERANDO...";
-    
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
-    
     const opt = {
         margin: 0,
         filename: isW ? 'Carometro.pdf' : 'Documento.pdf',
@@ -140,8 +133,7 @@ async function doPDF() {
         html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
-
-    html2pdf().set(opt).from(element).save().then(() => btn.innerText = originalText);
+    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "BAIXAR PDF");
 }
 
 function doPPT() {
@@ -150,7 +142,6 @@ function doPPT() {
     pptx.layout = 'WIDE';
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-
     document.querySelectorAll('.page-widescreen').forEach(p => {
         const slide = pptx.addSlide();
         slide.background = { path: bg };
