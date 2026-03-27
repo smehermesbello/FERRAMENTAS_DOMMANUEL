@@ -29,7 +29,7 @@ async function executarGeracao() {
     else renderCarometro(filesData);
 }
 
-// RESTAURADO CARÔMETRO ORIGINAL
+// --- CARÔMETRO (RESTAURADO) ---
 function renderCarometro(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -51,6 +51,7 @@ function renderCarometro(data) {
     setupBtns(['pdf', 'ppt']);
 }
 
+// --- ETIQUETAS ---
 function renderEtiquetas(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -80,6 +81,7 @@ function renderEtiquetas(data) {
     setupBtns(['pdf']);
 }
 
+// --- CRACHÁS ---
 function renderCrachas(data) {
     const area = document.getElementById('pdf-area');
     const turnoVal = document.querySelector('input[name="turno"]:checked').value;
@@ -105,7 +107,7 @@ function renderCrachas(data) {
                             <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
                         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center;">
-                            <div style="font-family:'SFT-Round'; font-size:18pt; color:black; margin-bottom:5px;" contenteditable="true">${item.nome}</div>
+                            <div style="font-family:'SFT-Round'; font-size:18pt; color:black; margin-bottom:2px;" contenteditable="true">${item.nome}</div>
                             <div style="font-size:10pt; color:#555;">${turma} - ${turnoTexto}</div>
                         </div>
                     </div>
@@ -119,8 +121,8 @@ function renderCrachas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
+    if (types.includes('ppt') && currentMode === 'carometro') div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">BAIXAR PPTX</button>`;
 }
 
 async function doPDF() {
@@ -129,7 +131,7 @@ async function doPDF() {
     btn.innerText = "GERANDO...";
     
     const element = document.getElementById('pdf-area');
-    const isW = currentMode === 'carometro';
+    const isW = (currentMode === 'carometro');
     
     const opt = {
         margin: 0,
