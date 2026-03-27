@@ -31,16 +31,16 @@ body {
     color: #333; font-weight: 700; font-size: 16pt; cursor: pointer;
 }
 
-/* CARÔMETRO - FORMATO WIDESCREEN ORIGINAL */
+/* CARÔMETRO - CONFIGURAÇÃO BASE RESTAURADA */
 .page-widescreen { 
     width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    page-break-after: always; position: relative;
+    page-break-after: always; position: relative; overflow: hidden;
 }
 .container-carometro { border: 2.25pt solid transparent; border-radius: 18px; padding: 2px; }
 .foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
 
-/* ETIQUETAS E CRACHÁS - FORMATO A4 */
+/* FOLHA A4 - ETIQUETAS E CRACHÁS */
 .page-a4 { 
     width: 210mm; height: 296mm; background: white !important; 
     display: grid; grid-template-columns: repeat(2, auto); 
