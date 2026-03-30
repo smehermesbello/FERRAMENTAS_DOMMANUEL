@@ -10,9 +10,9 @@
 </head>
 <body>
     <div class="main-window">
-        <img src="LOGO.png" alt="Logo" class="corner-logo-fixed">
+        <img src="LOGO.png" alt="Logo" class="corner-logo">
         
-        <div id="screen-menu" class="screen active-screen">
+        <div id="screen-menu" class="screen flex-center active">
             <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
             <div class="button-grid">
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
@@ -25,14 +25,16 @@
         </div>
 
         <div id="screen-config" class="screen hidden">
-            <div class="glass-card">
-                <button class="btn-liquid-small" onclick="showScreen('screen-menu')" style="margin-bottom: 20px;">← VOLTAR</button>
-                <h2 id="config-title">CONFIGURAÇÃO</h2>
+            <div class="config-container">
+                <button class="btn-back-small" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                <h2 id="config-title" class="section-title">CONFIGURAÇÃO</h2>
                 
                 <div class="field">
                     <label>FOTOS DOS ESTUDANTES:</label>
-                    <label for="file-input" class="btn-liquid-file">📁 ESCOLHER ARQUIVOS</label>
-                    <input type="file" id="file-input" accept="image/*" multiple style="display:none;">
+                    <label for="file-input" class="custom-file-upload">
+                        📁 ESCOLHER ARQUIVOS
+                    </label>
+                    <input type="file" id="file-input" accept="image/*" multiple>
                     <div id="file-status">Nenhum arquivo selecionado</div>
                 </div>
 
