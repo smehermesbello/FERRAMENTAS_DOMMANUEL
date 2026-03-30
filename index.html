@@ -13,20 +13,18 @@
         <img src="LOGO.png" alt="Logo" class="corner-logo">
         
         <div id="screen-menu" class="screen flex-center">
-            <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
+            <h1 class="main-title">GESTÃO ESCOLAR</h1>
             <div class="button-grid">
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
-                <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
-                <button class="btn-liquid" disabled style="opacity:0.5;">📋 LISTAGEM</button>
-                <button class="btn-liquid" disabled style="opacity:0.5;">🍽️ CARDÁPIO</button>
-                <button class="btn-liquid" disabled style="opacity:0.5;">⚙️ FORMATAÇÃO</button>
+                <button class="btn-liquid" disabled>📋 LISTAGEM</button>
+                <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
             </div>
         </div>
 
         <div id="screen-config" class="screen flex-center hidden">
             <div class="glass-card">
-                <button class="btn-liquid-small" onclick="showScreen('screen-menu')" style="margin-bottom:20px;">← VOLTAR</button>
+                <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 id="config-title">CONFIGURAÇÃO</h2>
                 <div class="field">
                     <label>FOTOS DOS ESTUDANTES:</label>
@@ -46,7 +44,7 @@
                     <label>TURMA:</label>
                     <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-liquid">
                 </div>
-                <button id="btn-gerar" class="btn-liquid" onclick="executarGeracao()" style="height: 60px; margin-top: 20px;">GERAR PRÉVIA</button>
+                <button id="btn-gerar" class="btn-liquid btn-execute-main" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
 
