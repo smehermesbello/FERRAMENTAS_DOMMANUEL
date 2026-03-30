@@ -11,15 +11,14 @@
 <body>
     <div class="main-window">
         <img src="LOGO.png" alt="Logo" class="corner-logo">
+        
         <div id="screen-menu" class="screen flex-center">
-            <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
+            <h1 class="main-title">GESTÃO ESCOLAR</h1>
             <div class="button-grid">
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
-                <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
                 <button class="btn-liquid" disabled>📋 LISTAGEM</button>
-                <button class="btn-liquid" disabled>🍽️ CARDÁPIO</button>
-                <button class="btn-liquid" disabled>⚙️ FORMATAÇÃO</button>
+                <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
             </div>
         </div>
 
@@ -29,8 +28,7 @@
                 <h2 id="config-title">CONFIGURAÇÃO</h2>
                 <div class="field">
                     <label>FOTOS DOS ESTUDANTES:</label>
-                    <label for="file-input" class="btn-file-modern">📂 SELECIONAR ARQUIVOS</label>
-                    <input type="file" id="file-input" accept="image/*" multiple style="display:none;">
+                    <input type="file" id="file-input" accept="image/*" multiple class="input-liquid">
                 </div>
                 <div class="field">
                     <label>TURNO:</label>
@@ -52,10 +50,12 @@
 
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
+                <button class="btn-liquid-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <div id="download-buttons"></div>
-                <button class="btn-liquid-small" onclick="showScreen('screen-config')">AJUSTAR →</button>
             </div>
-            <div id="pdf-area-wrapper"><div id="pdf-area"></div></div>
+            <div id="pdf-area-wrapper">
+                <div id="pdf-area"></div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
