@@ -23,41 +23,47 @@ body {
 .hidden { display: none !important; }
 .flex-center { align-items: center; justify-content: center; text-align: center; }
 
-.button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 600px; }
+/* Grelha de 6 Botões */
+.button-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 15px; 
+    width: 100%; 
+    max-width: 900px; 
+    margin-top: 20px;
+}
 
 .btn-liquid {
-    height: 100px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
+    aspect-ratio: 16/10; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.3);
-    color: #333; font-weight: 700; font-size: 16pt; cursor: pointer; transition: 0.3s;
+    color: #333; font-weight: 700; font-size: 14pt; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; justify-content: center;
 }
 
-.btn-liquid-small {
-    padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.4);
-    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
-    color: #333; font-weight: 700; cursor: pointer;
+.btn-liquid:hover:not(:disabled) { transform: translateY(-5px); background: rgba(255, 255, 255, 0.4); }
+
+.btn-liquid-small { padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.4); background: rgba(255, 255, 255, 0.3); font-weight: 700; cursor: pointer; }
+
+/* Fix Carómetro e PDF */
+.page-widescreen { 
+    width: 338.67mm; height: 190.5mm;
+    min-width: 338.67mm; min-height: 190.5mm;
+    background-size: 100% 100% !important; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    position: relative; flex-shrink: 0; margin-bottom: 20px;
 }
 
-.input-liquid { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255, 255, 255, 0.2); color: #333; font-weight: 600; outline: none; margin-top: 5px; }
+.page-a4 { width: 210mm; min-height: 297mm; background: white !important; display: grid; grid-template-columns: repeat(2, 92mm); justify-content: center; align-content: start; padding-top: 10mm; margin-bottom: 20px; }
 
-.modern-switch { position: relative; display: flex; width: 300px; height: 50px; background: rgba(0,0,0,0.1); border-radius: 25px; padding: 5px; }
+.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
+
+.modern-switch { position: relative; display: flex; width: 300px; height: 50px; background: rgba(0,0,0,0.1); border-radius: 25px; padding: 5px; margin: 10px 0; }
 .modern-switch input { display: none; }
 .switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; }
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
 .switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
 
-/* CARÔMETRO - FIX DE CORTE */
-.page-widescreen { 
-    width: 338.67mm; height: 190.5mm;
-    min-width: 338.67mm; /* Garante que não encolha na prévia */
-    background-size: 100% 100% !important; 
-    display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    position: relative; flex-shrink: 0;
-}
-.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
-
-.page-a4 { width: 210mm; min-height: 297mm; background: white !important; display: grid; grid-template-columns: repeat(2, 92mm); justify-content: center; align-content: start; padding-top: 10mm; margin-bottom: 20px; }
-
-.preview-toolbar { width: 100%; display: flex; justify-content: space-between; padding: 15px 30px; background: rgba(0,0,0,0.3); z-index: 10000; position: sticky; top: 0; }
+.preview-toolbar { width: 100%; display: flex; justify-content: space-between; padding: 15px 30px; background: rgba(0,0,0,0.6); z-index: 1000; position: sticky; top: 0; }
 #pdf-area-wrapper { background: #333; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
