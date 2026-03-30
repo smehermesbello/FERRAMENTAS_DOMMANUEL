@@ -18,17 +18,17 @@
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-liquid" disabled>📋 LISTAGEM</button>
-                <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
+                <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
             </div>
         </div>
 
         <div id="screen-config" class="screen flex-center hidden">
             <div class="glass-card">
-                <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                <button class="btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 id="config-title">CONFIGURAÇÃO</h2>
                 <div class="field">
                     <label>FOTOS DOS ESTUDANTES:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple class="input-liquid">
+                    <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
                 </div>
                 <div class="field">
                     <label>TURNO:</label>
@@ -42,15 +42,15 @@
                 </div>
                 <div class="field">
                     <label>TURMA:</label>
-                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-liquid">
+                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno">
                 </div>
-                <button id="btn-gerar" class="btn-liquid btn-execute-main" onclick="executarGeracao()">GERAR PRÉVIA</button>
+                <button id="btn-gerar" class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
-                <button class="btn-liquid-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <div id="download-buttons"></div>
             </div>
             <div id="pdf-area-wrapper">
