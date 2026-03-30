@@ -1,163 +1,68 @@
-let currentMode = 'etiqueta';
+@font-face {
+    font-family: 'SFT-Round';
+    src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
+}
+:root { --verde: #4A5D23; --azul: #003399; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+body { 
+    margin: 0; padding: 0; height: 100vh;
+    background: url('FUNDO.png') center/cover no-repeat fixed;
+    font-family: 'Fredoka', sans-serif;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 
-function openConfig(mode) {
-    currentMode = mode;
-    document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
-    showScreen('screen-config');
+.main-window { 
+    background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px);
+    width: 95vw; height: 92vh; border-radius: 30px; position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.4); display: flex; flex-direction: column; overflow: hidden;
 }
 
-async function executarGeracao() {
-    const input = document.getElementById('file-input');
-    if (!input.files || input.files.length === 0) return alert("SELECIONE AS FOTOS.");
-    showScreen('screen-preview');
-    const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>GERANDO...</h2>";
+.corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
+.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; }
+.hidden { display: none !important; }
+.flex-center { align-items: center; justify-content: center; text-align: center; }
 
-    const filesData = Array.from(input.files).map(f => ({
-        url: URL.createObjectURL(f),
-        nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
-    }));
-
-    setTimeout(() => {
-        if (currentMode === 'etiqueta') renderEtiquetas(filesData);
-        else if (currentMode === 'cracha') renderCrachas(filesData);
-        else renderCarometro(filesData);
-    }, 400);
+.button-grid { 
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; 
+    width: 100%; max-width: 900px; margin-top: 20px;
 }
 
-function renderCarometro(data) {
-    const area = document.getElementById('pdf-area');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    area.innerHTML = "";
-    data.forEach(item => {
-        const page = document.createElement('div');
-        page.className = 'page-widescreen';
-        page.style.backgroundImage = `url('${bg}')`;
-        page.innerHTML = `
-            <div style="border: 6pt solid ${cor}; border-radius:18px; padding:3px; background:white; display:inline-block;">
-                <img src="${item.url}" class="foto-carometro">
-            </div>
-            <div class="nome-carometro" contenteditable="true">${item.nome}</div>`;
-        area.appendChild(page);
-    });
-    setupBtns(['pdf', 'ppt']);
+.btn-liquid {
+    aspect-ratio: 16/10; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
+    color: #333; font-weight: 700; font-size: 14pt; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; justify-content: center;
 }
 
-// ... Funções renderEtiquetas e renderCrachas seguem o padrão A4 já funcional ...
-function renderCrachas(data) {
-    const area = document.getElementById('pdf-area');
-    area.innerHTML = "";
-    for (let i = 0; i < data.length; i += 8) {
-        const page = document.createElement('div');
-        page.className = 'page-a4';
-        data.slice(i, i + 8).forEach(item => {
-            page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1px solid black; display:flex; flex-direction:column; background:white;">
-                    <div style="height:15mm; border-bottom:1px solid #ddd; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:12mm;">
-                        <span style="font-size:8pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL D’ELBOUX</span>
-                    </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
-                        <img src="${item.url}" style="width:25mm; height:32mm; object-fit:cover; border-radius:5px;">
-                        <div style="font-family:'SFT-Round'; font-size:14pt;" contenteditable="true">${item.nome}</div>
-                    </div>
-                </div>`;
-        });
-        area.appendChild(page);
-    }
-    setupBtns(['pdf']);
+.btn-liquid:hover:not(:disabled) { transform: translateY(-3px); background: rgba(255, 255, 255, 0.4); }
+
+.input-liquid { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255, 255, 255, 0.2); text-align: center; }
+
+/* REGRAS RÍGIDAS DE DIMENSÃO PARA PDF */
+.page-widescreen { 
+    width: 338.67mm; height: 190.5mm; 
+    min-width: 338.67mm; min-height: 190.5mm;
+    background-size: 100% 100% !important; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    position: relative; flex-shrink: 0; margin: 0; padding: 0;
 }
 
-function renderEtiquetas(data) {
-    const area = document.getElementById('pdf-area');
-    area.innerHTML = "";
-    for (let i = 0; i < data.length; i += 8) {
-        const page = document.createElement('div');
-        page.className = 'page-a4';
-        data.slice(i, i + 8).forEach(item => {
-            page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:1px solid black; display:flex; flex-direction:column; background:white;">
-                    <div style="height:15mm; border-bottom:2px dotted green; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:10mm;">
-                        <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL D’ELBOUX</span>
-                    </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:40mm; object-fit:cover; border:2px solid green;">
-                        <div style="font-family:'SFT-Round'; font-size:16pt;" contenteditable="true">${item.nome}</div>
-                    </div>
-                </div>`;
-        });
-        area.appendChild(page);
-    }
-    setupBtns(['pdf']);
+.page-a4 { 
+    width: 210mm; min-height: 297mm; background: white !important; 
+    display: grid; grid-template-columns: repeat(2, 92mm); 
+    justify-content: center; align-content: start; padding-top: 10mm;
 }
 
-function setupBtns(types) {
-    const div = document.getElementById('download-buttons');
-    div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#27ae60; color:white;">BAIXAR PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#e67e22; color:white; margin-left:10px;">BAIXAR PPTX</button>`;
-}
+.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
+.nome-carometro { font-family: 'SFT-Round'; font-size: 44pt; margin-top: 20px; color: black; font-weight: bold; text-align: center; width: 100%; }
 
-// SOLUÇÃO ABSOLUTA PARA O PDF
-async function doPDF() {
-    const btn = document.getElementById('btn-pdf');
-    btn.innerText = "PROCESSANDO...";
-    
-    const isW = (currentMode === 'carometro');
-    const original = document.getElementById('pdf-area');
-    
-    // CRIAMOS UM CLONE OCULTO FORA DA TELA PARA EVITAR CORTES DO NAVEGADOR
-    const worker = document.createElement('div');
-    worker.style.position = "absolute";
-    worker.style.left = "-9999px";
-    worker.style.top = "0";
-    worker.style.width = isW ? "338.67mm" : "210mm"; // Força a largura exata
-    worker.innerHTML = original.innerHTML;
-    document.body.appendChild(worker);
+.modern-switch { position: relative; display: flex; width: 300px; height: 50px; background: rgba(0,0,0,0.1); border-radius: 25px; padding: 5px; margin: 10px 0; }
+.modern-switch input { display: none; }
+.switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; }
+#manha:checked ~ .switch-slider { transform: translateX(0); }
+#tarde:checked ~ .switch-slider { transform: translateX(100%); }
+.switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
 
-    const opt = {
-        margin: 0,
-        filename: 'DomManuel_Documento.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            windowWidth: isW ? 1400 : 800 
-        },
-        jsPDF: { 
-            unit: 'mm', 
-            format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p' 
-        }
-    };
-
-    html2pdf().set(opt).from(worker).save().then(() => {
-        document.body.removeChild(worker); // Deleta o clone após salvar
-        btn.innerText = "BAIXAR PDF";
-    });
-}
-
-function doPPT() {
-    const pptx = new PptxGenJS();
-    pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
-    pptx.layout = 'WIDE';
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    document.querySelectorAll('.page-widescreen').forEach(p => {
-        const slide = pptx.addSlide();
-        slide.background = { path: bg };
-        const img = p.querySelector('img').src;
-        const nome = p.querySelector('div[contenteditable]').innerText;
-        slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
-        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, color:'000000' });
-    });
-    pptx.writeFile({ fileName: 'Carometro.pptx' });
-}
+.preview-toolbar { width: 100%; display: flex; justify-content: space-between; padding: 15px 30px; background: rgba(0,0,0,0.7); z-index: 1000; position: sticky; top: 0; }
+#pdf-area-wrapper { background: #333; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
