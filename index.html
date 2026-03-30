@@ -11,7 +11,6 @@
 <body>
     <div class="main-window">
         <img src="LOGO.png" alt="Logo" class="corner-logo">
-        
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
             <div class="button-grid">
@@ -23,7 +22,6 @@
                 <button class="btn-liquid" disabled>⚙️ FORMATAÇÃO</button>
             </div>
         </div>
-
         <div id="screen-config" class="screen flex-center hidden">
             <div class="glass-card">
                 <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
@@ -50,15 +48,12 @@
                 <button id="btn-gerar" class="btn-liquid btn-execute-main" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
-
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
                 <div id="download-buttons"></div>
                 <button class="btn-liquid-small" onclick="showScreen('screen-config')">AJUSTAR →</button>
             </div>
-            <div id="pdf-area-wrapper">
-                <div id="pdf-area"></div>
-            </div>
+            <div id="pdf-area-wrapper"><div id="pdf-area"></div></div>
         </div>
     </div>
     <script src="script.js"></script>
