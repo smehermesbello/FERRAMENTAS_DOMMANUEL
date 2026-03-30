@@ -32,10 +32,3 @@ body {
 .input-liquid { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); text-align: center; font-size: 12pt; }
 
 .preview-toolbar { width: 100%; display: flex; justify-content: space-between; padding: 15px 30px; background: rgba(0,0,0,0.6); z-index: 1000; }
-#pdf-area-wrapper { background: #333; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
-
-/* PÁGINAS - CORREÇÃO DE CORTE */
-.page-widescreen { 
-    width: 338.67mm; height: 190.5mm; min-width: 338.67mm;
-    background-size: 100% 100% !important; display: flex; flex-direction: column; 
-    align-items: center; justify-content: center; position: relative;
