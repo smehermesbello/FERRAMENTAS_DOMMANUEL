@@ -17,7 +17,7 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>GERANDO...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>CARREGANDO...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
@@ -61,16 +61,16 @@ function renderCrachas(data) {
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
+                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; overflow:hidden;">
                     <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
-                        <img src="LOGO.png" style="height:14mm; margin-right:5px;">
-                        <div style="text-align:center; flex:1;"><div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div></div>
+                        <img src="LOGO.png" style="height:14mm;">
+                        <div style="text-align:center; flex:1; font-size:8pt; font-weight:bold;">DOM MANUEL D’ELBOUX</div>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px; border:1px solid #ccc;">
+                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px;">
                         <div style="flex:1; text-align:center;">
                             <div style="font-family:'SFT-Round'; font-size:16pt;" contenteditable="true">${item.nome}</div>
-                            <div style="font-size:10pt; color:#666;">${turma} - ${turno}</div>
+                            <div style="font-size:9pt; color:#666;">${turma}</div>
                         </div>
                     </div>
                 </div>`;
@@ -92,12 +92,12 @@ function renderEtiquetas(data) {
             page.innerHTML += `
                 <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; background:white;">
                     <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <img src="LOGO.png" style="height:12mm;">
+                        <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
                         <img src="${item.url}" style="width:32mm; height:42mm; border:2.5pt solid ${cor}; object-fit:cover;">
-                        <div style="font-family:'SFT-Round'; font-size:16pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
+                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
                     </div>
                 </div>`;
         });
@@ -118,15 +118,32 @@ async function doPDF() {
     btn.innerText = "GERANDO...";
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
+    
+    // CORREÇÃO DE CORTE: Força o scroll para o topo antes de capturar
+    window.scrollTo(0,0);
+
     const opt = {
         margin: 0,
         filename: 'Documento_DomManuel.pdf',
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
+        html2canvas: { 
+            scale: 1, // Reduzido de 2 para 1 para evitar cortes de zoom
+            useCORS: true, 
+            logging: false,
+            width: isW ? 1280 : 794, // Força a largura de captura
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p',
+            compress: true
+        },
         pagebreak: { mode: ['css', 'legacy'] }
     };
-    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "📄 PDF");
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        btn.innerText = "📄 PDF";
+    });
 }
 
 function doPPT() {
