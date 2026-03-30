@@ -17,7 +17,7 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>PREPARANDO AMBIENTE...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>GERANDO...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
@@ -28,7 +28,7 @@ async function executarGeracao() {
         if (currentMode === 'etiqueta') renderEtiquetas(filesData);
         else if (currentMode === 'cracha') renderCrachas(filesData);
         else renderCarometro(filesData);
-    }, 600);
+    }, 500);
 }
 
 function renderCarometro(data) {
@@ -42,10 +42,10 @@ function renderCarometro(data) {
         page.className = 'page-widescreen';
         page.style.backgroundImage = `url('${bg}')`;
         page.innerHTML = `
-            <div style="border: 6pt solid ${cor}; border-radius:18px; padding:3px; background:white;">
+            <div style="border: 6pt solid ${cor}; border-radius:18px; padding:3px; background:white; display:inline-block;">
                 <img src="${item.url}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; text-align:center;" contenteditable="true">${item.nome}</div>`;
+            <div class="nome-carometro" contenteditable="true">${item.nome}</div>`;
         area.appendChild(page);
     });
     setupBtns(['pdf', 'ppt']);
@@ -64,9 +64,7 @@ function renderCrachas(data) {
                 <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
                     <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
                         <img src="LOGO.png" style="height:14mm; margin-right:5px;">
-                        <div style="text-align:center; flex:1;">
-                            <div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                        </div>
+                        <div style="text-align:center; flex:1;"><div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div></div>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
                         <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px; border:1px solid #ccc;">
@@ -111,8 +109,8 @@ function renderEtiquetas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#27ae60; color:white;">📄 BAIXAR PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#e67e22; color:white;">📊 BAIXAR PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#27ae60; color:white;">📄 PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#e67e22; color:white; margin-left:10px;">📊 PPTX</button>`;
 }
 
 async function doPDF() {
@@ -124,11 +122,11 @@ async function doPDF() {
         margin: 0,
         filename: 'Documento_DomManuel.pdf',
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
         pagebreak: { mode: ['css', 'legacy'] }
     };
-    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "📄 BAIXAR PDF");
+    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "📄 PDF");
 }
 
 function doPPT() {
@@ -141,7 +139,7 @@ function doPPT() {
         const slide = pptx.addSlide();
         slide.background = { path: bg };
         const img = p.querySelector('img').src;
-        const nome = p.querySelector('div[contenteditable]').innerText;
+        const nome = p.querySelector('.nome-carometro').innerText;
         slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
         slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, color:'000000' });
     });
