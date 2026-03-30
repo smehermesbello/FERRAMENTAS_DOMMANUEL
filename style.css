@@ -15,74 +15,77 @@ body {
 
 .main-window { 
     background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px);
-    width: 95vw; height: 92vh; border-radius: 30px;
-    position: relative; border: 1px solid rgba(255, 255, 255, 0.4); 
-    display: flex; flex-direction: column; overflow: hidden;
+    width: 95vw; height: 92vh; border-radius: 30px; position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.4); display: flex; flex-direction: column; overflow: hidden;
 }
 
 .corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
 
 .screen { 
     flex: 1; overflow-y: auto; padding: 40px; 
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-    animation: fadeIn 0.3s ease-in-out;
+    display: flex; flex-direction: column; 
+    transition: opacity 0.3s ease;
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.flex-center { align-items: center; justify-content: center; text-align: center; }
 
-.main-title { font-size: 2.5rem; color: #333; margin-bottom: 30px; }
+.main-title { font-size: 2.8rem; color: #333; margin-bottom: 40px; text-align: center; }
 
-/* GRADE DE BOTÕES IGUAIS */
+/* GRADE DE BOTÕES PROPORCIONAIS */
 .button-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-    width: 100%; max-width: 900px;
+    width: 100%; max-width: 900px; margin: 0 auto;
 }
+
 .btn-liquid {
-    aspect-ratio: 16/10; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
+    aspect-ratio: 16 / 9; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
-    color: #333; font-weight: 700; font-size: 14pt; cursor: pointer; transition: 0.2s;
+    color: #333; font-weight: 700; font-size: 14pt; cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex; align-items: center; justify-content: center;
 }
-.btn-liquid:hover:not(:disabled) { transform: scale(1.03); background: rgba(255, 255, 255, 0.4); }
+.btn-liquid:hover:not(:disabled) { transform: scale(1.05); background: rgba(255, 255, 255, 0.4); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.btn-liquid:active { transform: scale(0.95); }
 .btn-liquid:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* BOTÃO DE ARQUIVO MODERNO */
+/* BOTÃO FILE MODERNO */
 .btn-file-modern {
-    display: block; width: 100%; padding: 15px; border-radius: 15px;
+    display: block; width: 100%; padding: 15px; border-radius: 12px;
     background: rgba(255,255,255,0.3); border: 2px dashed rgba(255,255,255,0.5);
-    cursor: pointer; font-weight: 700; transition: 0.3s;
+    cursor: pointer; font-weight: 700; transition: 0.2s; text-align: center;
 }
+.btn-file-modern:hover { background: rgba(255,255,255,0.5); }
 
-/* TOOLBAR E PDF AREA */
+/* TOOLBAR INVERTIDA */
 .preview-toolbar { 
-    width: 100%; display: flex; justify-content: space-between; 
-    padding: 15px 30px; background: rgba(0,0,0,0.5); z-index: 1000;
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 30px; background: rgba(0,0,0,0.6); z-index: 1000;
 }
-#download-buttons { display: flex; gap: 10px; }
+#download-buttons { display: flex; gap: 12px; }
 
-#pdf-area-wrapper { background: #555; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+/* ÁREA DE PDF (ESTRUTURA BASE PRESERVADA) */
+#pdf-area-wrapper { background: #444; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+#pdf-area { display: flex; flex-direction: column; align-items: center; }
 
-/* LÓGICA DE TAMANHO ORIGINAL PRESERVADA */
 .page-a4 { 
     width: 210mm; min-height: 297mm; background: white !important; 
-    display: grid; grid-template-columns: repeat(2, 92mm); 
-    justify-content: center; align-content: start; padding-top: 10mm; margin-bottom: 20px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    display: grid; grid-template-columns: repeat(2, 92.5mm); 
+    justify-content: center; align-content: start; gap: 0; padding-top: 10mm; margin-bottom: 30px;
 }
 
 .page-widescreen { 
     width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
     display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    position: relative; margin-bottom: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    position: relative; overflow: hidden; margin-bottom: 30px;
 }
 
-.hidden { display: none !important; }
-
-/* ESTILOS INTERNOS DOS COMPONENTES (CRÁCHA, ETIQUETA, CARÔMETRO) */
 .foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
-.btn-liquid-small { padding: 10px 20px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; }
-.glass-card { background: rgba(255, 255, 255, 0.15); padding: 30px; border-radius: 25px; width: 100%; max-width: 500px; }
-.input-liquid { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); text-align: center; }
+
+/* ESTILOS DE INTERFACE */
+.glass-card { background: rgba(255, 255, 255, 0.15); padding: 30px; border-radius: 25px; width: 100%; max-width: 450px; }
+.field { margin-bottom: 20px; text-align: center; }
+.field label { display: block; margin-bottom: 8px; font-weight: 700; }
+.input-liquid { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); text-align: center; font-family: inherit; }
 
 .modern-switch { position: relative; display: flex; width: 100%; height: 50px; background: rgba(0,0,0,0.1); border-radius: 25px; padding: 5px; }
 .modern-switch input { display: none; }
@@ -90,3 +93,7 @@ body {
 #manha:checked ~ .switch-slider { transform: translateX(0); }
 #tarde:checked ~ .switch-slider { transform: translateX(100%); }
 .switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
+
+.hidden { display: none !important; }
+.btn-liquid-small { padding: 8px 18px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.btn-liquid-small:hover { opacity: 0.8; }
