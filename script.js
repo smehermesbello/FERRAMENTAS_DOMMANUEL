@@ -14,10 +14,9 @@ function openConfig(mode) {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
-
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>GERANDO PRÉVIA...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>PROCESSANDO...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
@@ -61,18 +60,16 @@ function renderCrachas(data) {
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
+                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white;">
                     <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
-                        <img src="LOGO.png" style="height:14mm; margin-right:5px;">
-                        <div style="text-align:center; flex:1;">
-                            <div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                        </div>
+                        <img src="LOGO.png" style="height:14mm;">
+                        <div style="text-align:center; flex:1; font-size:8pt; font-weight:bold;">DOM MANUEL D’ELBOUX</div>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px; border:1px solid #ccc;">
+                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px;">
                         <div style="flex:1; text-align:center;">
                             <div style="font-family:'SFT-Round'; font-size:16pt;" contenteditable="true">${item.nome}</div>
-                            <div style="font-size:10pt; color:#666;">${turma} - ${turno}</div>
+                            <div style="font-size:10pt;">${turma}</div>
                         </div>
                     </div>
                 </div>`;
@@ -94,12 +91,12 @@ function renderEtiquetas(data) {
             page.innerHTML += `
                 <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; background:white;">
                     <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <img src="LOGO.png" style="height:12mm;">
+                        <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
                         <img src="${item.url}" style="width:32mm; height:42mm; border:2.5pt solid ${cor}; object-fit:cover;">
-                        <div style="font-family:'SFT-Round'; font-size:16pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
+                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
                     </div>
                 </div>`;
         });
@@ -111,8 +108,8 @@ function renderEtiquetas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#27ae60; color:white;">📄 BAIXAR PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#e67e22; color:white; margin-left:10px;">📊 BAIXAR PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#27ae60; color:white;">📄 PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#e67e22; color:white; margin-left:10px;">📊 PPTX</button>`;
 }
 
 async function doPDF() {
@@ -120,31 +117,30 @@ async function doPDF() {
     btn.innerText = "GERANDO...";
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
-    
-    // FIX DE CORTE: Reseta o scroll antes de tirar a "foto" da página
-    window.scrollTo(0,0);
 
+    // CONFIGURAÇÃO DE ALTA PRECISÃO PARA EVITAR BORDAS BRANCAS E CORTES
     const opt = {
-        margin: 0,
+        margin: [0, 0, 0, 0], // Remove todas as margens
         filename: 'Documento_DomManuel.pdf',
-        image: { type: 'jpeg', quality: 1 },
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
-            useCORS: true,
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: isW ? 1500 : 800 // Força o navegador a "ver" a página inteira
+            useCORS: true, 
+            letterRendering: true,
+            // Importante: define a largura exata para captura não depender do tamanho da janela
+            width: isW ? 1280.64 : 793.7 
         },
         jsPDF: { 
             unit: 'mm', 
             format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p' 
+            orientation: isW ? 'l' : 'p',
+            hotfixes: ['px_scaling'] // Corrige erros de escala entre pixels e mm
         },
-        pagebreak: { mode: ['css', 'legacy'] }
+        pagebreak: { mode: 'avoid' } // Evita quebra de página automática que gera brancos
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerText = "📄 BAIXAR PDF";
+        btn.innerText = "📄 PDF";
     });
 }
 
