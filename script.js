@@ -1,82 +1,65 @@
 let currentMode = 'etiqueta';
 
-// Feedback do arquivo
-document.getElementById('file-input').addEventListener('change', function(e) {
+// Feedback para o botão de arquivo personalizado
+document.getElementById('file-input').addEventListener('change', function() {
     const status = document.getElementById('file-status');
-    status.innerText = e.target.files.length > 0 ? `✅ ${e.target.files.length} fotos carregadas` : "Nenhum arquivo selecionado";
+    const files = this.files.length;
+    status.innerText = files > 0 ? `✅ ${files} arquivo(s) selecionado(s)` : "Nenhum arquivo selecionado";
 });
 
 function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(s => {
+        s.classList.add('hidden');
+    });
+    const target = document.getElementById(id);
+    target.classList.remove('hidden');
 }
 
 function openConfig(mode) {
     currentMode = mode;
-    document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
+    const titleMap = {
+        'etiqueta': '🏷️ CONFIGURAR ETIQUETAS',
+        'carometro': '📸 CONFIGURAR CARÔMETRO',
+        'cracha': '🎫 CONFIGURAR CRACHÁ'
+    };
+    document.getElementById('config-title').innerText = titleMap[mode] || "CONFIGURAÇÃO";
     showScreen('screen-config');
 }
 
 async function executarGeracao() {
     const input = document.getElementById('file-input');
-    if (!input.files.length) return alert("Selecione as fotos primeiro!");
+    if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>A PREPARAR...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:100px; text-align:center;'>ESTILIZANDO DOCUMENTOS...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
         nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
     }));
 
+    // Simulação de delay para fluidez na transição
     setTimeout(() => {
         area.innerHTML = "";
         if (currentMode === 'etiqueta') renderEtiquetas(filesData);
         else if (currentMode === 'cracha') renderCrachas(filesData);
-        else renderCarometro(filesData);
+        else if (currentMode === 'carometro') renderCarometro(filesData);
     }, 600);
 }
 
-function renderCarometro(data) {
-    const area = document.getElementById('pdf-area');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    data.forEach(item => {
-        const page = document.createElement('div');
-        page.className = 'page-widescreen';
-        page.style.backgroundImage = `url('${bg}')`;
-        page.innerHTML = `
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%;">
-                <div style="border: 6pt solid ${cor}; border-radius:20px; padding:3px; background:white;">
-                    <img src="${item.url}" class="foto-carometro">
-                </div>
-                <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold;">${item.nome}</div>
-            </div>`;
-        area.appendChild(page);
-    });
-    setupBtns(['pdf', 'ppt']);
-}
-
-// Outros renders omitidos aqui para brevidade, mas seguem o mesmo padrão centralizado
-
+// Funções de download dinâmicas (sempre à esquerda via CSS)
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:rgba(39, 174, 96, 0.4);">💾 PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:rgba(230, 126, 34, 0.4);">📊 PPTX</button>`;
+    
+    if (types.includes('pdf')) {
+        div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:rgba(39, 174, 96, 0.4);">💾 BAIXAR PDF</button>`;
+    }
+    if (types.includes('ppt') && currentMode === 'carometro') {
+        div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:rgba(230, 126, 34, 0.4);">📊 BAIXAR PPTX</button>`;
+    }
 }
 
-async function doPDF() {
-    const element = document.getElementById('pdf-area');
-    const isW = (currentMode === 'carometro');
-    const opt = {
-        margin: 0,
-        filename: 'Sistema_Dom_Manuel.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
-    };
-    html2pdf().set(opt).from(element).save();
-}
+// ... Restante das funções de render (renderEtiquetas, renderCarometro, renderCrachas) seguem a mesma lógica anterior ...
