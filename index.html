@@ -28,13 +28,11 @@
             <div class="glass-card">
                 <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 id="config-title">CONFIGURAÇÃO</h2>
-                
                 <div class="field">
                     <label>FOTOS DOS ESTUDANTES:</label>
-                    <label for="file-input" class="btn-file-modern">📂 SELECIONAR ARQUIVOS</label>
+                    <label for="file-input" class="btn-file-modern">📂 SELECIONAR FOTOS</label>
                     <input type="file" id="file-input" accept="image/*" multiple style="display:none;">
                 </div>
-
                 <div class="field">
                     <label>TURNO:</label>
                     <div class="modern-switch">
@@ -45,19 +43,18 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-
                 <div class="field">
                     <label>TURMA:</label>
                     <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-liquid">
                 </div>
-                
                 <button id="btn-gerar" class="btn-liquid btn-execute-main" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
-                <div id="download-buttons"></div> <button class="btn-liquid-small" onclick="showScreen('screen-config')">AJUSTAR →</button>
+                <div id="download-buttons"></div>
+                <button class="btn-liquid-small" onclick="showScreen('screen-config')">AJUSTAR →</button>
             </div>
             <div id="pdf-area-wrapper">
                 <div id="pdf-area"></div>
