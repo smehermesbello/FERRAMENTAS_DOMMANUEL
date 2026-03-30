@@ -14,10 +14,9 @@ function openConfig(mode) {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
-
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>PREPARANDO ARQUIVOS...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>GERANDO...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
@@ -45,13 +44,12 @@ function renderCarometro(data) {
             <div style="border: 6pt solid ${cor}; border-radius:18px; padding:3px; background:white; display:inline-block;">
                 <img src="${item.url}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold;" contenteditable="true">${item.nome}</div>`;
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; text-align:center; width:100%;" contenteditable="true">${item.nome}</div>`;
         area.appendChild(page);
     });
     setupBtns(['pdf', 'ppt']);
 }
 
-// Funções renderCrachas e renderEtiquetas permanecem as mesmas do seu base 30.03
 function renderCrachas(data) {
     const area = document.getElementById('pdf-area');
     const turno = (document.querySelector('input[name="turno"]:checked').value === 'manha') ? 'MANHÃ' : 'TARDE';
@@ -62,19 +60,16 @@ function renderCrachas(data) {
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
+                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; overflow:hidden;">
                     <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
-                        <img src="LOGO.png" style="height:14mm; margin-right:5px;">
-                        <div style="text-align:center; flex:1;">
-                            <div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                            <div style="font-size:7pt;">Fone: 3262-1627</div>
-                        </div>
+                        <img src="LOGO.png" style="height:14mm;">
+                        <div style="text-align:center; flex:1; font-size:8pt; font-weight:bold;">DOM MANUEL D’ELBOUX</div>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px; border:1px solid #ccc;">
+                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px;">
                         <div style="flex:1; text-align:center;">
                             <div style="font-family:'SFT-Round'; font-size:16pt;" contenteditable="true">${item.nome}</div>
-                            <div style="font-size:10pt; color:#666;">${turma} - ${turno}</div>
+                            <div style="font-size:9pt;">${turma}</div>
                         </div>
                     </div>
                 </div>`;
@@ -96,12 +91,12 @@ function renderEtiquetas(data) {
             page.innerHTML += `
                 <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; background:white;">
                     <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <img src="LOGO.png" style="height:12mm;">
+                        <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
                         <img src="${item.url}" style="width:32mm; height:42mm; border:2.5pt solid ${cor}; object-fit:cover;">
-                        <div style="font-family:'SFT-Round'; font-size:16pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
+                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
                     </div>
                 </div>`;
         });
@@ -113,36 +108,35 @@ function renderEtiquetas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:rgba(39, 174, 96, 0.6);">📄 PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:rgba(230, 126, 34, 0.6); margin-left:10px;">📊 PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#27ae60; color:white;">📄 BAIXAR PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#e67e22; color:white; margin-left:10px;">📊 BAIXAR PPTX</button>`;
 }
 
 async function doPDF() {
     const btn = document.getElementById('btn-pdf');
-    btn.innerText = "GERANDO...";
+    btn.innerText = "PROCESSANDO...";
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
-
-    // FIX DE CORTE: Reseta o scroll e define largura de visualização fixa para o Canvas
+    
     window.scrollTo(0,0);
 
     const opt = {
         margin: 0,
-        filename: 'Documento_DomManuel.pdf',
+        filename: 'Sistema_DomManuel.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
-            windowWidth: isW ? 1400 : 800 // Força o canvas a ver a largura total sem cortar
+            windowWidth: isW ? 1400 : 800 
         },
         jsPDF: { 
             unit: 'mm', 
             format: isW ? [338.67, 190.5] : 'a4', 
             orientation: isW ? 'l' : 'p' 
-        },
-        pagebreak: { mode: ['css', 'legacy'] }
+        }
     };
-    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "📄 PDF");
+
+    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "📄 BAIXAR PDF");
 }
 
 function doPPT() {
