@@ -19,76 +19,82 @@ body {
     display: flex; flex-direction: column; overflow: hidden;
 }
 
-/* LOGO POSICIONADA NO CANTO - NÃO AFETA O CENTRO */
-.corner-logo { 
-    position: absolute; top: 25px; right: 30px; 
-    width: 80px; height: auto; z-index: 1000; 
+/* FIX DEFINITIVO DA LOGO: Ela não empurra mais nada */
+.corner-logo-fixed { 
+    position: absolute; 
+    top: 25px; 
+    right: 30px; 
+    width: 80px; /* Tamanho fixo e pequeno */
+    height: auto; 
+    z-index: 9999; 
 }
 
-/* TELAS TOTALMENTE CENTRALIZADAS */
+/* CENTRALIZAÇÃO TOTAL DO CONTEÚDO */
 .screen { 
-    flex: 1; width: 100%; display: flex; flex-direction: column; 
-    align-items: center; justify-content: center; 
-    padding: 40px; transition: opacity 0.4s ease, transform 0.4s ease;
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; /* Centraliza verticalmente */
+    text-align: center;
+    padding: 40px; 
+    width: 100%;
+    transition: opacity 0.4s ease;
 }
-.hidden { display: none !important; opacity: 0; transform: translateY(10px); }
+.hidden { display: none !important; }
 
 .main-title { 
-    font-size: 2.8rem; color: #222; margin-bottom: 40px; 
-    text-align: center; width: 100%; font-weight: 700;
+    font-size: 2.8rem; 
+    color: #222; 
+    margin-bottom: 40px; 
+    font-weight: 700;
 }
 
-/* GRID DE BOTÕES: MESMO TAMANHO E PROPORÇÃO */
+/* GRID DE BOTÕES UNIFORMES */
 .button-grid { 
     display: grid; 
-    grid-template-columns: repeat(2, 280px); 
+    grid-template-columns: repeat(2, 280px); /* 2 colunas iguais de 280px */
     gap: 25px; 
-    justify-content: center;
 }
 
 .btn-liquid {
-    height: 105px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.5);
-    background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+    height: 100px; 
+    border-radius: 20px; 
+    border: 1px solid rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.3);
-    color: #333; font-weight: 700; font-size: 15pt; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #333; 
+    font-weight: 700; 
+    font-size: 15pt; 
+    cursor: pointer;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.btn-liquid:hover:not(:disabled) { transform: scale(1.06); background: rgba(255, 255, 255, 0.35); }
-.btn-liquid:active { transform: scale(0.95); }
 
-/* BOTÃO ESCOLHER ARQUIVO MODERNO */
+.btn-liquid:hover:not(:disabled) { transform: scale(1.05); background: rgba(255, 255, 255, 0.4); }
+
+/* BOTÃO DE ARQUIVO ESTILO LIQUID GLASS */
 .btn-liquid-file {
-    display: inline-block; width: 100%; padding: 15px; 
-    background: rgba(255,255,255,0.2); border: 1px dashed rgba(0,0,0,0.3); 
-    border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s;
+    display: block; width: 100%; padding: 15px; 
+    background: rgba(255,255,255,0.2); 
+    border: 1px dashed rgba(0,0,0,0.3); 
+    border-radius: 15px; font-weight: 700; cursor: pointer;
 }
-.btn-liquid-file:hover { background: rgba(255,255,255,0.4); }
-#file-status { font-size: 0.9rem; margin-top: 10px; color: #444; font-weight: 600; }
 
-/* SLIDER DO TURNO (PIXEL PERFECT) */
+/* SLIDER TURNO */
 .modern-switch { 
     position: relative; display: flex; width: 300px; height: 50px; 
     background: rgba(0,0,0,0.1); border-radius: 25px; padding: 5px; margin: 0 auto;
 }
 .switch-slider { 
     position: absolute; width: 145px; height: 40px; background: white; 
-    border-radius: 20px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    border-radius: 20px; transition: 0.3s; z-index: 1;
 }
 #tarde:checked ~ .switch-slider { transform: translateX(145px); }
 .switch-option { flex: 1; z-index: 2; line-height: 40px; font-weight: 700; cursor: pointer; text-align: center; }
 
-/* BARRA DE BOTÕES PDF/PPT À ESQUERDA */
+/* TOOLBAR À ESQUERDA */
 .preview-toolbar { 
-    width: 100%; padding: 15px 30px; background: rgba(0,0,0,0.2); 
+    width: 100%; padding: 15px 30px; background: rgba(0,0,0,0.25); 
     display: flex; justify-content: flex-start; gap: 15px;
 }
-.btn-liquid-small { 
-    padding: 10px 22px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.4); 
-    background: rgba(255,255,255,0.2); font-weight: 700; cursor: pointer; transition: 0.3s;
-}
-.btn-liquid-small:hover { background: rgba(255,255,255,0.4); transform: translateY(-2px); }
-
-.input-liquid { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.2); text-align: center; font-weight: 700; outline: none; }
-#pdf-area-wrapper { background: #222; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
