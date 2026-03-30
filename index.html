@@ -12,7 +12,7 @@
     <div class="main-window">
         <img src="LOGO.png" alt="Logo" class="corner-logo-fixed">
         
-        <div id="screen-menu" class="screen active">
+        <div id="screen-menu" class="screen">
             <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
             <div class="button-grid">
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
@@ -26,7 +26,7 @@
 
         <div id="screen-config" class="screen hidden">
             <div class="glass-card">
-                <button class="btn-liquid-small" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                <button class="btn-back-small" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 id="config-title" class="section-title">CONFIGURAÇÃO</h2>
                 
                 <div class="field">
@@ -52,20 +52,4 @@
                     <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-liquid">
                 </div>
 
-                <button id="btn-gerar" class="btn-liquid btn-execute-main" onclick="executarGeracao()">GERAR PRÉVIA</button>
-            </div>
-        </div>
-
-        <div id="screen-preview" class="screen hidden" style="padding:0;">
-            <div class="preview-toolbar">
-                <div id="download-buttons"></div>
-                <button class="btn-liquid-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
-            </div>
-            <div id="pdf-area-wrapper">
-                <div id="pdf-area"></div>
-            </div>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+                <button class
