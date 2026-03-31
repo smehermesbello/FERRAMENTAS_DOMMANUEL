@@ -7,6 +7,7 @@ function showScreen(id) {
 
 function openConfig(mode) {
     currentMode = mode;
+    document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
     showScreen('screen-config');
 }
 
@@ -24,24 +25,29 @@ async function executarGeracao() {
     if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
-    area.innerHTML = `<div style="color:white; text-align:center; margin-top:80px;"><h2>⚙️ PROCESSANDO...</h2><p>Organizando arquivos para evitar travamentos.</p></div>`;
+    area.innerHTML = `<div style="color:white; text-align:center; margin-top:100px;">
+                        <h2>⚙️ PROCESSANDO...</h2>
+                        <p>A organizar layout para evitar travamentos.</p>
+                      </div>`;
 
-    const files = Array.from(input.files);
-    const data = files.map(f => ({
+    const data = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
         nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
     }));
 
-    // Chunking: Processa 8 fotos por vez para não congelar o navegador
-    area.innerHTML = ""; 
-    const chunkSize = 8;
+    area.innerHTML = "";
+    
+    // Processamento por lotes para não travar o navegador (especialmente no carômetro)
+    const chunkSize = (currentMode === 'carometro') ? 1 : 8; 
+
     for (let i = 0; i < data.length; i += chunkSize) {
         const chunk = data.slice(i, i + chunkSize);
-        await new Promise(r => setTimeout(r, 150)); // Pausa para renderização
-        
+        // Pausa de 100ms para o navegador renderizar e não congelar
+        await new Promise(r => setTimeout(r, 100)); 
+
         if (currentMode === 'cracha') renderCrachaPage(chunk);
         else if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
-        else if (currentMode === 'carometro') renderCarometroPage(chunk);
+        else if (currentMode === 'carometro') renderCarometroPage(chunk[0]);
     }
     
     setupBtns(['pdf']);
@@ -50,26 +56,25 @@ async function executarGeracao() {
 function renderCrachaPage(chunk) {
     const area = document.getElementById('pdf-area');
     const isTarde = document.getElementById('turno-checkbox').checked;
-    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA";
-    const turno = isTarde ? 'TARDE' : 'MANHÃ';
+    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA NÃO INFORMADA";
     
     const page = document.createElement('div');
     page.className = 'page-a4';
     chunk.forEach(item => {
         page.innerHTML += `
-        <div class="item-border" style="width:92mm; height:60mm; display:flex; flex-direction:column;">
-            <div style="height:16mm; border-bottom:0.5pt solid #ccc; display:flex; align-items:center; padding:5px; gap:8px;">
+        <div class="item-cracha">
+            <div class="header-cracha">
                 <img src="LOGO.png" style="height:12mm;">
                 <div style="flex:1; text-align:center;">
-                    <div style="font-family:'SFT-Round'; font-size:8pt; font-weight:900;">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</div>
-                    <div style="font-size:6.5pt;">Fone: 3262-1627 / (41) 9107-9242</div>
+                    <div class="titulo-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</div>
+                    <div class="fone-escola">Fone: 3262-1627 / (41) 9107-9242</div>
                 </div>
             </div>
-            <div style="flex:1; display:flex; align-items:center; padding:8px; gap:12px;">
-                <img src="${item.url}" style="width:30mm; height:36mm; object-fit:cover; border-radius:8px; border:1px solid #eee;">
-                <div style="flex:1; text-align:center; display:flex; flex-direction:column; justify-content:center;">
-                    <div style="font-family:'SFT-Round'; font-size:13pt; line-height:1.2;" contenteditable="true">${item.nome}</div>
-                    <div style="font-size:9pt; margin-top:8px; color:#444;">${turma} - ${turno}</div>
+            <div class="body-cracha">
+                <img src="${item.url}" class="foto-estudante">
+                <div class="info-estudante">
+                    <div class="nome-estudante-cracha" contenteditable="true">${item.nome}</div>
+                    <div class="turma-turno-cracha">${turma}<br>${isTarde?'TARDE':'MANHÃ'}</div>
                 </div>
             </div>
         </div>`;
@@ -86,17 +91,32 @@ function renderEtiquetaPage(chunk) {
     page.className = 'page-a4';
     chunk.forEach(item => {
         page.innerHTML += `
-        <div class="item-border" style="width:92mm; height:65mm; display:flex; flex-direction:column; padding:3mm; border: 2pt solid #000;">
+        <div class="item-etiqueta">
             <div style="border-bottom:2.5pt dotted ${cor}; padding-bottom:5px; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
                 <img src="LOGO.png" style="height:11mm;">
-                <span style="font-family:'SFT-Round'; font-size:8.5pt; font-weight:900;">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</span>
+                <span class="titulo-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</span>
             </div>
             <div style="flex:1; display:flex; align-items:center; gap:15px;">
                 <img src="${item.url}" style="width:34mm; height:42mm; object-fit:cover; border:2.5pt solid ${cor}; border-radius:5px;">
-                <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center; font-weight:900;" contenteditable="true">${item.nome}</div>
+                <div class="nome-estudante-etiqueta" contenteditable="true">${item.nome}</div>
             </div>
         </div>`;
     });
+    area.appendChild(page);
+}
+
+function renderCarometroPage(item) {
+    const area = document.getElementById('pdf-area');
+    const isTarde = document.getElementById('turno-checkbox').checked;
+    const bg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
+    
+    const page = document.createElement('div');
+    page.className = 'page-widescreen';
+    page.style.background = `url(${bg})`;
+    page.innerHTML = `
+        <img src="${item.url}" class="foto-carometro">
+        <div class="nome-carometro" contenteditable="true">${item.nome}</div>
+    `;
     area.appendChild(page);
 }
 
@@ -104,18 +124,19 @@ function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
     if (types.includes('pdf')) {
-        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:42px; width:150px; font-size:10pt; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
+        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:140px; font-size:10pt; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
     }
 }
 
 async function doPDF() {
     const element = document.getElementById('pdf-area');
+    const isW = (currentMode === 'carometro');
     const opt = {
         margin: 0,
-        filename: 'Documentos_DomManuel.pdf',
+        filename: 'DomManuel_Documento.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'p' }
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
     };
     html2pdf().set(opt).from(element).save();
 }
