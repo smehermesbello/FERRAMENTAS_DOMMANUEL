@@ -1,36 +1,41 @@
 let currentMode = 'etiqueta';
 
 function showScreen(id) {
+    // Esconde todas as telas e remove a classe hidden da selecionada
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+    const target = document.getElementById(id);
+    if (target) target.classList.remove('hidden');
 }
 
 function openConfig(mode) {
     currentMode = mode;
-    document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
+    const title = document.getElementById('config-title');
+    if (title) title.innerText = "GERAR " + mode.toUpperCase();
     showScreen('screen-config');
 }
 
 function toggleTurno() {
     const sw = document.querySelector('.toggle-switch');
     const cb = document.getElementById('turno-checkbox');
-    sw.classList.toggle('active');
-    cb.checked = sw.classList.contains('active');
+    if (sw && cb) {
+        sw.classList.toggle('active');
+        cb.checked = sw.classList.contains('active');
+    }
 }
 
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
     
-    if (!input.files || input.files.length === 0) {
-        alert("POR FAVOR, SELECIONE AS FOTOS.");
+    if (!input || !input.files || input.files.length === 0) {
+        alert("POR FAVOR, SELECIONE AS FOTOS DOS ALUNOS.");
         return;
     }
 
     showScreen('screen-preview');
     area.innerHTML = "<h2 style='color:white; text-align:center; margin-top:100px;'>PREPARANDO PRÉVIA...</h2>";
 
-    // O setTimeout evita o travamento da interface (Freeze)
+    // Timeout para evitar que a UI congele
     setTimeout(() => {
         const filesData = Array.from(input.files).map(f => ({
             url: URL.createObjectURL(f),
@@ -40,15 +45,18 @@ async function executarGeracao() {
         if (currentMode === 'etiqueta') renderEtiquetas(filesData);
         else if (currentMode === 'cracha') renderCrachas(filesData);
         else if (currentMode === 'carometro') renderCarometro(filesData);
-        else area.innerHTML = "<h2 style='color:white;'>EM DESENVOLVIMENTO</h2>";
-    }, 300);
+        else {
+            area.innerHTML = "<h2 style='color:white; text-align:center; margin-top:100px;'>ESTA FUNÇÃO (CARDÁPIO/FORMATAÇÃO) SERÁ IMPLEMENTADA EM BREVE.</h2>";
+            setupBtns([]);
+        }
+    }, 400);
 }
 
 function renderCrachas(data) {
     const area = document.getElementById('pdf-area');
     const isTarde = document.getElementById('turno-checkbox').checked;
     const turno = isTarde ? 'TARDE' : 'MANHÃ';
-    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA NÃO DEFINIDA";
+    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA NÃO INFORMADA";
     area.innerHTML = "";
 
     for (let i = 0; i < data.length; i += 8) {
@@ -104,8 +112,11 @@ function renderEtiquetas(data) {
 
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
+    if (!div) return;
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:40px; font-size:10pt; background:#e74c3c; color:white;">BAIXAR PDF</button>`;
+    if (types.includes('pdf')) {
+        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:45px; width:150px; font-size:10pt; background:#e74c3c; color:white;">BAIXAR PDF</button>`;
+    }
 }
 
 async function doPDF() {
