@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -20,7 +21,7 @@
                 <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
                 <button class="btn-liquid" onclick="openConfig('cardapio')">🍽️ CARDÁPIO</button>
                 <button class="btn-liquid" onclick="openConfig('formatacao')">📄 FORMATAÇÃO</button>
-                <button class="btn-liquid" disabled style="opacity: 0.5;">📋 LISTAGEM</button>
+                <button class="btn-liquid" disabled style="opacity: 0.5; cursor: not-allowed;">📋 LISTAGEM</button>
             </div>
         </div>
 
@@ -31,10 +32,12 @@
                 
                 <div class="field">
                     <label>TURNO:</label>
-                    <div class="toggle-switch" onclick="toggleTurno()">
-                        <div id="switch-knob"></div>
-                        <span class="option">☀️ MANHÃ</span>
-                        <span class="option">🌙 TARDE</span>
+                    <div class="toggle-container" onclick="toggleTurno()">
+                        <div class="toggle-switch">
+                            <div id="switch-knob"></div>
+                            <span class="option">☀️ MANHÃ</span>
+                            <span class="option">🌙 TARDE</span>
+                        </div>
                     </div>
                     <input type="checkbox" id="turno-checkbox" style="display:none;">
                 </div>
@@ -52,3 +55,17 @@
                 <button class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
+
+        <div id="screen-preview" class="screen hidden" style="padding:0;">
+            <div class="preview-toolbar">
+                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
+                <div id="download-buttons"></div>
+            </div>
+            <div id="pdf-area-wrapper">
+                <div id="pdf-area"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
