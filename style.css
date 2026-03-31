@@ -6,8 +6,8 @@
 :root { 
     --verde: #4A5D23; 
     --azul: #003399; 
-    --glass: rgba(255, 255, 255, 0.25);
-    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass: rgba(255, 255, 255, 0.2);
+    --border: rgba(255, 255, 255, 0.4);
 }
 
 * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -19,102 +19,81 @@ body {
     display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 
-/* CONTAINER PRINCIPAL */
 .main-window {
     background: var(--glass); backdrop-filter: blur(25px);
     width: 95vw; height: 92vh; border-radius: 30px; position: relative;
-    border: 1px solid var(--glass-border); display: flex; flex-direction: column; overflow: hidden;
+    border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
 }
 
-.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; position: relative; }
+.corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
+
+.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; }
 .hidden { display: none !important; }
 
-/* BOTÕES UNIFORMES LIQUID GLASS */
+/* GRADE DE BOTÕES (3x2) */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 30px;
+}
+
+/* ESTILO UNIFORME LIQUID GLASS PARA TODOS OS BOTÕES */
 .btn-liquid, .btn-execute, .btn-back, .btn-back-small {
     all: unset;
-    padding: 15px 20px;
+    height: 80px;
+    padding: 0 20px;
     border-radius: 20px;
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     color: #1a1a1a;
     font-weight: 700;
-    font-size: 14pt;
+    font-size: 13pt;
     cursor: pointer;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; align-items: center; justify-content: center; text-align: center;
 }
 
 .btn-liquid:hover, .btn-execute:hover {
     background: rgba(255, 255, 255, 0.4);
     transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
-    max-width: 800px;
-    margin-top: 30px;
+/* BOTÃO DESLIZANTE (TOGGLE) */
+.toggle-switch {
+    width: 100%; height: 55px; background: rgba(0,0,0,0.1);
+    border-radius: 28px; position: relative; display: flex;
+    align-items: center; cursor: pointer; border: 1px solid var(--border);
+    margin-top: 10px;
 }
 
-/* SWITCH DE TURNO DESLIZANTE */
-.switch-container {
-    position: relative;
-    width: 200px;
-    height: 50px;
-    background: rgba(0,0,0,0.1);
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border: 1px solid var(--glass-border);
+#switch-knob {
+    position: absolute; width: calc(50% - 10px); height: 45px;
+    background: white; border-radius: 23px; left: 5px;
+    transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1;
 }
 
-.switch-option {
-    flex: 1;
-    text-align: center;
-    z-index: 2;
-    font-weight: bold;
-    font-size: 10pt;
-    transition: 0.3s;
+.toggle-switch.active #switch-knob { left: calc(50% + 5px); }
+.option { flex: 1; text-align: center; z-index: 2; font-weight: bold; font-size: 10pt; color: #333; pointer-events: none; }
+
+/* CONFIG CARD */
+.glass-card {
+    background: rgba(255,255,255,0.2); padding: 30px; border-radius: 25px;
+    border: 1px solid white; width: 450px;
 }
 
-.switch-handle {
-    position: absolute;
-    width: 50%;
-    height: 40px;
-    background: white;
-    border-radius: 20px;
-    left: 5px;
-    transition: 0.4s cubic-bezier(0.18, 0.89, 0.35, 1.15);
-    z-index: 1;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-#turno-toggle:checked + .switch-handle { left: calc(50% - 5px); }
-
-/* CORREÇÃO DE PÁGINAS EM BRANCO (A4) */
+/* ÁREA DE IMPRESSÃO - CORREÇÃO DE PÁGINA EM BRANCO */
 .page-a4 {
-    width: 210mm;
-    height: 296mm; /* Ajuste fino para não vazar */
-    background: white !important;
-    display: grid;
-    grid-template-columns: repeat(2, 92mm);
-    grid-template-rows: repeat(4, 65mm);
-    justify-content: center;
-    align-content: start;
-    gap: 0;
-    page-break-after: always;
+    width: 210mm; height: 296mm; background: white !important;
+    display: grid; grid-template-columns: repeat(2, 92mm); grid-template-rows: repeat(4, 65mm);
+    justify-content: center; align-content: start; gap: 4mm;
+    page-break-after: always; margin-bottom: 0;
 }
 
-.page-widescreen {
-    width: 338.67mm; height: 190.4mm;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative; overflow: hidden; page-break-after: always;
-}
+.preview-toolbar { background: rgba(0,0,0,0.7); width: 100%; padding: 15px; display: flex; justify-content: space-between; }
+#pdf-area-wrapper { background: #222; flex: 1; width: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
