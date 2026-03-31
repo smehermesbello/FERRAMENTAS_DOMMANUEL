@@ -3,146 +3,75 @@ let currentMode = 'etiqueta';
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
-}
+} [cite: 111, 112, 113]
 
 function openConfig(mode) {
     currentMode = mode;
     document.getElementById('config-title').innerText = "GERAR " + mode.toUpperCase();
     showScreen('screen-config');
-}
+} [cite: 115, 117, 118]
 
 async function executarGeracao() {
     const input = document.getElementById('file-input');
-    if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
+    if (!input.files || input.files.length === 0) return alert("SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:50px;'>PREPARANDO PRÉVIA...</h2>";
+    area.innerHTML = "<h2 style='color:white; margin-top:50px;'>GERANDO...</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
         nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
-    }));
+    })); [cite: 126, 127, 128]
 
     if (currentMode === 'etiqueta') renderEtiquetas(filesData);
     else if (currentMode === 'cracha') renderCrachas(filesData);
-    else renderCarometro(filesData);
-}
-
-function renderCarometro(data) {
-    const area = document.getElementById('pdf-area');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    area.innerHTML = "";
-    data.forEach(item => {
-        const page = document.createElement('div');
-        page.className = 'page-widescreen';
-        page.style.backgroundImage = `url('${bg}')`;
-        page.innerHTML = `
-            <div style="border: 2.25pt solid ${cor}; border-radius:18px; padding:2px;">
-                <img src="${item.url}" class="foto-carometro">
-            </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold;" contenteditable="true">${item.nome}</div>`;
-        area.appendChild(page);
-    });
-    setupBtns(['pdf', 'ppt']);
-}
+    else if (currentMode === 'carometro') renderCarometro(filesData);
+} [cite: 130, 131, 132]
 
 function renderCrachas(data) {
     const area = document.getElementById('pdf-area');
-    const turno = (document.querySelector('input[name="turno"]:checked').value === 'manha') ? 'MANHÃ' : 'TARDE';
-    const turma = document.getElementById('input-turma').value.toUpperCase();
+    const turno = document.getElementById('turno-toggle').checked ? 'TARDE' : 'MANHÃ';
     area.innerHTML = "";
-    for (let i = 0; i < data.length; i += 8) {
-        const page = document.createElement('div');
-        page.className = 'page-a4';
-        data.slice(i, i + 8).forEach(item => {
-            page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1.5pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
-                    <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
-                        <img src="LOGO.png" style="height:14mm; margin-right:5px;">
-                        <div style="text-align:center; flex:1;">
-                            <div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                            <div style="font-size:7pt;">Fone: 3262-1627 / (41) 9107-9242</div>
-                        </div>
-                    </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px;">
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-family:'SFT-Round'; font-size:16pt; margin-bottom:5px;" contenteditable="true">${item.nome}</div>
-                            <div style="font-size:10pt;">${turma} - ${turno}</div>
-                        </div>
-                    </div>
-                </div>`;
-        });
-        area.appendChild(page);
-    }
-    setupBtns(['pdf']);
-}
 
-function renderEtiquetas(data) {
-    const area = document.getElementById('pdf-area');
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
-    area.innerHTML = "";
     for (let i = 0; i < data.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; margin:1mm;">
-                    <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-size:9pt; font-weight:bold; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+            <div style="width:92mm; height:60mm; border:1px solid #000; background:white; display:flex; flex-direction:column;">
+                <div style="height:15mm; border-bottom:1px solid #ddd; display:flex; align-items:center; padding:5px;">
+                    <img src="LOGO.png" style="height:12mm;">
+                    <span style="font-size:7pt; font-weight:bold; margin-left:5px;">EM DOM MANUEL D'ELBOUX</span>
+                </div>
+                <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
+                    <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:8px;">
+                    <div style="text-align:center; flex:1;">
+                        <div style="font-family:'SFT-Round'; font-size:14pt;" contenteditable="true">🪪 ${item.nome}</div>
+                        <div style="font-size:9pt;">${turno}</div>
                     </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
-                        <img src="${item.url}" style="width:32mm; height:42mm; object-fit:cover; border:2.5pt solid ${cor};">
-                        <div style="font-family:'SFT-Round'; font-size:16pt; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
-                    </div>
-                </div>`;
-        });
+                </div>
+            </div>`;
+        }); [cite: 163, 164, 165, 172, 174, 175]
         area.appendChild(page);
     }
     setupBtns(['pdf']);
-}
+} [cite: 180, 182]
 
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-execute" style="background:orange; margin-left:10px;">BAIXAR PPTX</button>`;
-}
+    if (types.includes('pdf')) div.innerHTML += `<button onclick="doPDF()" class="btn-execute">BAIXAR PDF</button>`;
+} [cite: 209, 210, 212]
 
 async function doPDF() {
-    const btn = document.getElementById('btn-pdf');
-    btn.innerText = "GERANDO...";
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
     const opt = {
         margin: 0,
-        filename: 'Documento_DomManuel.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
-        pagebreak: { mode: ['css', 'legacy'] }
-    };
-    html2pdf().set(opt).from(element).save().then(() => btn.innerText = "BAIXAR PDF");
-}
-
-function doPPT() {
-    const pptx = new PptxGenJS();
-    pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
-    pptx.layout = 'WIDE';
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    document.querySelectorAll('.page-widescreen').forEach(p => {
-        const slide = pptx.addSlide();
-        slide.background = { path: bg };
-        const img = p.querySelector('img').src;
-        const nome = p.querySelector('div[contenteditable]').innerText;
-        slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
-        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, color:'000000' });
-    });
-    pptx.writeFile({ fileName: 'Carometro.pptx' });
-}
+        filename: 'DomManuel.pdf',
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
+    }; [cite: 220, 222, 224, 225]
+    html2pdf().set(opt).from(element).save();
+} [cite: 228]
