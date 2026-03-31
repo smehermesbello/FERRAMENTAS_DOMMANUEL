@@ -17,7 +17,7 @@
             <div class="button-grid">
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
-                <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
+                <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
                 <button class="btn-liquid" onclick="openConfig('cardapio')">🍽️ CARDÁPIO</button>
                 <button class="btn-liquid" onclick="openConfig('formatacao')">📄 FORMATAÇÃO</button>
                 <button class="btn-liquid" disabled style="opacity: 0.5;">📋 LISTAGEM</button>
@@ -28,7 +28,7 @@
             <div class="glass-card">
                 <div class="card-header">
                     <button class="btn-back-small" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                    <h2 id="config-title">CONFIGURAÇÃO</h2>
+                    <h2>CONFIGURAÇÃO</h2>
                 </div>
                 
                 <div class="field">
@@ -44,13 +44,13 @@
                 </div>
 
                 <div class="field">
-                    <label>FOTOS DOS ESTUDANTES:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
+                    <label>TURMA:</label>
+                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno">
                 </div>
 
                 <div class="field">
-                    <label>TURMA:</label>
-                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno">
+                    <label>FOTOS DOS ESTUDANTES:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
                 </div>
 
                 <button class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
