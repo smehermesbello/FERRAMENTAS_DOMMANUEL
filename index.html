@@ -1,69 +1,35 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>SISTEMA DOM MANUEL - GESTÃO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="main-window">
-        <img src="LOGO.png" alt="Logo" class="corner-logo" style="position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100;">
-
-        <div id="screen-menu" class="screen">
-            <h1 style="color: #1a1a1a; margin-bottom: 10px;">FERRAMENTAS DOM MANUEL</h1>
-            <div class="button-grid">
-                <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
-                <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
-                <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
-                <button class="btn-liquid" onclick="openConfig('cardapio')">🍽️ CARDÁPIO</button>
-                <button class="btn-liquid" onclick="openConfig('formatacao')">📄 FORMATAÇÃO</button>
-                <button class="btn-liquid" disabled style="opacity: 0.6;">📋 LISTAGEM</button>
-            </div>
-        </div>
-
-        <div id="screen-config" class="screen hidden">
-            <div style="background: rgba(255,255,255,0.3); padding: 30px; border-radius: 25px; width: 450px;">
-                <button class="btn-back" onclick="showScreen('screen-menu')" style="margin-bottom:20px; font-size: 10pt;">← VOLTAR</button>
-                <h2 id="config-title" style="margin-bottom: 20px;">CONFIGURAÇÃO</h2>
-                
-                <div style="margin-bottom: 15px;">
-                    <label>FOTOS DOS ESTUDANTES:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple style="width:100%; margin-top:10px;">
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label>TURNO:</label>
-                    <div class="switch-container" onclick="toggleTurno()">
-                        <input type="checkbox" id="turno-toggle" style="display:none;">
-                        <div class="switch-handle"></div>
-                        <span class="switch-option">☀️ MANHÃ</span>
-                        <span class="switch-option">🌙 TARDE</span>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <label>TURMA:</label>
-                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" style="width:100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
-                </div>
-
-                <button class="btn-execute" onclick="executarGeracao()" style="width:100%; background: #27ae60; color: white;">GERAR PRÉVIA</button>
-            </div>
-        </div>
-
-        <div id="screen-preview" class="screen hidden" style="padding:0;">
-            <div style="width:100%; display:flex; justify-content: space-between; padding: 15px 30px; background: rgba(0,0,0,0.7); position: sticky; top:0; z-index:1000;">
-                <button class="btn-back-small" onclick="showScreen('screen-config')" style="color:white; border-color:white;">← AJUSTAR</button>
-                <div id="download-buttons"></div>
-            </div>
-            <div id="pdf-area-wrapper" style="background:#333; flex:1; width:100%; display:flex; flex-direction:column; align-items:center; overflow-y:auto;">
-                <div id="pdf-area"></div>
-            </div>
-        </div>
+<div id="screen-menu" class="screen">
+    <h1 style="margin-bottom: 20px;">FERRAMENTAS DOM MANUEL</h1>
+    <div class="button-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 900px;">
+        <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
+        <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
+        <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
+        <button class="btn-liquid" onclick="openConfig('cardapio')">🍽️ CARDÁPIO</button>
+        <button class="btn-liquid" onclick="openConfig('formatacao')">📄 FORMATAÇÃO</button>
+        <button class="btn-liquid" disabled style="opacity:0.5">📋 LISTAGEM</button>
     </div>
+</div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+<div id="screen-config" class="screen hidden">
+    <div class="glass-card" style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 25px; border: 1px solid white; width: 400px;">
+        <button class="btn-back" onclick="showScreen('screen-menu')" style="margin-bottom:15px; font-size:10pt;">← VOLTAR</button>
+        <h2 id="config-title">CONFIGURAÇÃO</h2>
+        
+        <div style="margin: 20px 0;">
+            <label>TURNO:</label>
+            <div class="toggle-switch" onclick="toggleTurno()">
+                <div id="switch-knob"></div>
+                <span class="option">MANHÃ</span>
+                <span class="option">TARDE</span>
+            </div>
+            <input type="checkbox" id="turno-checkbox" style="display:none;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label>FOTOS:</label>
+            <input type="file" id="file-input" multiple style="width:100%; margin-top:10px;">
+        </div>
+
+        <button class="btn-execute" onclick="executarGeracao()" style="width:100%; background:#27ae60; color:white;">GERAR PRÉVIA</button>
+    </div>
+</div>
