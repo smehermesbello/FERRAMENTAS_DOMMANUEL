@@ -1,5 +1,4 @@
 let currentMode = 'etiqueta';
-let objectUrls = [];
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
@@ -8,7 +7,6 @@ function showScreen(id) {
 
 function openConfig(mode) {
     currentMode = mode;
-    document.getElementById('config-title').innerText = mode.toUpperCase();
     showScreen('screen-config');
 }
 
@@ -26,36 +24,24 @@ async function executarGeracao() {
     if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
-    area.innerHTML = `<div style="color:white; text-align:center; margin-top:80px;">
-                        <h2 id="prog-txt">Iniciando Processamento...</h2>
-                        <div style="width:200px; height:4px; background:#444; margin:20px auto; border-radius:2px; overflow:hidden;">
-                            <div id="bar" style="width:0%; height:100%; background:#27ae60; transition:0.3s;"></div>
-                        </div>
-                      </div>`;
-
-    // Limpeza de memória anterior
-    objectUrls.forEach(url => URL.revokeObjectURL(url));
-    objectUrls = [];
+    area.innerHTML = `<div style="color:white; text-align:center; margin-top:80px;"><h2>⚙️ PROCESSANDO...</h2><p>Organizando arquivos para evitar travamentos.</p></div>`;
 
     const files = Array.from(input.files);
-    const data = files.map(f => {
-        const url = URL.createObjectURL(f);
-        objectUrls.push(url);
-        return { url, nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase() };
-    });
+    const data = files.map(f => ({
+        url: URL.createObjectURL(f),
+        nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
+    }));
 
-    // Renderização por Lotes (Chunking) para evitar travamento
-    const chunkSize = 8;
+    // Chunking: Processa 8 fotos por vez para não congelar o navegador
     area.innerHTML = ""; 
-
+    const chunkSize = 8;
     for (let i = 0; i < data.length; i += chunkSize) {
         const chunk = data.slice(i, i + chunkSize);
+        await new Promise(r => setTimeout(r, 150)); // Pausa para renderização
         
-        // Atualiza interface antes de renderizar lote
-        await new Promise(r => setTimeout(r, 50)); 
-        
-        if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
-        else if (currentMode === 'cracha') renderCrachaPage(chunk);
+        if (currentMode === 'cracha') renderCrachaPage(chunk);
+        else if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
+        else if (currentMode === 'carometro') renderCarometroPage(chunk);
     }
     
     setupBtns(['pdf']);
@@ -64,22 +50,26 @@ async function executarGeracao() {
 function renderCrachaPage(chunk) {
     const area = document.getElementById('pdf-area');
     const isTarde = document.getElementById('turno-checkbox').checked;
-    const turma = document.getElementById('input-turma').value || "TURMA NÃO DEFINIDA";
+    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA";
+    const turno = isTarde ? 'TARDE' : 'MANHÃ';
     
     const page = document.createElement('div');
     page.className = 'page-a4';
     chunk.forEach(item => {
         page.innerHTML += `
-        <div style="width:92mm; height:60mm; border:1px solid #555; background:white; display:flex; flex-direction:column; margin:2mm;">
-            <div style="height:14mm; border-bottom:1px solid #eee; display:flex; align-items:center; padding:5px;">
-                <img src="LOGO.png" style="height:11mm;">
-                <div style="flex:1; text-align:center; font-size:7pt; font-weight:bold; line-height:1.1;">EM DOM MANUEL D'ELBOUX</div>
+        <div class="item-border" style="width:92mm; height:60mm; display:flex; flex-direction:column;">
+            <div style="height:16mm; border-bottom:0.5pt solid #ccc; display:flex; align-items:center; padding:5px; gap:8px;">
+                <img src="LOGO.png" style="height:12mm;">
+                <div style="flex:1; text-align:center;">
+                    <div style="font-family:'SFT-Round'; font-size:8pt; font-weight:900;">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</div>
+                    <div style="font-size:6.5pt;">Fone: 3262-1627 / (41) 9107-9242</div>
+                </div>
             </div>
-            <div style="flex:1; display:flex; align-items:center; padding:10px; gap:12px;">
-                <img src="${item.url}" style="width:30mm; height:36mm; object-fit:cover; border-radius:5px; border:1px solid #ddd;">
-                <div style="text-align:center; flex:1;">
-                    <div style="font-family:'SFT-Round'; font-size:13pt; color:#1a1a1a;" contenteditable="true">🎫 ${item.nome}</div>
-                    <div style="font-size:8.5pt; color:#666; margin-top:8px; font-weight:600;">${turma}<br>TURNO: ${isTarde?'TARDE':'MANHÃ'}</div>
+            <div style="flex:1; display:flex; align-items:center; padding:8px; gap:12px;">
+                <img src="${item.url}" style="width:30mm; height:36mm; object-fit:cover; border-radius:8px; border:1px solid #eee;">
+                <div style="flex:1; text-align:center; display:flex; flex-direction:column; justify-content:center;">
+                    <div style="font-family:'SFT-Round'; font-size:13pt; line-height:1.2;" contenteditable="true">${item.nome}</div>
+                    <div style="font-size:9pt; margin-top:8px; color:#444;">${turma} - ${turno}</div>
                 </div>
             </div>
         </div>`;
@@ -96,10 +86,10 @@ function renderEtiquetaPage(chunk) {
     page.className = 'page-a4';
     chunk.forEach(item => {
         page.innerHTML += `
-        <div style="width:92mm; height:65mm; border:1px solid #ccc; display:flex; flex-direction:column; padding:3mm;">
-            <div style="border-bottom:2.5pt dotted ${cor}; padding-bottom:6px; margin-bottom:10px; display:flex; align-items:center;">
-                <img src="LOGO.png" style="height:11mm; margin-right:12px;">
-                <span style="font-size:8.5pt; font-weight:700; color:#333;">DOM MANUEL D'ELBOUX</span>
+        <div class="item-border" style="width:92mm; height:65mm; display:flex; flex-direction:column; padding:3mm; border: 2pt solid #000;">
+            <div style="border-bottom:2.5pt dotted ${cor}; padding-bottom:5px; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
+                <img src="LOGO.png" style="height:11mm;">
+                <span style="font-family:'SFT-Round'; font-size:8.5pt; font-weight:900;">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</span>
             </div>
             <div style="flex:1; display:flex; align-items:center; gap:15px;">
                 <img src="${item.url}" style="width:34mm; height:42mm; object-fit:cover; border:2.5pt solid ${cor}; border-radius:5px;">
@@ -114,7 +104,7 @@ function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
     if (types.includes('pdf')) {
-        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:42px; width:150px; font-size:10pt; background:#e74c3c; color:white; margin:0;">BAIXAR PDF</button>`;
+        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:42px; width:150px; font-size:10pt; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
     }
 }
 
@@ -122,9 +112,9 @@ async function doPDF() {
     const element = document.getElementById('pdf-area');
     const opt = {
         margin: 0,
-        filename: 'Sistema_DomManuel.pdf',
+        filename: 'Documentos_DomManuel.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'p' }
     };
     html2pdf().set(opt).from(element).save();
