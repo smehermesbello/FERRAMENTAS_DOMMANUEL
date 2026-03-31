@@ -6,7 +6,6 @@
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,7 +20,7 @@
                 <button class="btn-liquid" onclick="openConfig('cracha')">🎫 CRACHÁ</button>
                 <button class="btn-liquid" onclick="openConfig('cardapio')">🍽️ CARDÁPIO</button>
                 <button class="btn-liquid" onclick="openConfig('formatacao')">📄 FORMATAÇÃO</button>
-                <button class="btn-liquid" disabled style="opacity: 0.5; cursor: not-allowed;">📋 LISTAGEM</button>
+                <button class="btn-liquid" disabled style="opacity: 0.5;">📋 LISTAGEM</button>
             </div>
         </div>
 
@@ -35,7 +34,7 @@
                 <div class="field">
                     <label>TURNO:</label>
                     <div class="toggle-container" onclick="toggleTurno()">
-                        <div class="toggle-switch">
+                        <div class="toggle-switch" id="sw-element">
                             <div id="switch-knob"></div>
                             <span class="option">☀️ MANHÃ</span>
                             <span class="option">🌙 TARDE</span>
