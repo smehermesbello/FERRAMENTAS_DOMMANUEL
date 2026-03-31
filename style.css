@@ -1,109 +1,129 @@
-@font-face {
-    font-family: 'SFT-Round';
-    src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
+let currentMode = 'etiqueta';
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
 }
 
-:root { 
-    --verde: #4A5D23; 
-    --azul: #003399; 
-    --glass: rgba(255, 255, 255, 0.2);
-    --border: rgba(255, 255, 255, 0.4);
+function openConfig(mode) {
+    currentMode = mode;
+    document.getElementById('config-title').innerText = mode.toUpperCase();
+    showScreen('screen-config');
 }
 
-* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-body {
-    margin: 0; padding: 0; height: 100vh;
-    background: url('FUNDO.png') center/cover no-repeat fixed;
-    font-family: 'Fredoka', sans-serif;
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
+function toggleTurno() {
+    const sw = document.querySelector('.toggle-switch');
+    const cb = document.getElementById('turno-checkbox');
+    sw.classList.toggle('active');
+    cb.checked = sw.classList.contains('active');
 }
 
-.main-window {
-    background: var(--glass); backdrop-filter: blur(25px);
-    width: 95vw; height: 92vh; border-radius: 30px; position: relative;
-    border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
-    z-index: 1;
+async function executarGeracao() {
+    const input = document.getElementById('file-input');
+    const area = document.getElementById('pdf-area');
+    
+    if (!input.files || input.files.length === 0) return alert("SELECIONE AS FOTOS.");
+
+    showScreen('screen-preview');
+    area.innerHTML = `
+        <div style="color:white; text-align:center; margin-top:100px;">
+            <h2 id="status-text">PROCESSANDO IMAGENS...</h2>
+            <p>Aguarde, organizando layout sem travar o navegador.</p>
+        </div>`;
+
+    // Criar array de dados
+    const filesArray = Array.from(input.files);
+    const filesData = filesArray.map(f => ({
+        url: URL.createObjectURL(f),
+        nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
+    }));
+
+    // Processar em "chunks" (pedaços) para não travar
+    setTimeout(() => {
+        if (currentMode === 'etiqueta') renderEtiquetas(filesData);
+        else if (currentMode === 'cracha') renderCrachas(filesData);
+        else if (currentMode === 'carometro') renderCarometro(filesData);
+        else {
+            area.innerHTML = "<h2 style='color:white; text-align:center; margin-top:100px;'>FUNÇÃO EM BREVE</h2>";
+            setupBtns([]);
+        }
+    }, 500);
 }
 
-.corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; pointer-events: none; }
+function renderCrachas(data) {
+    const area = document.getElementById('pdf-area');
+    const isTarde = document.getElementById('turno-checkbox').checked;
+    const turno = isTarde ? 'TARDE' : 'MANHÃ';
+    const turma = document.getElementById('input-turma').value.toUpperCase() || "GERAL";
+    area.innerHTML = "";
 
-.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; z-index: 2; }
-.hidden { display: none !important; }
-
-.main-title { color: #1a1a1a; margin-bottom: 30px; text-shadow: 0 2px 4px rgba(255,255,255,0.5); }
-
-/* GRADE DE BOTÕES (3x2) */
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
-    max-width: 900px;
+    for (let i = 0; i < data.length; i += 8) {
+        const page = document.createElement('div');
+        page.className = 'page-a4';
+        data.slice(i, i + 8).forEach(item => {
+            page.innerHTML += `
+            <div style="width:92mm; height:60mm; border:1px solid #444; background:white; display:flex; flex-direction:column; margin:2mm;">
+                <div style="height:14mm; border-bottom:1px solid #ddd; display:flex; align-items:center; padding:5px;">
+                    <img src="LOGO.png" style="height:11mm;">
+                    <div style="flex:1; text-align:center; font-size:7pt; font-weight:bold; line-height:1;">EM DOM MANUEL D'ELBOUX</div>
+                </div>
+                <div style="flex:1; display:flex; align-items:center; padding:8px; gap:12px;">
+                    <img src="${item.url}" style="width:30mm; height:36mm; object-fit:cover; border-radius:6px; border:1px solid #eee;">
+                    <div style="text-align:center; flex:1;">
+                        <div style="font-family:'SFT-Round'; font-size:13pt; line-height:1.1;" contenteditable="true">🎫 ${item.nome}</div>
+                        <div style="font-size:8pt; margin-top:6px; color:#666;">${turma}<br>TURNO: ${turno}</div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        area.appendChild(page);
+    }
+    setupBtns(['pdf']);
 }
 
-/* BOTÕES UNIFORMES LIQUID GLASS */
-.btn-liquid, .btn-execute, .btn-back, .btn-back-small {
-    all: unset;
-    height: 80px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    color: #1a1a1a;
-    font-weight: 700;
-    font-size: 13pt;
-    cursor: pointer;
-    transition: 0.3s ease;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+function renderEtiquetas(data) {
+    const area = document.getElementById('pdf-area');
+    const isTarde = document.getElementById('turno-checkbox').checked;
+    const cor = isTarde ? '#003399' : '#4A5D23';
+    area.innerHTML = "";
+
+    for (let i = 0; i < data.length; i += 8) {
+        const page = document.createElement('div');
+        page.className = 'page-a4';
+        data.slice(i, i + 8).forEach(item => {
+            page.innerHTML += `
+            <div style="width:92mm; height:65mm; border:1px solid #ccc; display:flex; flex-direction:column; padding:3mm;">
+                <div style="border-bottom:2pt dotted ${cor}; padding-bottom:5px; margin-bottom:8px; display:flex; align-items:center;">
+                    <img src="LOGO.png" style="height:10mm; margin-right:10px;">
+                    <span style="font-size:7.5pt; font-weight:bold;">DOM MANUEL D'ELBOUX</span>
+                </div>
+                <div style="flex:1; display:flex; align-items:center; gap:12px;">
+                    <img src="${item.url}" style="width:32mm; height:40mm; object-fit:cover; border:2pt solid ${cor}; border-radius:4px;">
+                    <div style="font-family:'SFT-Round'; font-size:15pt; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
+                </div>
+            </div>`;
+        });
+        area.appendChild(page);
+    }
+    setupBtns(['pdf']);
 }
 
-.btn-liquid:hover, .btn-execute:hover, .btn-back:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+function setupBtns(types) {
+    const div = document.getElementById('download-buttons');
+    div.innerHTML = "";
+    if (types.includes('pdf')) {
+        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:140px; font-size:9pt; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
+    }
 }
 
-.btn-back { height: 40px; width: 120px; font-size: 10pt; margin-bottom: 20px; }
-
-/* BOTÃO DESLIZANTE (TOGGLE) */
-.toggle-container { width: 100%; margin-top: 10px; }
-.toggle-switch {
-    width: 100%; height: 55px; background: rgba(0,0,0,0.1);
-    border-radius: 28px; position: relative; display: flex;
-    align-items: center; cursor: pointer; border: 1px solid var(--border);
-}
-
-#switch-knob {
-    position: absolute; width: calc(50% - 10px); height: 45px;
-    background: white; border-radius: 23px; left: 5px;
-    transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1;
-}
-
-.toggle-switch.active #switch-knob { transform: translateX(calc(100% + 10px)); }
-.option { flex: 1; text-align: center; z-index: 2; font-weight: bold; font-size: 10pt; color: #333; pointer-events: none; }
-
-/* CONFIG CARD */
-.glass-card {
-    background: rgba(255,255,255,0.3); padding: 30px; border-radius: 25px;
-    border: 1px solid white; width: 450px; display: flex; flex-direction: column;
-}
-
-.field { margin-bottom: 20px; display: flex; flex-direction: column; }
-.input-moderno {
-    padding: 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);
-    background: rgba(255,255,255,0.5); font-family: 'Fredoka', sans-serif; margin-top: 5px;
-}
-
-/* ÁREA DE PRÉVIA */
-.preview-toolbar { background: rgba(0,0,0,0.8); width: 100%; padding: 15px 30px; display: flex; justify-content: space-between; z-index: 1000; }
-#pdf-area-wrapper { background: #222; flex: 1; width: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
-
-.page-a4 {
-    width: 210mm; height: 296mm; background: white !important;
-    display: grid; grid-template-columns: repeat(2, 92mm); grid-template-rows: repeat(4, 65mm);
-    justify-content: center; align-content: start; gap: 4mm;
-    page-break-after: always; margin-bottom: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+async function doPDF() {
+    const element = document.getElementById('pdf-area');
+    const opt = {
+        margin: 0,
+        filename: 'DomManuel_Documento.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'p' }
+    };
+    html2pdf().set(opt).from(element).save();
 }
