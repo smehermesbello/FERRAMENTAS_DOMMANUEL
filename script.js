@@ -21,7 +21,7 @@ function toggleTurno() {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
-    if (!input.files || input.files.length === 0) return alert("SELECIONE AS FOTOS.");
+    if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
     area.innerHTML = `<div style="color:white; text-align:center; margin-top:100px;"><h2>⚙️ PROCESSANDO...</h2></div>`;
@@ -45,7 +45,7 @@ async function executarGeracao() {
 
 function renderCrachaPage(chunk) {
     const page = document.createElement('div');
-    page.className = 'page-a4';
+    page.className = 'pdf-page page-a4';
     const isTarde = document.getElementById('turno-checkbox').checked;
     const turma = document.getElementById('input-turma').value || "TURMA";
     chunk.forEach(item => {
@@ -66,14 +66,14 @@ function renderCrachaPage(chunk) {
 
 function renderEtiquetaPage(chunk) {
     const page = document.createElement('div');
-    page.className = 'page-a4';
+    page.className = 'pdf-page page-a4';
     const isTarde = document.getElementById('turno-checkbox').checked;
     const cor = isTarde ? '#003399' : '#4A5D23';
     chunk.forEach(item => {
         page.innerHTML += `
         <div class="item-etiqueta">
             <div style="border-bottom:2pt dotted ${cor}; margin-bottom:5px; display:flex; align-items:center;">
-                <img src="LOGO.png" style="height:8mm; margin-right:5px;"> ESCOLA DOM MANUEL
+                <img src="LOGO.png" style="height:8mm; margin-right:5px;"> DOM MANUEL
             </div>
             <div style="display:flex; align-items:center; gap:10px; flex:1;">
                 <img src="${item.url}" style="width:30mm; height:40mm; object-fit:cover; border:2pt solid ${cor};">
@@ -86,11 +86,10 @@ function renderEtiquetaPage(chunk) {
 
 function renderCarometroPage(item) {
     const page = document.createElement('div');
-    page.className = 'page-widescreen';
+    page.className = 'pdf-page page-widescreen';
     const isTarde = document.getElementById('turno-checkbox').checked;
     const bgImg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
     
-    // Layout Robusto: Imagem de fundo real para evitar falhas de captura do html2canvas
     page.innerHTML = `
         <img src="${bgImg}" class="carometro-bg">
         <div class="carometro-content">
@@ -112,17 +111,14 @@ async function doPDF() {
     
     const opt = {
         margin: 0,
-        filename: `Sistema_Dom_Manuel_${currentMode}.pdf`,
+        filename: `Sistema_Dom_Manuel.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { 
-            unit: 'mm', 
-            format: isW ? [338, 190] : 'a4', 
-            orientation: isW ? 'l' : 'p' 
-        },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: isW ? '.page-widescreen' : '.page-a4' }
+        html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: isW ? [338, 189] : 'a4', orientation: isW ? 'l' : 'p' },
+        pagebreak: { mode: ['css', 'legacy'], before: '.pdf-page' }
     };
 
-    // Gera o PDF
+    // Pequena pausa para o canvas reconhecer as imagens injetadas
+    await new Promise(r => setTimeout(r, 500));
     html2pdf().set(opt).from(element).save();
 }
