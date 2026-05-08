@@ -21,7 +21,7 @@ function toggleTurno() {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
-    if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
+    if (!input.files || input.files.length === 0) return alert("SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
     area.innerHTML = `<div style="color:white; text-align:center; margin-top:100px;"><h2>⚙️ PROCESSANDO...</h2></div>`;
@@ -40,26 +40,18 @@ async function executarGeracao() {
         else if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
         else if (currentMode === 'carometro') renderCarometroPage(chunk[0]);
     }
-    
-    setupBtns(['pdf']);
+    setupBtns();
 }
 
 function renderCrachaPage(chunk) {
-    const area = document.getElementById('pdf-area');
     const page = document.createElement('div');
-    page.className = 'html2pdf__page-break page-a4'; // Adicionada classe de quebra específica
+    page.className = 'page-a4';
     const isTarde = document.getElementById('turno-checkbox').checked;
-    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA";
-
+    const turma = document.getElementById('input-turma').value || "TURMA";
     chunk.forEach(item => {
         page.innerHTML += `
         <div class="item-cracha">
-            <div class="header-cracha">
-                <img src="LOGO.png" style="height:12mm;">
-                <div style="flex:1; text-align:center;">
-                    <div class="titulo-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</div>
-                </div>
-            </div>
+            <div class="header-cracha"><img src="LOGO.png" style="height:10mm;"> <span>DOM MANUEL</span></div>
             <div class="body-cracha">
                 <img src="${item.url}" class="foto-estudante">
                 <div class="info-estudante">
@@ -69,62 +61,61 @@ function renderCrachaPage(chunk) {
             </div>
         </div>`;
     });
-    area.appendChild(page);
+    document.getElementById('pdf-area').appendChild(page);
 }
 
 function renderEtiquetaPage(chunk) {
-    const area = document.getElementById('pdf-area');
     const page = document.createElement('div');
-    page.className = 'html2pdf__page-break page-a4';
+    page.className = 'page-a4';
     const isTarde = document.getElementById('turno-checkbox').checked;
     const cor = isTarde ? '#003399' : '#4A5D23';
-
     chunk.forEach(item => {
         page.innerHTML += `
         <div class="item-etiqueta">
-            <div style="border-bottom:2pt dotted ${cor}; margin-bottom:5px; display:flex; align-items:center; gap:10px;">
-                <img src="LOGO.png" style="height:10mm;">
-                <span class="titulo-escola">ESCOLA DOM MANUEL</span>
+            <div style="border-bottom:2pt dotted ${cor}; margin-bottom:5px; display:flex; align-items:center;">
+                <img src="LOGO.png" style="height:8mm; margin-right:5px;"> ESCOLA DOM MANUEL
             </div>
-            <div style="flex:1; display:flex; align-items:center; gap:10px;">
+            <div style="display:flex; align-items:center; gap:10px; flex:1;">
                 <img src="${item.url}" style="width:30mm; height:40mm; object-fit:cover; border:2pt solid ${cor};">
                 <div class="nome-estudante-etiqueta">${item.nome}</div>
             </div>
         </div>`;
     });
-    area.appendChild(page);
+    document.getElementById('pdf-area').appendChild(page);
 }
 
 function renderCarometroPage(item) {
-    const area = document.getElementById('pdf-area');
     const page = document.createElement('div');
-    page.className = 'html2pdf__page-break page-widescreen';
+    page.className = 'page-widescreen';
     const isTarde = document.getElementById('turno-checkbox').checked;
-    page.style.background = `url(${isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg'}) center/cover`;
+    const bgImg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
+    
+    // Solução: Fundo como imagem real em vez de CSS background
     page.innerHTML = `
-        <img src="${item.url}" class="foto-carometro">
-        <div class="nome-carometro">${item.nome}</div>
+        <img src="${bgImg}" class="carometro-bg">
+        <div class="carometro-content">
+            <img src="${item.url}" class="foto-carometro">
+            <div class="nome-carometro">${item.nome}</div>
+        </div>
     `;
-    area.appendChild(page);
+    document.getElementById('pdf-area').appendChild(page);
 }
 
-function setupBtns(types) {
+function setupBtns() {
     const div = document.getElementById('download-buttons');
-    div.innerHTML = `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:140px; background:#c0392b; color:white;">BAIXAR PDF</button>`;
+    div.innerHTML = `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:140px; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
 }
 
 async function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
-    
     const opt = {
         margin: 0,
-        filename: `Sistema_Dom_Manuel_${currentMode}.pdf`,
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        filename: `Sistema_Dom_Manuel.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true },
         jsPDF: { unit: 'mm', format: isW ? [338, 190] : 'a4', orientation: isW ? 'l' : 'p' },
-        pagebreak: { mode: 'css' } // Força a quebra baseada puramente na classe CSS
+        pagebreak: { mode: 'css', before: '.page-a4, .page-widescreen' }
     };
-
     html2pdf().set(opt).from(element).save();
 }
