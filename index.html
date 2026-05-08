@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="main-window">
-        <img src="LOGO.png" class="corner-logo">
+        <img src="LOGO.png" class="corner-logo" alt="Logo">
 
         <div id="screen-menu" class="screen">
             <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
@@ -18,6 +18,9 @@
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
+                <button class="btn-liquid" onclick="openConfig('cardapio')">🍽️ CARDÁPIO</button>
+                <button class="btn-liquid" onclick="openConfig('formatacao')">📄 FORMATAÇÃO</button>
+                <button class="btn-liquid" disabled style="opacity: 0.5;">📋 LISTAGEM</button>
             </div>
         </div>
 
@@ -27,6 +30,7 @@
                     <button class="btn-back-small" onclick="showScreen('screen-menu')">← VOLTAR</button>
                     <h2 id="config-title">CONFIGURAÇÃO</h2>
                 </div>
+                
                 <div class="field">
                     <label>TURNO:</label>
                     <div class="toggle-container" onclick="toggleTurno()">
@@ -38,14 +42,17 @@
                     </div>
                     <input type="checkbox" id="turno-checkbox" style="display:none;">
                 </div>
+
                 <div class="field">
                     <label>TURMA:</label>
                     <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno">
                 </div>
+
                 <div class="field">
                     <label>FOTOS DOS ESTUDANTES:</label>
                     <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
                 </div>
+
                 <button class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
