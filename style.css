@@ -7,7 +7,7 @@
 
 * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; }
 
-body { margin: 0; padding: 0; background: url('FUNDO.png') center/cover; font-family: 'Fredoka', sans-serif; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+body { margin: 0; background: url('FUNDO.png') center/cover; font-family: 'Fredoka', sans-serif; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
 .main-window { background: var(--glass); backdrop-filter: blur(20px); width: 95vw; height: 92vh; border-radius: 30px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border); position: relative; }
 .corner-logo { position: absolute; top: 20px; right: 25px; width: 70px; z-index: 100; }
@@ -15,49 +15,30 @@ body { margin: 0; padding: 0; background: url('FUNDO.png') center/cover; font-fa
 .hidden { display: none !important; }
 
 .button-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; max-width: 900px; }
-.btn-liquid, .btn-execute, .btn-back-small { all: unset; height: 60px; border-radius: 15px; background: rgba(255, 255, 255, 0.2); border: 1px solid var(--border); color: #1a1a1a; font-weight: 700; cursor: pointer; text-align: center; transition: 0.2s; }
-.btn-liquid:hover { background: rgba(255, 255, 255, 0.4); }
+.btn-liquid, .btn-execute, .btn-back-small { all: unset; height: 60px; border-radius: 15px; background: rgba(255, 255, 255, 0.2); border: 1px solid var(--border); color: #1a1a1a; font-weight: 700; cursor: pointer; text-align: center; }
 
 .preview-toolbar { background: #000; width: 100%; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
 #pdf-area-wrapper { background: #333; flex: 1; overflow-y: auto; width: 100%; padding: 20px 0; }
 
-/* CONFIGURAÇÃO DE PÁGINA ROBUSTA */
-.page-a4 {
-    width: 210mm;
-    height: 295mm; /* Altura reduzida para margem de segurança técnica */
-    background: white !important;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 92mm);
-    grid-template-rows: repeat(4, 65mm);
-    justify-content: center;
-    gap: 2mm;
-    padding-top: 10mm;
-    overflow: hidden;
-    page-break-after: always; /* Importante para o html2pdf */
+/* PAGINACAO */
+.page-a4 { width: 210mm; height: 295mm; background: white !important; margin: 0 auto 10px auto; display: grid; grid-template-columns: repeat(2, 92mm); grid-template-rows: repeat(4, 65mm); justify-content: center; padding-top: 10mm; overflow: hidden; page-break-after: always; }
+
+.page-widescreen { 
+    width: 338mm; height: 189mm; margin: 0 auto; 
+    position: relative; overflow: hidden; page-break-after: always;
+    display: flex; align-items: center; justify-content: center;
 }
 
-.page-widescreen {
-    width: 338mm;
-    height: 190mm;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    page-break-after: always;
-}
+/* FIX PARA O CAROMETRO */
+.carometro-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.carometro-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 
-/* ITENS INTERNOS */
-.item-cracha { width: 92mm; height: 60mm; border: 1px solid #000; display: flex; flex-direction: column; padding: 2mm; }
-.header-cracha { display: flex; align-items: center; gap: 5px; border-bottom: 1px solid #000; padding-bottom: 2px; }
-.body-cracha { flex: 1; display: flex; align-items: center; gap: 10px; padding-top: 5px; }
-.foto-estudante { width: 28mm; height: 35mm; object-fit: cover; }
+.item-cracha { width: 92mm; height: 60mm; border: 1px solid #000; display: flex; flex-direction: column; padding: 2mm; background: white; }
 .nome-estudante-cracha { font-family: 'SFT-Round'; font-size: 14pt; font-weight: 900; }
+.foto-estudante { width: 28mm; height: 35mm; object-fit: cover; }
 
-.item-etiqueta { width: 92mm; height: 63mm; border: 1.5pt solid #000; padding: 2mm; display: flex; flex-direction: column; }
-.nome-estudante-etiqueta { font-family: 'SFT-Round'; font-size: 16pt; text-align: center; font-weight: 900; flex: 1; display: flex; align-items: center; }
+.item-etiqueta { width: 92mm; height: 63mm; border: 1px solid #000; padding: 2mm; display: flex; flex-direction: column; background: white; }
+.nome-estudante-etiqueta { font-family: 'SFT-Round'; font-size: 16pt; font-weight: 900; flex: 1; display: flex; align-items: center; text-align: center; }
 
-.foto-carometro { width: 10cm; height: 13cm; object-fit: cover; border: 5px solid white; border-radius: 10px; }
+.foto-carometro { width: 10cm; height: 13cm; object-fit: cover; border: 5px solid white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .nome-carometro { font-family: 'SFT-Round'; font-size: 40pt; color: white; text-shadow: 2px 2px 8px #000; margin-top: 15px; }
