@@ -21,7 +21,6 @@ function toggleTurno() {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
-    
     if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
@@ -34,17 +33,13 @@ async function executarGeracao() {
         url: URL.createObjectURL(f),
         nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
     }));
-
-    area.innerHTML = "";
     
-    // Processamento por lotes (Chunking) para estabilidade total
+    area.innerHTML = "";
     const chunkSize = (currentMode === 'carometro') ? 1 : 8; 
 
     for (let i = 0; i < data.length; i += chunkSize) {
         const chunk = data.slice(i, i + chunkSize);
-        // Pequena pausa para o navegador não "congelar" a tela
-        await new Promise(r => setTimeout(r, 100)); 
-
+        await new Promise(r => setTimeout(r, 100));
         if (currentMode === 'cracha') renderCrachaPage(chunk);
         else if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
         else if (currentMode === 'carometro') renderCarometroPage(chunk[0]);
@@ -73,7 +68,7 @@ function renderCrachaPage(chunk) {
             <div class="body-cracha">
                 <img src="${item.url}" class="foto-estudante">
                 <div class="info-estudante">
-                    <div class="nome-estudante-cracha" contenteditable="true">${item.nome}</div>
+                   <div class="nome-estudante-cracha" contenteditable="true">${item.nome}</div>
                     <div class="turma-turno-cracha">${turma}<br>${isTarde?'TARDE':'MANHÃ'}</div>
                 </div>
             </div>
@@ -131,12 +126,19 @@ function setupBtns(types) {
 async function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
+    
     const opt = {
         margin: 0,
         filename: 'DomManuel_Documento.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' }
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338.67, 190.5] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        },
+        // Correção crucial: Evita quebras desnecessárias e define o ponto exato de nova página
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: isW ? '.page-widescreen' : '.page-a4' }
     };
     html2pdf().set(opt).from(element).save();
 }
