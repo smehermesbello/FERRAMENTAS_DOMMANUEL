@@ -21,7 +21,7 @@ function toggleTurno() {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
-    if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
+    if (!input.files || input.files.length === 0) return alert("SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
     area.innerHTML = `<div style="color:white; text-align:center; margin-top:100px;"><h2>⚙️ PROCESSANDO...</h2></div>`;
@@ -73,7 +73,7 @@ function renderEtiquetaPage(chunk) {
         page.innerHTML += `
         <div class="item-etiqueta">
             <div style="border-bottom:2pt dotted ${cor}; margin-bottom:5px; display:flex; align-items:center;">
-                <img src="LOGO.png" style="height:8mm; margin-right:5px;"> DOM MANUEL
+                <img src="LOGO.png" style="height:8mm; margin-right:5px;"> ESCOLA DOM MANUEL
             </div>
             <div style="display:flex; align-items:center; gap:10px; flex:1;">
                 <img src="${item.url}" style="width:30mm; height:40mm; object-fit:cover; border:2pt solid ${cor};">
@@ -109,16 +109,29 @@ async function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
     
+    // A mágica para eliminar páginas em branco está aqui: 
+    // format exato e modo de quebra que ignora "vazios".
     const opt = {
         margin: 0,
-        filename: `Sistema_Dom_Manuel.pdf`,
+        filename: `DomManuel_${currentMode}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: isW ? [338, 189] : 'a4', orientation: isW ? 'l' : 'p' },
-        pagebreak: { mode: ['css', 'legacy'], before: '.pdf-page' }
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            logging: false,
+            scrollY: 0,
+            windowWidth: isW ? 1280 : 794 // Estabiliza a largura do viewport de captura
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338, 189] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        },
+        pagebreak: { mode: 'avoid-all', before: '.pdf-page' }
     };
 
-    // Pequena pausa para o canvas reconhecer as imagens injetadas
-    await new Promise(r => setTimeout(r, 500));
+    // Forçamos o scroll para o topo antes de capturar (essencial!)
+    document.getElementById('pdf-area-wrapper').scrollTop = 0;
+
     html2pdf().set(opt).from(element).save();
 }
