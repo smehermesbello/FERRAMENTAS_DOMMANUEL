@@ -21,136 +21,79 @@ function toggleTurno() {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
-    
-    if (!input.files || input.files.length === 0) 
-        return alert("POR FAVOR, SELECIONE AS FOTOS.");
+    if (!input.files || input.files.length === 0) return alert("Selecione as fotos.");
 
     showScreen('screen-preview');
-    area.innerHTML = `<div style="color:white; text-align:center; margin-top:100px;">
-                        <h2>⚙️ PROCESSANDO...</h2>
-                        <p>A organizar layout para evitar travamentos.</p>
-                      </div>`;
+    area.innerHTML = "";
 
     const data = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
         nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
     }));
-
-    area.innerHTML = "";
     
     const chunkSize = (currentMode === 'carometro') ? 1 : 8; 
 
     for (let i = 0; i < data.length; i += chunkSize) {
         const chunk = data.slice(i, i + chunkSize);
-        await new Promise(r => setTimeout(r, 100));
-
-        if (currentMode === 'cracha') renderCrachaPage(chunk);
-        else if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
-        else if (currentMode === 'carometro') renderCarometroPage(chunk[0]);
-    }
-    
-    setupBtns(['pdf']);
-}
-
-function renderCrachaPage(chunk) {
-    const area = document.getElementById('pdf-area');
-    const isTarde = document.getElementById('turno-checkbox').checked;
-    const turma = document.getElementById('input-turma').value.toUpperCase() || "TURMA NÃO INFORMADA";
-    
-    const page = document.createElement('div');
-    page.className = 'page-a4';
-    chunk.forEach(item => {
-        page.innerHTML += `
-        <div class="item-cracha">
-            <div class="header-cracha">
-                <img src="LOGO.png" style="height:12mm;">
-                <div style="flex:1; text-align:center;">
-                    <div class="titulo-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</div>
-                    <div class="fone-escola">Fone: 3262-1627 / (41) 9107-9242</div>
+        const page = document.createElement('div');
+        page.className = (currentMode === 'carometro') ? 'pdf-page page-landscape' : 'pdf-page page-portrait';
+        
+        if (currentMode === 'carometro') {
+            const isTarde = document.getElementById('turno-checkbox').checked;
+            const bgImg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
+            page.innerHTML = `
+                <img src="${bgImg}" class="carometro-bg">
+                <div class="carometro-content">
+                    <img src="${chunk[0].url}" class="foto-principal">
+                    <div class="nome-aluno">${chunk[0].nome}</div>
                 </div>
-            </div>
-            <div class="body-cracha">
-                <img src="${item.url}" class="foto-estudante">
-                <div class="info-estudante">
-                    <div class="nome-estudante-cracha" contenteditable="true">${item.nome}</div>
-                    <div class="turma-turno-cracha">${turma}<br>${isTarde?'TARDE':'MANHÃ'}</div>
-                </div>
-            </div>
-        </div>`;
-    });
-    area.appendChild(page);
-}
-
-function renderEtiquetaPage(chunk) {
-    const area = document.getElementById('pdf-area');
-    const isTarde = document.getElementById('turno-checkbox').checked;
-    const cor = isTarde ? '#003399' : '#4A5D23';
-    
-    const page = document.createElement('div');
-    page.className = 'page-a4';
-    chunk.forEach(item => {
-        page.innerHTML += `
-        <div class="item-etiqueta">
-            <div style="border-bottom:2.5pt dotted ${cor}; padding-bottom:5px; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
-                <img src="LOGO.png" style="height:11mm;">
-                <span class="titulo-escola">ESCOLA MUNICIPAL DOM MANUEL DA SILVEIRA D'ELBOUX</span>
-            </div>
-            <div style="flex:1; display:flex; align-items:center; gap:15px;">
-                <img src="${item.url}" style="width:34mm; height:42mm; object-fit:cover; border:2.5pt solid ${cor}; border-radius:5px;">
-                <div class="nome-estudante-etiqueta" contenteditable="true">${item.nome}</div>
-            </div>
-        </div>`;
-    });
-    area.appendChild(page);
-}
-
-function renderCarometroPage(item) {
-    const area = document.getElementById('pdf-area');
-    const isTarde = document.getElementById('turno-checkbox').checked;
-    const bg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
-    
-    const page = document.createElement('div');
-    page.className = 'page-widescreen';
-    page.style.background = `url(${bg})`;
-    page.innerHTML = `
-        <img src="${item.url}" class="foto-carometro">
-        <div class="nome-carometro" contenteditable="true">${item.nome}</div>
-    `;
-    area.appendChild(page);
-}
-
-function setupBtns(types) {
-    const div = document.getElementById('download-buttons');
-    div.innerHTML = "";
-    if (types.includes('pdf')) {
-        div.innerHTML += `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:140px; font-size:10pt; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
+            `;
+        } else {
+            // Renderização unificada para Crachá/Etiqueta
+            chunk.forEach(item => {
+                page.innerHTML += `
+                    <div class="item-${currentMode}">
+                        <div class="nome-estudante">${item.nome}</div>
+                    </div>`;
+            });
+        }
+        area.appendChild(page);
     }
+    setupBtns();
+}
+
+function setupBtns() {
+    document.getElementById('download-buttons').innerHTML = 
+        `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:150px; margin:0; background:#c0392b; color:white;">BAIXAR PDF</button>`;
 }
 
 async function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
     
+    // Configurações inquebráveis
     const opt = {
         margin: 0,
-        filename: 'DomManuel_Documento.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: `Sistema_Dom_Manuel_${currentMode}.pdf`,
+        image: { type: 'jpeg', quality: 1.0 },
         html2canvas: { 
             scale: 2, 
-            useCORS: true,
-            letterRendering: true,
-            scrollX: 0,
-            scrollY: 0
+            useCORS: true, 
+            logging: false,
+            scrollY: 0,
+            y: 0
         },
         jsPDF: { 
             unit: 'mm', 
-            format: isW ? [338.67, 190.5] : 'a4', 
-            orientation: isW ? 'l' : 'p'
+            // O formato do PDF é 1mm maior que o conteúdo HTML para garantir folga
+            format: isW ? [339, 191] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
         },
-        pagebreak: { 
-            mode: ['avoid-all', 'css', 'legacy']
-        }
+        pagebreak: { mode: 'avoid-all', before: '.pdf-page' }
     };
-    
+
+    // Força o scroll para o topo para evitar cortes no canvas
+    document.getElementById('pdf-area-wrapper').scrollTop = 0;
+
     html2pdf().set(opt).from(element).save();
 }
