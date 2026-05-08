@@ -21,79 +21,102 @@ function toggleTurno() {
 async function executarGeracao() {
     const input = document.getElementById('file-input');
     const area = document.getElementById('pdf-area');
-    if (!input.files || input.files.length === 0) return alert("Selecione as fotos.");
+    
+    if (!input.files || input.files.length === 0) return alert("POR FAVOR, SELECIONE AS FOTOS.");
 
     showScreen('screen-preview');
-    area.innerHTML = "";
+    area.innerHTML = `<div style="color:white; text-align:center; margin-top:100px;"><h2>⚙️ PROCESSANDO...</h2></div>`;
 
     const data = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
         nome: f.name.split('.')[0].replace(/[_-]/g, " ").toUpperCase()
     }));
-    
+
+    area.innerHTML = "";
     const chunkSize = (currentMode === 'carometro') ? 1 : 8; 
 
     for (let i = 0; i < data.length; i += chunkSize) {
         const chunk = data.slice(i, i + chunkSize);
-        const page = document.createElement('div');
-        page.className = (currentMode === 'carometro') ? 'pdf-page page-landscape' : 'pdf-page page-portrait';
-        
-        if (currentMode === 'carometro') {
-            const isTarde = document.getElementById('turno-checkbox').checked;
-            const bgImg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
-            page.innerHTML = `
-                <img src="${bgImg}" class="carometro-bg">
-                <div class="carometro-content">
-                    <img src="${chunk[0].url}" class="foto-principal">
-                    <div class="nome-aluno">${chunk[0].nome}</div>
-                </div>
-            `;
-        } else {
-            // Renderização unificada para Crachá/Etiqueta
-            chunk.forEach(item => {
-                page.innerHTML += `
-                    <div class="item-${currentMode}">
-                        <div class="nome-estudante">${item.nome}</div>
-                    </div>`;
-            });
-        }
-        area.appendChild(page);
+        if (currentMode === 'cracha') renderCrachaPage(chunk);
+        else if (currentMode === 'etiqueta') renderEtiquetaPage(chunk);
+        else if (currentMode === 'carometro') renderCarometroPage(chunk[0]);
     }
-    setupBtns();
+    setupBtns(['pdf']);
 }
 
-function setupBtns() {
-    document.getElementById('download-buttons').innerHTML = 
-        `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:150px; margin:0; background:#c0392b; color:white;">BAIXAR PDF</button>`;
+function renderCarometroPage(item) {
+    const area = document.getElementById('pdf-area');
+    const isTarde = document.getElementById('turno-checkbox').checked;
+    const bg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
+    
+    const page = document.createElement('div');
+    page.className = 'page-widescreen';
+    // Estética original mantida, mas fundo injetado de forma mais estável
+    page.style.backgroundImage = `url(${bg})`;
+    page.innerHTML = `
+        <img src="${item.url}" class="foto-carometro">
+        <div class="nome-carometro">${item.nome}</div>
+    `;
+    area.appendChild(page);
+}
+
+function renderCrachaPage(chunk) {
+    const area = document.getElementById('pdf-area');
+    const page = document.createElement('div');
+    page.className = 'page-a4';
+    const isTarde = document.getElementById('turno-checkbox').checked;
+    const turma = document.getElementById('input-turma').value || "TURMA";
+
+    chunk.forEach(item => {
+        page.innerHTML += `
+        <div class="item-cracha">
+            <div class="header-cracha"><img src="LOGO.png" style="height:10mm;"> <span>DOM MANUEL</span></div>
+            <div class="body-cracha">
+                <img src="${item.url}" class="foto-estudante">
+                <div class="info-estudante">
+                    <div class="nome-estudante-cracha">${item.nome}</div>
+                    <div class="turma-turno-cracha">${turma}<br>${isTarde ? 'TARDE' : 'MANHÃ'}</div>
+                </div>
+            </div>
+        </div>`;
+    });
+    area.appendChild(page);
+}
+
+function renderEtiquetaPage(chunk) {
+    const area = document.getElementById('pdf-area');
+    const page = document.createElement('div');
+    page.className = 'page-a4';
+    chunk.forEach(item => {
+        page.innerHTML += `
+        <div class="item-etiqueta">
+            <div class="nome-estudante-etiqueta">${item.nome}</div>
+        </div>`;
+    });
+    area.appendChild(page);
+}
+
+function setupBtns(types) {
+    const div = document.getElementById('download-buttons');
+    div.innerHTML = `<button onclick="doPDF()" class="btn-execute" style="height:40px; width:140px; background:#c0392b; color:white; margin:0;">BAIXAR PDF</button>`;
 }
 
 async function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
     
-    // Configurações inquebráveis
     const opt = {
         margin: 0,
-        filename: `Sistema_Dom_Manuel_${currentMode}.pdf`,
-        image: { type: 'jpeg', quality: 1.0 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false,
-            scrollY: 0,
-            y: 0
-        },
+        filename: `Sistema_Dom_Manuel.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF: { 
             unit: 'mm', 
-            // O formato do PDF é 1mm maior que o conteúdo HTML para garantir folga
-            format: isW ? [339, 191] : 'a4', 
+            format: isW ? [339, 191] : 'a4', // O Buffer de 1mm resolve a página branca
             orientation: isW ? 'l' : 'p' 
         },
-        pagebreak: { mode: 'avoid-all', before: '.pdf-page' }
+        pagebreak: { mode: 'avoid-all', before: isW ? '.page-widescreen' : '.page-a4' }
     };
-
-    // Força o scroll para o topo para evitar cortes no canvas
-    document.getElementById('pdf-area-wrapper').scrollTop = 0;
 
     html2pdf().set(opt).from(element).save();
 }
