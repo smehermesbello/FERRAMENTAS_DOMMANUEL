@@ -90,7 +90,7 @@ function renderCarometroPage(item) {
     const isTarde = document.getElementById('turno-checkbox').checked;
     const bgImg = isTarde ? 'FUNDOTARDE.jpg' : 'FUNDOMANHA.jpg';
     
-    // Solução: Fundo como imagem real em vez de CSS background
+    // Layout Robusto: Imagem de fundo real para evitar falhas de captura do html2canvas
     page.innerHTML = `
         <img src="${bgImg}" class="carometro-bg">
         <div class="carometro-content">
@@ -109,13 +109,20 @@ function setupBtns() {
 async function doPDF() {
     const element = document.getElementById('pdf-area');
     const isW = (currentMode === 'carometro');
+    
     const opt = {
         margin: 0,
-        filename: `Sistema_Dom_Manuel.pdf`,
+        filename: `Sistema_Dom_Manuel_${currentMode}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, allowTaint: true },
-        jsPDF: { unit: 'mm', format: isW ? [338, 190] : 'a4', orientation: isW ? 'l' : 'p' },
-        pagebreak: { mode: 'css', before: '.page-a4, .page-widescreen' }
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { 
+            unit: 'mm', 
+            format: isW ? [338, 190] : 'a4', 
+            orientation: isW ? 'l' : 'p' 
+        },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'], before: isW ? '.page-widescreen' : '.page-a4' }
     };
+
+    // Gera o PDF
     html2pdf().set(opt).from(element).save();
 }
