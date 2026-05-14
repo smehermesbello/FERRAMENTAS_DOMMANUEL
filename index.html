@@ -2,60 +2,55 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="main-window">
-        <img src="LOGO.png" class="corner-logo" alt="Logo">
-
-        <div id="screen-menu" class="screen">
-            <h1 class="main-title">FERRAMENTAS DOM MANUEL</h1>
+        <img src="LOGO.png" alt="Logo" class="corner-logo">
+        
+        <div id="screen-menu" class="screen flex-center">
+            <h1 class="main-title">GESTÃO ESCOLAR</h1>
             <div class="button-grid">
                 <button class="btn-liquid" onclick="openConfig('etiqueta')">🏷️ ETIQUETAS</button>
                 <button class="btn-liquid" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
+                <button class="btn-liquid" disabled>📋 LISTAGEM</button>
                 <button class="btn-liquid" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
             </div>
         </div>
 
-        <div id="screen-config" class="screen hidden">
+        <div id="screen-config" class="screen flex-center hidden">
             <div class="glass-card">
-                <div class="card-header">
-                    <button class="btn-back-small" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                    <h2 id="config-title">CONFIGURAÇÃO</h2>
+                <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
+                <h2 id="config-title">CONFIGURAÇÃO</h2>
+                <div class="field">
+                    <label>FOTOS DOS ESTUDANTES:</label>
+                    <input type="file" id="file-input" accept="image/*" multiple class="input-liquid">
                 </div>
                 <div class="field">
                     <label>TURNO:</label>
-                    <div class="toggle-container" onclick="toggleTurno()">
-                        <div class="toggle-switch" id="sw-element">
-                            <div id="switch-knob"></div>
-                            <span class="option">☀️ MANHÃ</span>
-                            <span class="option">🌙 TARDE</span>
-                        </div>
+                    <div class="modern-switch">
+                        <input type="radio" id="manha" name="turno" value="manha" checked>
+                        <input type="radio" id="tarde" name="turno" value="tarde">
+                        <div class="switch-slider"></div>
+                        <label for="manha" class="switch-option">☀️ MANHÃ</label>
+                        <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
-                    <input type="checkbox" id="turno-checkbox" style="display:none;">
                 </div>
-
                 <div class="field">
                     <label>TURMA:</label>
-                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-moderno">
+                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-liquid">
                 </div>
-
-                <div class="field">
-                    <label>FOTOS DOS ESTUDANTES:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple class="input-moderno">
-                </div>
-
-                <button class="btn-execute" onclick="executarGeracao()">GERAR PRÉVIA</button>
+                <button id="btn-gerar" class="btn-liquid btn-execute-main" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
 
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
-                <button class="btn-back-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
+                <button class="btn-liquid-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
                 <div id="download-buttons"></div>
             </div>
             <div id="pdf-area-wrapper">
