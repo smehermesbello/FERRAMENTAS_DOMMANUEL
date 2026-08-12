@@ -45,7 +45,7 @@ function renderCarometro(data) {
             <div style="border: 6pt solid ${cor}; border-radius:22px; padding:3px; background:white;">
                 <img src="${item.url}" class="foto-carometro">
             </div>
-            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold;" contenteditable="true">${item.nome}</div>`;
+            <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; width:90%; text-align:center; word-break:break-word; overflow-wrap:break-word;" contenteditable="true">${item.nome}</div>`;
         area.appendChild(page);
     });
     setupBtns(['pdf', 'ppt']);
@@ -62,19 +62,22 @@ function renderCrachas(data) {
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:2pt solid ${cor}; border-radius:14px; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
-                    <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:2px solid ${cor};">
-                        <img src="LOGO.png" style="height:14mm; margin-right:5px;">
-                        <div style="text-align:center; flex:1;">
-                            <div style="font-family:'Baloo 2',sans-serif; font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                            <div style="font-family:'Nunito',sans-serif; font-size:7pt;">Fone: 3262-1627 / (41) 9107-9242</div>
+                <div style="width:92mm; height:60mm; border:1pt solid #ddd; border-radius:0; display:flex; background:white; position:relative; overflow:hidden;">
+                    <div style="width:8mm; background:${cor}; flex-shrink:0;"></div>
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <div style="height:16mm; display:flex; align-items:center; padding:4px 6px; border-bottom:1pt solid #eee;">
+                            <img src="LOGO.png" style="height:12mm; margin-right:5px;">
+                            <div style="text-align:center; flex:1;">
+                                <div style="font-family:'Baloo 2',sans-serif; font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
+                                <div style="font-family:'Nunito',sans-serif; font-size:7pt;">Fone: 3262-1627 / (41) 9107-9242</div>
+                            </div>
                         </div>
-                    </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:12px; border:2px solid ${cor};">
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-family:'SFT-Round'; font-size:16pt;" contenteditable="true">${item.nome}</div>
-                            <div style="font-family:'Nunito',sans-serif; font-size:10pt; color:#777;">${turma} - ${turno}</div>
+                        <div style="flex:1; display:flex; align-items:center; padding:6px; gap:8px;">
+                            <img src="${item.url}" style="width:28mm; height:34mm; object-fit:cover; border-radius:10px; border:2.5pt solid ${cor};">
+                            <div style="flex:1; text-align:center;">
+                                <div style="font-family:'SFT-Round'; font-size:15pt;" contenteditable="true">${item.nome}</div>
+                                <div style="font-family:'Nunito',sans-serif; font-size:9pt; color:#777;">${turma} - ${turno}</div>
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -94,14 +97,17 @@ function renderEtiquetas(data) {
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:1.5pt solid ${cor}; border-radius:14px; display:flex; flex-direction:column; background:white; overflow:hidden;">
-                    <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
-                        <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-family:'Baloo 2',sans-serif; font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
-                    </div>
-                    <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
-                        <img src="${item.url}" style="width:32mm; height:42mm; border-radius:10px; border:2.5pt solid ${cor}; object-fit:cover;">
-                        <div style="font-family:'SFT-Round'; font-size:16pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
+                <div style="width:90mm; height:63mm; border:1pt solid #ddd; border-radius:0; display:flex; background:white; overflow:hidden;">
+                    <div style="width:8mm; background:${cor}; flex-shrink:0;"></div>
+                    <div style="flex:1; display:flex; flex-direction:column;">
+                        <div style="height:16mm; border-bottom:1pt solid #eee; display:flex; align-items:center; padding:4px 6px;">
+                            <img src="LOGO.png" style="height:11mm; margin-right:5px;">
+                            <span style="font-family:'Baloo 2',sans-serif; font-size:8.5pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        </div>
+                        <div style="flex:1; display:flex; align-items:center; padding:8px; gap:8px;">
+                            <img src="${item.url}" style="width:30mm; height:40mm; border-radius:10px; border:2.5pt solid ${cor}; object-fit:cover;">
+                            <div style="font-family:'SFT-Round'; font-size:15pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
+                        </div>
                     </div>
                 </div>`;
         });
