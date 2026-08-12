@@ -2,65 +2,171 @@
     font-family: 'SFT-Round';
     src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
 }
-:root { --verde: #4A5D23; --azul: #003399; }
-* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-body { 
+:root {
+    /* Paleta estilo Duolingo */
+    --verde: #58CC02;
+    --verde-escuro: #46A302;
+    --azul: #1CB0F6;
+    --azul-escuro: #1899D6;
+    --amarelo: #FFC800;
+    --amarelo-escuro: #E6AC00;
+    --roxo: #CE82FF;
+    --roxo-escuro: #A568CC;
+    --cinza: #E5E5E5;
+    --cinza-escuro: #AFAFAF;
+    --texto: #4B4B4B;
+    --texto-claro: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+body {
     margin: 0; padding: 0; height: 100vh;
-    background: url('FUNDO.png') center/cover no-repeat fixed;
-    font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(180deg, #E7F8FF 0%, #FFFFFF 100%);
+    font-family: 'Nunito', sans-serif;
     display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 
-.main-window { 
-    background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px);
+.main-window {
+    background: #FFFFFF;
     width: 95vw; height: 92vh; border-radius: 30px; position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.4); display: flex; flex-direction: column; overflow: hidden;
+    border: 2px solid var(--cinza);
+    box-shadow: 0 10px 0 var(--cinza), 0 15px 30px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; overflow: hidden;
 }
 
 .corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 100; }
 .screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; position: relative; }
 .hidden { display: none !important; }
 
-/* BOTÕES E INPUTS LIQUID GLASS */
-.btn-liquid {
-    height: 100px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5);
-    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.3);
-    color: #333; font-weight: 700; font-size: 16pt; cursor: pointer; transition: 0.3s;
+.main-title {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    color: var(--texto);
+    font-size: 40pt;
+    margin-bottom: 30px;
+    text-align: center;
 }
-.btn-liquid:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.4); }
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    width: 100%;
+    max-width: 520px;
+}
+
+/* BOTÕES ESTILO DUOLINGO (efeito 3D "pressionável") */
+.btn-liquid {
+    height: 100px; border-radius: 18px; border: none;
+    border-bottom: 6px solid transparent;
+    background: var(--verde);
+    box-shadow: none;
+    color: var(--texto-claro); font-family: 'Baloo 2', sans-serif;
+    font-weight: 700; font-size: 15pt; letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer; transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn-liquid:active:not(:disabled) { transform: translateY(4px); }
+
+.btn-green   { background: var(--verde);  border-bottom-color: var(--verde-escuro); }
+.btn-blue    { background: var(--azul);   border-bottom-color: var(--azul-escuro); }
+.btn-yellow  { background: var(--amarelo); border-bottom-color: var(--amarelo-escuro); color: var(--texto); }
+.btn-purple  { background: var(--roxo);   border-bottom-color: var(--roxo-escuro); }
+.btn-gray, .btn-liquid:disabled {
+    background: #F2F2F2; border-bottom-color: var(--cinza-escuro);
+    color: var(--cinza-escuro); cursor: not-allowed;
+}
+
+.btn-execute-main { width: 100%; margin-top: 20px; height: 70px; font-size: 14pt; }
 
 .btn-liquid-small {
-    padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.4);
-    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
-    color: #333; font-weight: 700; cursor: pointer; transition: 0.2s;
+    padding: 12px 22px; border-radius: 14px; border: none;
+    border-bottom: 4px solid rgba(0,0,0,0.15);
+    background: #FFFFFF; color: var(--texto);
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700; text-transform: uppercase; font-size: 11pt;
+    cursor: pointer; transition: transform 0.08s ease;
+}
+.btn-liquid-small:active { transform: translateY(3px); border-bottom-width: 1px; }
+.btn-back { background: var(--cinza); }
+
+.glass-card {
+    background: #FFFFFF;
+    border: 2px solid var(--cinza);
+    border-radius: 24px;
+    padding: 35px 40px;
+    width: 100%; max-width: 480px;
+    box-shadow: 0 6px 0 var(--cinza);
+    position: relative;
+}
+
+#config-title {
+    font-family: 'Baloo 2', sans-serif;
+    color: var(--texto);
+    font-weight: 800;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.field { margin-bottom: 22px; }
+.field label {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    color: var(--texto);
+    font-size: 11pt;
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
 }
 
 .input-liquid {
-    width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px);
-    color: #333; font-weight: 600; outline: none;
+    width: 100%; padding: 14px; border-radius: 14px;
+    border: 2px solid var(--cinza);
+    background: #F7F7F7;
+    color: var(--texto); font-weight: 700; font-family: 'Nunito', sans-serif;
+    outline: none; transition: border-color 0.15s ease;
+}
+.input-liquid:focus { border-color: var(--azul); background: #FFFFFF; }
+
+/* SLIDER ESTILO DUOLINGO */
+.modern-switch {
+    position: relative; display: flex; width: 300px; height: 54px;
+    background: #F0F0F0; border: 2px solid var(--cinza);
+    border-radius: 27px; padding: 4px;
+}
+.modern-switch input { display: none; }
+.switch-slider {
+    position: absolute; top: 4px; left: 4px; width: calc(50% - 4px); height: 42px;
+    background: var(--verde); border-radius: 21px; transition: 0.25s ease;
+    z-index: 1; box-shadow: 0 3px 0 var(--verde-escuro);
+}
+#manha:checked ~ .switch-slider { transform: translateX(0); background: var(--verde); box-shadow: 0 3px 0 var(--verde-escuro); }
+#tarde:checked ~ .switch-slider { transform: translateX(100%); background: var(--azul); box-shadow: 0 3px 0 var(--azul-escuro); }
+.switch-option {
+    flex: 1; z-index: 2; text-align: center; line-height: 46px;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; cursor: pointer; color: var(--texto);
 }
 
-/* SLIDER DESLIZANTE RESTAURADO */
-.modern-switch { position: relative; display: flex; width: 300px; height: 50px; background: rgba(0,0,0,0.1); border-radius: 25px; padding: 5px; }
-.modern-switch input { display: none; }
-.switch-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: 40px; background: white; border-radius: 20px; transition: 0.3s; z-index: 1; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-#manha:checked ~ .switch-slider { transform: translateX(0); }
-#tarde:checked ~ .switch-slider { transform: translateX(100%); }
-.switch-option { flex: 1; z-index: 2; text-align: center; line-height: 40px; font-weight: 700; cursor: pointer; }
-
-/* CARÔMETRO (Correção de quebra de página) */
-.page-widescreen { 
-    width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; 
-    display: flex; flex-direction: column; align-items: center; justify-content: center; 
+/* CARÔMETRO (mantém dimensões de impressão) */
+.page-widescreen {
+    width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
 }
-.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 15px; }
+.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 20px; }
 
 /* FORMATO A4 */
 .page-a4 { width: 210mm; height: 297mm; background: white !important; display: grid; grid-template-columns: repeat(2, 92mm); justify-content: center; align-content: start; padding-top: 10mm; }
 
-.preview-toolbar { width: 100%; display: flex; justify-content: space-between; padding: 15px 30px; background: rgba(0,0,0,0.3); z-index: 10000; position: sticky; top: 0; }
-#pdf-area-wrapper { background: #333; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.preview-toolbar {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 30px; background: #FFFFFF; border-bottom: 2px solid var(--cinza);
+    z-index: 10000; position: sticky; top: 0;
+}
+#pdf-area-wrapper { background: #E5E5E5; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
