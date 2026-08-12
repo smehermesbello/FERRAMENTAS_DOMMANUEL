@@ -17,7 +17,7 @@ async function executarGeracao() {
 
     showScreen('screen-preview');
     const area = document.getElementById('pdf-area');
-    area.innerHTML = "<h2 style='color:white; margin-top:100px;'>PREPARANDO LIQUID GLASS...</h2>";
+    area.innerHTML = "<h2 style='font-family:\"Baloo 2\",sans-serif; color:#4B4B4B; margin-top:100px;'>PREPARANDO TUDO... 🦉</h2>";
 
     const filesData = Array.from(input.files).map(f => ({
         url: URL.createObjectURL(f),
@@ -35,14 +35,14 @@ function renderCarometro(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
     const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
+    const cor = (turno === 'manha') ? '#58CC02' : '#1CB0F6';
     area.innerHTML = "";
     data.forEach(item => {
         const page = document.createElement('div');
         page.className = 'page-widescreen';
         page.style.backgroundImage = `url('${bg}')`;
         page.innerHTML = `
-            <div style="border: 6pt solid ${cor}; border-radius:18px; padding:3px;">
+            <div style="border: 6pt solid ${cor}; border-radius:22px; padding:3px; background:white;">
                 <img src="${item.url}" class="foto-carometro">
             </div>
             <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold;" contenteditable="true">${item.nome}</div>`;
@@ -54,6 +54,7 @@ function renderCarometro(data) {
 function renderCrachas(data) {
     const area = document.getElementById('pdf-area');
     const turno = (document.querySelector('input[name="turno"]:checked').value === 'manha') ? 'MANHÃ' : 'TARDE';
+    const cor = (turno === 'MANHÃ') ? '#58CC02' : '#1CB0F6';
     const turma = document.getElementById('input-turma').value.toUpperCase();
     area.innerHTML = "";
     for (let i = 0; i < data.length; i += 8) {
@@ -61,19 +62,19 @@ function renderCrachas(data) {
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:92mm; height:60mm; border:1pt solid black; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
-                    <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:1px solid #ddd;">
+                <div style="width:92mm; height:60mm; border:2pt solid ${cor}; border-radius:14px; display:flex; flex-direction:column; background:white; position:relative; overflow:hidden;">
+                    <div style="height:18mm; display:flex; align-items:center; padding:5px; border-bottom:2px solid ${cor};">
                         <img src="LOGO.png" style="height:14mm; margin-right:5px;">
                         <div style="text-align:center; flex:1;">
-                            <div style="font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
-                            <div style="font-size:7pt;">Fone: 3262-1627 / (41) 9107-9242</div>
+                            <div style="font-family:'Baloo 2',sans-serif; font-size:8pt; font-weight:bold;">ESCOLA MUNICIPAL DOM MANUEL D’ELBOUX</div>
+                            <div style="font-family:'Nunito',sans-serif; font-size:7pt;">Fone: 3262-1627 / (41) 9107-9242</div>
                         </div>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:5px; gap:10px;">
-                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:10px; border:1px solid #ccc;">
+                        <img src="${item.url}" style="width:30mm; height:35mm; object-fit:cover; border-radius:12px; border:2px solid ${cor};">
                         <div style="flex:1; text-align:center;">
                             <div style="font-family:'SFT-Round'; font-size:16pt;" contenteditable="true">${item.nome}</div>
-                            <div style="font-size:10pt; color:#666;">${turma} - ${turno}</div>
+                            <div style="font-family:'Nunito',sans-serif; font-size:10pt; color:#777;">${turma} - ${turno}</div>
                         </div>
                     </div>
                 </div>`;
@@ -86,20 +87,20 @@ function renderCrachas(data) {
 function renderEtiquetas(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
-    const cor = (turno === 'manha') ? '#4A5D23' : '#003399';
+    const cor = (turno === 'manha') ? '#58CC02' : '#1CB0F6';
     area.innerHTML = "";
     for (let i = 0; i < data.length; i += 8) {
         const page = document.createElement('div');
         page.className = 'page-a4';
         data.slice(i, i + 8).forEach(item => {
             page.innerHTML += `
-                <div style="width:90mm; height:63mm; border:0.5pt solid black; display:flex; flex-direction:column; background:white;">
+                <div style="width:90mm; height:63mm; border:1.5pt solid ${cor}; border-radius:14px; display:flex; flex-direction:column; background:white; overflow:hidden;">
                     <div style="height:17.5mm; border-bottom:2.5pt dotted ${cor}; display:flex; align-items:center; padding:5px;">
                         <img src="LOGO.png" style="height:12mm; margin-right:5px;">
-                        <span style="font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
+                        <span style="font-family:'Baloo 2',sans-serif; font-size:9pt; font-weight:bold; color:black; flex:1; text-align:center;">DOM MANUEL DA SILVEIRA D’ELBOUX</span>
                     </div>
                     <div style="flex:1; display:flex; align-items:center; padding:10px; gap:10px;">
-                        <img src="${item.url}" style="width:32mm; height:42mm; border:2.5pt solid ${cor}; object-fit:cover;">
+                        <img src="${item.url}" style="width:32mm; height:42mm; border-radius:10px; border:2.5pt solid ${cor}; object-fit:cover;">
                         <div style="font-family:'SFT-Round'; font-size:16pt; color:black; flex:1; text-align:center;" contenteditable="true">${item.nome}</div>
                     </div>
                 </div>`;
@@ -112,8 +113,8 @@ function renderEtiquetas(data) {
 function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
-    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:rgba(39, 174, 96, 0.4);">PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:rgba(230, 126, 34, 0.4); margin-left:10px;">PPTX</button>`;
+    if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#58CC02; color:white; border-bottom-color:#46A302;">PDF</button>`;
+    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#FF9600; color:white; border-bottom-color:#CC7A00; margin-left:10px;">PPTX</button>`;
 }
 
 async function doPDF() {
