@@ -5,7 +5,6 @@
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -50,8 +49,10 @@
 
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
-                <button class="btn-liquid-small" onclick="showScreen('screen-config')">← AJUSTAR</button>
-                <div id="download-buttons"></div>
+                <div class="toolbar-left">
+                    <button class="btn-liquid-small btn-ajustar" onclick="showScreen('screen-config')">← AJUSTAR</button>
+                    <div id="download-buttons"></div>
+                </div>
             </div>
             <div id="pdf-area-wrapper">
                 <div id="pdf-area"></div>
