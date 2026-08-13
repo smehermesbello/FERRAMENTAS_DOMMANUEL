@@ -48,7 +48,7 @@ function renderCarometro(data) {
             <div style="font-family:'SFT-Round'; font-size:44pt; margin-top:20px; color:black; font-weight:bold; width:90%; text-align:center; word-break:break-word; overflow-wrap:break-word;" contenteditable="true">${item.nome}</div>`;
         area.appendChild(page);
     });
-    setupBtns(['pdf', 'ppt']);
+    setupBtns(['pdf']);
 }
 
 function renderCrachas(data) {
@@ -120,7 +120,15 @@ function setupBtns(types) {
     const div = document.getElementById('download-buttons');
     div.innerHTML = "";
     if (types.includes('pdf')) div.innerHTML += `<button id="btn-pdf" onclick="doPDF()" class="btn-liquid-small" style="background:#58CC02; color:white; border-bottom-color:#46A302;">PDF</button>`;
-    if (types.includes('ppt')) div.innerHTML += `<button onclick="doPPT()" class="btn-liquid-small" style="background:#FF9600; color:white; border-bottom-color:#CC7A00; margin-left:10px;">PPTX</button>`;
+}
+
+function gerarNomeArquivo() {
+    const tipoMap = { etiqueta: 'ETIQUETAS', cracha: 'CRACHÁ', carometro: 'CARÔMETRO' };
+    const tipo = tipoMap[currentMode] || 'DOCUMENTO';
+    const turno = document.querySelector('input[name="turno"]:checked').value === 'manha' ? 'MANHÃ' : 'TARDE';
+    const turmaRaw = document.getElementById('input-turma').value.toUpperCase();
+    const turma = turmaRaw.replace(/[^\p{L}\p{N}]/gu, '') || 'SEMTURMA';
+    return `${tipo}_${turma}_${turno}`;
 }
 
 async function doPDF() {
@@ -130,28 +138,11 @@ async function doPDF() {
     const isW = (currentMode === 'carometro');
     const opt = {
         margin: 0,
-        filename: 'Documento_DomManuel.pdf',
+        filename: gerarNomeArquivo() + '.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: isW ? [338.67, 190.5] : 'a4', orientation: isW ? 'l' : 'p' },
         pagebreak: { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save().then(() => btn.innerText = "PDF");
-}
-
-function doPPT() {
-    const pptx = new PptxGenJS();
-    pptx.defineLayout({ name:'WIDE', width:13.33, height:7.5 });
-    pptx.layout = 'WIDE';
-    const turno = document.querySelector('input[name="turno"]:checked').value;
-    const bg = (turno === 'manha') ? 'FUNDOMANHA.jpg' : 'FUNDOTARDE.jpg';
-    document.querySelectorAll('.page-widescreen').forEach(p => {
-        const slide = pptx.addSlide();
-        slide.background = { path: bg };
-        const img = p.querySelector('img').src;
-        const nome = p.querySelector('div[contenteditable]').innerText;
-        slide.addImage({ data:img, x:4.6, y:0.5, w:4.1, h:5.3 });
-        slide.addText(nome, { x:0, y:6.2, w:'100%', align:'center', fontSize:42, bold:true, color:'000000' });
-    });
-    pptx.writeFile({ fileName: 'Carometro_DomManuel.pptx' });
 }
