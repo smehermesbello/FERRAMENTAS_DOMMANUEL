@@ -188,22 +188,22 @@ body {
     overflow: hidden;
 }
 .listagem-header {
-    width: 184mm; margin-top: 8mm; padding: 5mm 0;
+    width: 184mm; margin-top: 5mm; padding: 4mm 0;
     text-align: center; color: white;
     font-family: 'Baloo 2', sans-serif; font-weight: 700;
-    font-size: 13pt; text-transform: uppercase; letter-spacing: 1px;
+    font-size: 17pt; text-transform: uppercase; letter-spacing: 1px;
 }
 .listagem-grid {
     width: 184mm; flex: 1;
     display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(8, 1fr);
-    gap: 2.5mm 6mm; padding: 5mm 0;
+    gap: 3mm 6mm; padding: 4mm 0;
 }
 .listagem-item {
-    display: flex; align-items: center; gap: 6px;
-    border: 0.5pt solid #ddd; padding: 3px 6px; background: white; overflow: hidden;
+    display: flex; align-items: stretch; gap: 8px;
+    border: 0.5pt solid #ddd; padding: 4px 8px; background: white; overflow: hidden;
 }
-.listagem-foto { width: 20mm; height: 24mm; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
-.listagem-footer { width: 184mm; display: flex; justify-content: flex-end; padding: 3mm 0 8mm 0; }
+.listagem-foto { width: 25mm; height: 100%; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.listagem-footer { width: 184mm; display: flex; justify-content: flex-end; padding: 2mm 0 5mm 0; }
 .listagem-footer img { height: 14mm; }
 
 .preview-toolbar {
