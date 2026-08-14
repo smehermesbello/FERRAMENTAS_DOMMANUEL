@@ -181,6 +181,31 @@ body {
 /* FORMATO A4 */
 .page-a4 { width: 210mm; height: 297mm; background: white !important; display: grid; grid-template-columns: repeat(2, 92mm); justify-content: center; align-content: start; padding-top: 10mm; }
 
+/* LISTAGEM (16 alunos por folha A4, 2 colunas) */
+.page-listagem {
+    width: 210mm; height: 297mm; background: white !important;
+    display: flex; flex-direction: column; align-items: center;
+    overflow: hidden;
+}
+.listagem-header {
+    width: 184mm; margin-top: 8mm; padding: 5mm 0;
+    text-align: center; color: white;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700;
+    font-size: 13pt; text-transform: uppercase; letter-spacing: 1px;
+}
+.listagem-grid {
+    width: 184mm; flex: 1;
+    display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(8, 1fr);
+    gap: 2.5mm 6mm; padding: 5mm 0;
+}
+.listagem-item {
+    display: flex; align-items: center; gap: 6px;
+    border: 0.5pt solid #ddd; padding: 3px 6px; background: white; overflow: hidden;
+}
+.listagem-foto { width: 20mm; height: 24mm; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.listagem-footer { width: 184mm; display: flex; justify-content: flex-end; padding: 3mm 0 8mm 0; }
+.listagem-footer img { height: 14mm; }
+
 .preview-toolbar {
     width: 100%; display: flex; justify-content: flex-start; align-items: center;
     padding: 15px 30px; background: #FFFFFF; border-bottom: 2px solid var(--cinza);
