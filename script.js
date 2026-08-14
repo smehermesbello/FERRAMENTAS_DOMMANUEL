@@ -27,6 +27,7 @@ async function executarGeracao() {
     setTimeout(() => {
         if (currentMode === 'etiqueta') renderEtiquetas(filesData);
         else if (currentMode === 'cracha') renderCrachas(filesData);
+        else if (currentMode === 'listagem') renderListagem(filesData);
         else renderCarometro(filesData);
     }, 500);
 }
@@ -87,6 +88,46 @@ function renderCrachas(data) {
     setupBtns(['pdf']);
 }
 
+function renderListagem(data) {
+    const area = document.getElementById('pdf-area');
+    const turno = (document.querySelector('input[name="turno"]:checked').value === 'manha') ? 'MANHÃ' : 'TARDE';
+    const cor = (turno === 'MANHÃ') ? '#58CC02' : '#1CB0F6';
+    const turma = document.getElementById('input-turma').value.toUpperCase();
+    area.innerHTML = "";
+    for (let i = 0; i < data.length; i += 16) {
+        const page = document.createElement('div');
+        page.className = 'page-listagem';
+
+        const header = document.createElement('div');
+        header.className = 'listagem-header';
+        header.style.background = cor;
+        header.innerText = `${turma} - ${turno}`;
+        page.appendChild(header);
+
+        const grid = document.createElement('div');
+        grid.className = 'listagem-grid';
+        data.slice(i, i + 16).forEach(item => {
+            grid.innerHTML += `
+                <div class="listagem-item">
+                    <img src="${item.url}" class="listagem-foto" style="border:2pt solid ${cor};">
+                    <div style="flex:1; overflow:hidden;">
+                        <div style="font-family:'SFT-Round'; font-size:9pt; line-height:1.15;" contenteditable="true">${item.nome}</div>
+                        <div style="font-family:'Nunito',sans-serif; font-size:7.5pt; color:#777; margin-top:2px;">${turma}</div>
+                    </div>
+                </div>`;
+        });
+        page.appendChild(grid);
+
+        const footer = document.createElement('div');
+        footer.className = 'listagem-footer';
+        footer.innerHTML = `<img src="LOGO.png">`;
+        page.appendChild(footer);
+
+        area.appendChild(page);
+    }
+    setupBtns(['pdf']);
+}
+
 function renderEtiquetas(data) {
     const area = document.getElementById('pdf-area');
     const turno = document.querySelector('input[name="turno"]:checked').value;
@@ -123,7 +164,7 @@ function setupBtns(types) {
 }
 
 function gerarNomeArquivo() {
-    const tipoMap = { etiqueta: 'ETIQUETAS', cracha: 'CRACHÁ', carometro: 'CARÔMETRO' };
+    const tipoMap = { etiqueta: 'ETIQUETAS', cracha: 'CRACHÁ', carometro: 'CARÔMETRO', listagem: 'LISTAGEM' };
     const tipo = tipoMap[currentMode] || 'DOCUMENTO';
     const turno = document.querySelector('input[name="turno"]:checked').value === 'manha' ? 'MANHÃ' : 'TARDE';
     const turmaRaw = document.getElementById('input-turma').value.toUpperCase();
