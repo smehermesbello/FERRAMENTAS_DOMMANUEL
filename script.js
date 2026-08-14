@@ -110,9 +110,9 @@ function renderListagem(data) {
             grid.innerHTML += `
                 <div class="listagem-item">
                     <img src="${item.url}" class="listagem-foto" style="border:2pt solid ${cor};">
-                    <div style="flex:1; overflow:hidden;">
-                        <div style="font-family:'SFT-Round'; font-size:9pt; line-height:1.15;" contenteditable="true">${item.nome}</div>
-                        <div style="font-family:'Nunito',sans-serif; font-size:7.5pt; color:#777; margin-top:2px;">${turma}</div>
+                    <div style="flex:1; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+                        <div style="font-family:'SFT-Round'; font-size:12pt; line-height:1.15;" contenteditable="true">${item.nome}</div>
+                        <div style="font-family:'Nunito',sans-serif; font-size:9pt; color:#777; margin-top:3px;">${turma}</div>
                     </div>
                 </div>`;
         });
