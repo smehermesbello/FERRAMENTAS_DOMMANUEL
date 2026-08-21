@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <title>SISTEMA DOM MANUEL - GESTÃO</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
-    <!-- html2pdf & html2canvas -->
+    <!-- Bibliotecas de conversão e leitura -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- PDF.js para extração de texto dos PDFs de cardápio -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,7 +14,7 @@
     <div class="main-window">
         <img src="LOGO.png" alt="Logo" class="corner-logo">
 
-        <!-- MENU PRINCIPAL -->
+        <!-- MENU INICIAL -->
         <div id="screen-menu" class="screen flex-center">
             <h1 class="main-title">GESTÃO ESCOLAR</h1>
             <div class="button-grid">
@@ -23,20 +22,34 @@
                 <button class="btn-liquid btn-blue" onclick="openConfig('carometro')">📸 CARÔMETRO</button>
                 <button class="btn-liquid btn-purple" onclick="openConfig('listagem')">📋 LISTAGEM</button>
                 <button class="btn-liquid btn-yellow" onclick="openConfig('cracha')">🪪 CRACHÁ</button>
-                <button class="btn-liquid btn-cardapio grid-full" onclick="openCardapioConfig()">🍎 CARDÁPIO DO MÊS</button>
+                <button class="btn-liquid btn-yellow" style="grid-column: span 2; background: var(--amarelo-escuro); color: white;" onclick="openConfig('cardapio')">🍽️ CARDÁPIO MENSAL</button>
             </div>
         </div>
 
-        <!-- CONFIGURAÇÃO PADRÃO (FOTOS / ALUNOS) -->
+        <!-- TELA DE CONFIGURAÇÃO -->
         <div id="screen-config" class="screen flex-center hidden">
             <div class="glass-card">
                 <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
                 <h2 id="config-title">CONFIGURAÇÃO</h2>
+                
                 <div class="field">
-                    <label>FOTOS DOS ESTUDANTES:</label>
-                    <input type="file" id="file-input" accept="image/*" multiple class="input-liquid">
+                    <label id="label-file">ARQUIVOS:</label>
+                    <input type="file" id="file-input" multiple class="input-liquid">
                 </div>
-                <div class="field">
+
+                <!-- Campo de tipo de refeição exclusivo do Cardápio -->
+                <div class="field hidden" id="field-refeicoes">
+                    <label>TIPO DE REFEIÇÃO NO ARQUIVO:</label>
+                    <select id="select-refeicao" class="input-liquid">
+                        <option value="lanche_manha">Lanche da Manhã</option>
+                        <option value="almoco">Almoço</option>
+                        <option value="lanche_tarde">Lanche da Tarde</option>
+                        <option value="manha_tarde">Lanche da Manhã e Tarde</option>
+                        <option value="completo">Todos (Manhã, Almoço e Tarde)</option>
+                    </select>
+                </div>
+
+                <div class="field" id="field-turno">
                     <label>TURNO:</label>
                     <div class="modern-switch">
                         <input type="radio" id="manha" name="turno" value="manha" checked>
@@ -46,44 +59,21 @@
                         <label for="tarde" class="switch-option">🌙 TARDE</label>
                     </div>
                 </div>
-                <div class="field">
-                    <label>TURMA:</label>
-                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A" class="input-liquid">
+
+                <div class="field" id="field-turma">
+                    <label>TURMA / MÊS:</label>
+                    <input type="text" id="input-turma" placeholder="Ex: 5º ANO A ou AGOSTO" class="input-liquid">
                 </div>
+
                 <button id="btn-gerar" class="btn-liquid btn-execute-main btn-green" onclick="executarGeracao()">GERAR PRÉVIA</button>
             </div>
         </div>
 
-        <!-- CONFIGURAÇÃO CARDÁPIO (PDFs DA PREFEITURA) -->
-        <div id="screen-cardapio-config" class="screen flex-center hidden">
-            <div class="glass-card" style="max-width: 550px;">
-                <button class="btn-liquid-small btn-back" onclick="showScreen('screen-menu')">← VOLTAR</button>
-                <h2 id="config-title">GERAR CARDÁPIO MENSAL</h2>
-                
-                <div class="field">
-                    <label>📄 PDF DO ALMOÇO INTEGRAL:</label>
-                    <input type="file" id="pdf-almoco" accept="application/pdf" class="input-liquid">
-                </div>
-
-                <div class="field">
-                    <label>📄 PDF DOS LANCHES (MANHÃ / TARDE):</label>
-                    <input type="file" id="pdf-lanche" accept="application/pdf" class="input-liquid">
-                </div>
-
-                <div class="field">
-                    <label>MÊS / ANO DO CALENDÁRIO:</label>
-                    <input type="text" id="input-mes-ano" placeholder="Ex: AGOSTO / 2026" value="AGOSTO / 2026" class="input-liquid">
-                </div>
-
-                <button class="btn-liquid btn-execute-main btn-purple" onclick="processarCardapio()">📅 PROCESSAR E REFORMULAR</button>
-            </div>
-        </div>
-
-        <!-- PRÉVIA / ÁREA DE IMPRESSÃO / GENERATOR -->
+        <!-- TELA DE PRÉVIA -->
         <div id="screen-preview" class="screen hidden" style="padding:0;">
             <div class="preview-toolbar">
                 <div class="toolbar-left">
-                    <button class="btn-liquid-small btn-ajustar" onclick="voltarDaPrevia()">← AJUSTAR</button>
+                    <button class="btn-liquid-small btn-ajustar" onclick="showScreen('screen-config')">← AJUSTAR</button>
                     <div id="download-buttons"></div>
                 </div>
             </div>
