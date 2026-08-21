@@ -1,121 +1,167 @@
-/* Cor especial do botão de Cardápio */
-.btn-cardapio {
-    background: #FF9600;
-    border-bottom-color: #E08400;
-}
-.grid-full {
-    grid-column: span 2;
+@font-face {
+    font-family: 'SFT-Round';
+    src: url('SFTSchriftedRoundTRIAL-Black.ttf') format('truetype');
 }
 
-/* ==========================================
-   ESTILOS DO CALENDÁRIO DO CARDÁPIO (A4 Paisagem / Widescreen)
-   ========================================== */
-.page-calendar-landscape {
-    width: 297mm;
-    min-height: 210mm;
-    background: #FFFFFF !important;
-    padding: 12mm;
-    display: flex;
-    flex-direction: column;
+:root {
+    /* Paleta estilo Duolingo */
+    --verde: #58CC02;
+    --verde-escuro: #46A302;
+    --azul: #1CB0F6;
+    --azul-escuro: #1899D6;
+    --amarelo: #FFC800;
+    --amarelo-escuro: #E6AC00;
+    --roxo: #CE82FF;
+    --roxo-escuro: #A568CC;
+    --cinza: #E5E5E5;
+    --cinza-escuro: #AFAFAF;
+    --texto: #4B4B4B;
+    --texto-claro: #FFFFFF;
+}
+
+* {
     box-sizing: border-box;
-    color: #333;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
 }
 
-.calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #1CB0F6 0%, #58CC02 100%);
-    padding: 12px 20px;
-    border-radius: 16px;
-    color: white;
-    margin-bottom: 12px;
-}
-
-.calendar-header h1 {
-    font-family: 'Baloo 2', sans-serif;
-    margin: 0;
-    font-size: 22pt;
-    font-weight: 800;
-}
-
-.calendar-header .school-info {
-    text-align: right;
+body {
+    margin: 0; padding: 0; height: 100vh;
+    background: linear-gradient(180deg, #E7F8FF 0%, #FFFFFF 100%);
     font-family: 'Nunito', sans-serif;
-    font-size: 10pt;
-    font-weight: 700;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 
-.calendar-grid-header {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    margin-bottom: 6px;
+.main-window {
+    background: #FFFFFF;
+    width: 95vw; height: 92vh; border-radius: 30px; position: relative;
+    border: 2px solid var(--cinza);
+    box-shadow: 0 10px 0 var(--cinza), 0 15px 30px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; overflow: hidden;
 }
 
-.day-name-header {
-    background: #4B4B4B;
-    color: white;
+.corner-logo { position: absolute; top: 20px; right: 25px; width: 85px; z-index: 99999; pointer-events: none; }
+.screen { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; align-items: center; position: relative; }
+.hidden { display: none !important; }
+
+.main-title {
     font-family: 'Baloo 2', sans-serif;
-    font-weight: 700;
-    text-align: center;
-    padding: 6px 0;
-    border-radius: 8px;
-    font-size: 11pt;
-    text-transform: uppercase;
+    font-weight: 800; color: var(--texto); font-size: 40pt;
+    margin-bottom: 30px; text-align: center;
 }
 
-.calendar-grid-days {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    flex: 1;
+.button-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 22px; width: 100%; max-width: 520px;
 }
 
-.day-card {
-    border: 2px solid #E5E5E5;
-    border-radius: 12px;
-    padding: 6px;
-    background: #FAFAFA;
-    display: flex;
-    flex-direction: column;
-    font-size: 7.5pt;
-    min-height: 110px;
+.btn-liquid {
+    height: 90px; border-radius: 18px; border: none;
+    border-bottom: 6px solid transparent; background: var(--verde);
+    color: var(--texto-claro); font-family: 'Baloo 2', sans-serif;
+    font-weight: 700; font-size: 15pt; letter-spacing: 0.5px;
+    text-transform: uppercase; cursor: pointer; transition: transform 0.15s ease, filter 0.15s ease;
+}
+.btn-liquid:hover:not(:disabled) { transform: translateY(-4px); filter: brightness(1.05); }
+.btn-liquid:active:not(:disabled) { transform: translateY(2px); filter: brightness(0.97); }
+
+.btn-green   { background: var(--verde);  border-bottom-color: var(--verde-escuro); }
+.btn-blue    { background: var(--azul);   border-bottom-color: var(--azul-escuro); }
+.btn-yellow  { background: var(--amarelo); border-bottom-color: var(--amarelo-escuro); color: var(--texto); }
+.btn-purple  { background: var(--roxo);   border-bottom-color: var(--roxo-escuro); }
+
+.btn-execute-main { width: 100%; margin-top: 20px; height: 70px; font-size: 14pt; }
+
+.btn-liquid-small {
+    padding: 12px 22px; border-radius: 14px; border: none;
+    border-bottom: 4px solid rgba(0,0,0,0.15); background: #FFFFFF; color: var(--texto);
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 11pt;
+    cursor: pointer; transition: transform 0.15s ease, filter 0.15s ease;
+}
+.btn-liquid-small:hover { transform: translateY(-3px); filter: brightness(1.05); }
+.btn-liquid-small:active { transform: translateY(2px); border-bottom-width: 1px; }
+.btn-back { background: var(--cinza); }
+.btn-ajustar { background: var(--azul); color: var(--texto-claro); border-bottom-color: var(--azul-escuro); }
+
+.glass-card {
+    background: #FFFFFF; border: 2px solid var(--cinza); border-radius: 24px;
+    padding: 35px 40px; width: 100%; max-width: 480px; box-shadow: 0 6px 0 var(--cinza); position: relative;
 }
 
-.day-number-badge {
-    background: #1CB0F6;
-    color: white;
-    font-family: 'Baloo 2', sans-serif;
-    font-weight: 800;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 10pt;
-    align-self: flex-start;
-    margin-bottom: 4px;
+#config-title { font-family: 'Baloo 2', sans-serif; color: var(--texto); font-weight: 800; text-align: center; margin-top: 10px; }
+
+.field { margin-bottom: 22px; }
+.field label {
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; color: var(--texto);
+    font-size: 11pt; display: block; margin-bottom: 8px; text-transform: uppercase;
 }
 
-.meal-block {
-    margin-bottom: 4px;
-    padding: 3px 5px;
-    border-radius: 6px;
+.input-liquid {
+    width: 100%; padding: 14px; border-radius: 14px; border: 2px solid var(--cinza);
+    background: #F7F7F7; color: var(--texto); font-weight: 700; font-family: 'Nunito', sans-serif; outline: none;
+}
+.input-liquid:focus { border-color: var(--azul); background: #FFFFFF; }
+
+.modern-switch {
+    position: relative; display: flex; width: 300px; height: 54px;
+    background: #F0F0F0; border: 2px solid var(--cinza); border-radius: 27px; padding: 4px;
+}
+.modern-switch input { display: none; }
+.switch-slider {
+    position: absolute; top: 4px; left: 4px; width: calc(50% - 4px); height: 42px;
+    background: var(--verde); border-radius: 21px; transition: 0.25s ease; z-index: 1; box-shadow: 0 3px 0 var(--verde-escuro);
+}
+#manha:checked ~ .switch-slider { transform: translateX(0); background: var(--verde); box-shadow: 0 3px 0 var(--verde-escuro); }
+#tarde:checked ~ .switch-slider { transform: translateX(100%); background: var(--azul); box-shadow: 0 3px 0 var(--azul-escuro); }
+.switch-option {
+    flex: 1; z-index: 2; text-align: center; line-height: 46px;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; cursor: pointer; color: var(--texto);
 }
 
-.block-almoco { background: #FFF4D9; border-left: 3px solid #FFC800; }
-.block-lanche { background: #E7F8FF; border-left: 3px solid #1CB0F6; }
-
-.meal-label {
-    font-family: 'Baloo 2', sans-serif;
-    font-weight: 800;
-    font-size: 7pt;
-    text-transform: uppercase;
-    color: #4B4B4B;
-    margin-bottom: 2px;
+/* FORMATO A4 PAISAGEM - CARDÁPIO */
+.page-a4-landscape {
+    width: 297mm; height: 210mm; background: white !important;
+    padding: 8mm; display: flex; flex-direction: column;
+    box-sizing: border-box; position: relative; margin-bottom: 20px;
+    border: 1px solid var(--cinza); border-radius: 10px;
 }
 
-.meal-text {
-    font-family: 'Nunito', sans-serif;
-    line-height: 1.15;
-    color: #333;
-    word-break: break-word;
+.cardapio-header {
+    background: var(--verde); color: white; padding: 10px;
+    border-radius: 14px; text-align: center; font-family: 'Baloo 2', sans-serif;
+    font-size: 18pt; font-weight: 800; margin-bottom: 8mm; text-transform: uppercase;
+    display: flex; align-items: center; justify-content: space-between;
 }
+.cardapio-header img { height: 12mm; }
+
+.cardapio-grid { display: grid; gap: 4mm; flex: 1; }
+.cols-5 { grid-template-columns: repeat(5, 1fr); }
+.cols-6 { grid-template-columns: repeat(5, 1fr) 1.2fr; }
+
+.card-day, .card-nutri {
+    border: 2px solid var(--cinza); border-radius: 16px;
+    padding: 8px; display: flex; flex-direction: column; background: #FAF9F6;
+    box-shadow: 0 4px 0 var(--cinza);
+}
+.col-header {
+    font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 11pt; text-align: center;
+    color: var(--texto); border-bottom: 2px solid var(--cinza); padding-bottom: 4px; margin-bottom: 6px;
+}
+.meal-box { margin-bottom: 6px; }
+.meal-title { font-family: 'Baloo 2', sans-serif; font-size: 8.5pt; color: var(--azul-escuro); font-weight: 800; text-transform: uppercase; }
+.meal-content { font-family: 'Nunito', sans-serif; font-size: 8pt; color: var(--texto); font-weight: 700; line-height: 1.2; }
+
+/* DEMAIS FORMATOS DO SISTEMA */
+.page-widescreen { width: 338.67mm; height: 190.5mm; background-size: 100% 100% !important; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.foto-carometro { width: 10.5cm; height: 13.5cm; object-fit: cover; border-radius: 20px; }
+.page-a4 { width: 210mm; height: 297mm; background: white !important; display: grid; grid-template-columns: repeat(2, 92mm); justify-content: center; align-content: start; padding-top: 10mm; }
+.page-listagem { width: 210mm; height: 297mm; background: white !important; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+.listagem-header { width: 184mm; margin-top: 5mm; padding: 4mm 0; text-align: center; color: white; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 17pt; text-transform: uppercase; }
+.listagem-grid { width: 184mm; flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(8, 1fr); gap: 3mm 6mm; padding: 4mm 0; }
+.listagem-item { display: flex; align-items: stretch; gap: 8px; border: 0.5pt solid #ddd; padding: 4px 8px; background: white; overflow: hidden; }
+.listagem-foto { width: 25mm; height: 100%; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.listagem-footer { width: 184mm; display: flex; justify-content: flex-end; padding: 2mm 0 5mm 0; }
+.listagem-footer img { height: 14mm; }
+.preview-toolbar { width: 100%; display: flex; justify-content: flex-start; align-items: center; padding: 15px 30px; background: #FFFFFF; border-bottom: 2px solid var(--cinza); z-index: 10000; position: sticky; top: 0; }
+.toolbar-left { display: flex; align-items: center; gap: 14px; }
+#pdf-area-wrapper { background: #E5E5E5; flex: 1; overflow-y: auto; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
